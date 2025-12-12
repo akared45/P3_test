@@ -1,0 +1,142 @@
+.headerWrapper {
+    width: 100%;
+    height: 80px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+  
+   
+}
+
+.search{
+    background-color: #fff;
+    border: 1px solid #e6e0e0;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    
+    .search__input{
+        border: none;
+        outline: none;
+        padding: 15px 0px;
+        width: 500px;
+        border-radius: 12px;
+    }
+
+    .search__icon{
+        padding: 10px 15px;
+    }
+}
+
+.left {
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+.headerIcon {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f2f5;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.25s;
+    font-size: 18px;
+    svg{
+        width: 24px;
+        height: 24px;
+    }
+    &:hover {
+        background: #dcdcdc;
+    }
+}
+
+.profile{
+    display: flex;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 30px;
+    transition: background-color 0.3s ease ;
+}
+
+.profile:hover{
+    background-color: #f0f2f5;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #4c8bf5;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.info_name{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.info_role{
+    font-size: 12px;
+}
+
+.options__admin{
+    position: absolute;
+    width: 250px;
+    right: 0;
+    top: 65px;
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 12px;
+    .options__item{
+        padding: 15px;
+        cursor: pointer;
+   
+        gap: 10px;
+        transition: background-color 0.3s ease;
+        
+        span{
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            svg{
+                font-size: 24px;
+            }
+        }
+        &:hover{
+            background-color: #f0f2f5;
+        }
+        svg{
+            font-size: 16px;
+        }
+    }
+}

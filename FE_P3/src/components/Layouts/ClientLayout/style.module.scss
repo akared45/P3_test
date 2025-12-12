@@ -1,0 +1,21 @@
+.main__container {
+  min-height: 100vh;
+}
+
+.rightWidgetContainer {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+
+  display: flex;
+  flex-direction: column-reverse;
+  /* 👆 ChatWidget ở dưới – ChatDoctor/Patient ở trên */
+
+  gap: 14px;
+  z-index: 99999;
+}
+
+/* tránh widget đè layout không mong muốn */
+.rightWidgetContainer > * {
+  position: relative;
+}

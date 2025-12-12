@@ -1,0 +1,9 @@
+
+@import "@styles/_variables.module.scss";
+@import "@styles/_mixins.module.scss";
+
+.home__container{
+    max-width: 1600px;
+    padding: 0 12px;
+    margin: 0 auto;
+}

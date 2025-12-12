@@ -1,0 +1,46 @@
+@import "@styles/_variables.module.scss";
+@import "@styles/_mixins.module.scss";
+.wrapper {
+  display: flex;
+  justify-content: center;
+  background-color: $color-blue-dark;
+  color: $color-white;
+}
+
+.footer__container {
+  padding: 30px 0px;
+  width: 1400px;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+
+ 
+}
+
+.footer__middle {
+  @include flex(space-between, center, 10px);
+  padding: 15px 0px;
+ 
+}
+
+.address {
+  @include flex(flex-start, center, 8px);
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.footer__bottom {
+  @include flex(space-between, center, 10px);
+
+  padding: 15px 0px;
+  .footer__options {
+    @include flex(center, center, 20px);
+  
+  }
+}
+
+
+
+

@@ -1,0 +1,83 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modalWrapper {
+    position: relative;
+    width: 600px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 1000;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+.modalHeader {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.modalAvatar {
+    width: 80px;
+    height: 80px;
+}
+
+.modalHeaderInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.modalName {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.modalClose {
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+}
+
+.modalBody {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-size: 16px;
+}
+
+.modalBio {
+    font-size: 14px;
+    color: #555;
+}
+
+.modalSection {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.modalSectionTitle {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.modalList {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin: 0;
+}

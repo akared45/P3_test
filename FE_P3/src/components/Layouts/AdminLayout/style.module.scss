@@ -1,0 +1,24 @@
+.layoutWrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+   
+}
+
+.mainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f5f6fa;
+    min-height: 100vh;
+
+   
+}
+
+/* Content của các page trong <Outlet /> */
+.pageContent {
+    padding: 20px;
+    width: 100%;
+    min-height: calc(100vh - 60px); // trừ chiều cao header
+    background: #f5f6fa;
+}

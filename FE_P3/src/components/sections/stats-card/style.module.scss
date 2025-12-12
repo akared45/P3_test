@@ -1,0 +1,150 @@
+@import "@styles/_mixins.module.scss";
+@import "@styles/_variables.module.scss";
+
+.stats__wrapper {
+  width: 360px;
+  height: 185px;
+  padding: 25px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.stats__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .stats__title {
+    font-size: 16px;
+  }
+}
+
+.stats__icon {
+  padding: 10px;
+  background-color: $color-secondary;
+  border-radius: 30px;
+  svg {
+    width: 30px;
+    height: 30px;
+    color: white;
+  }
+}
+
+.stats__bot {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  .stats__value {
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+.wrapper__smalls {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 200px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  .small__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 25px 15px;
+    color: white;
+    border-radius: 12px;
+    background-color: #fb2091;
+
+    svg {
+      font-size: 58px;
+    }
+  }
+
+  .small__content {
+    flex: 2;
+    span {
+      font-size: 25px;
+      font-weight: 600;
+      color: #747577;
+    }
+    .small__value {
+      font-size: 45px;
+      font-weight: 700;
+    }
+  }
+}
+
+.wrapper {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  width: 350px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  background: #f5f7fb;
+  padding: 14px 18px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.value {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* màu phân loại giống UI */
+.low {
+  background-color: #fff7d7;
+}
+
+.out {
+  background-color: #ffe4e4;
+}
+
+.normal {
+  background-color: #e7f3ff;
+}
+
+.valueBox {
+  background-color: #e4ffe9;
+}
+
+.avg {
+  background-color: #f6e8ff;
+}

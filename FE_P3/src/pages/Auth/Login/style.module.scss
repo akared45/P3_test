@@ -1,0 +1,140 @@
+@import "@styles/_mixins.module.scss";
+@import "@styles/_variables.module.scss";
+
+.auth {
+    min-height: 100vh;
+    max-width: 1400px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 auto;
+    position: relative;
+
+   
+
+
+    &__illustration {
+        width: 566px;
+        height: 411px;
+        padding: 0 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    
+
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+    }
+
+    &__content {
+        width: 500px;
+        padding: 0 55px;
+
+        .auth__form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+      
+            .auth__social {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 15px;
+
+                .auth__social_list {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+
+                    .auth__social_item {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 12px;
+                        background-color: #4a81ff;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        transition: all 0.3s ease-in-out;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+                        svg {
+                            color: white;
+                        }
+
+                        &:hover {
+                            transform: translateY(-3px);
+                        }
+                    }
+                }
+            }
+
+            .auth__divider {
+                display: flex;
+                align-items: center;
+                text-align: center;
+                font-weight: 700;
+                gap: 12px;
+                color: #333;
+
+                &::before,
+                &::after {
+                    content: "";
+                    flex: 1;
+                    height: 1px;
+                    background-color: #ccc8c8;
+                }
+            }
+        }
+
+        .auth__actions_regis {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 8px;
+            font-size: $font-size-md;
+
+            input {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        .auth__actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-size: $font-size-md;
+
+            input {
+                width: 16px;
+                height: 16px;
+            }
+
+            .auth__forgot {
+                cursor: pointer;
+                flex: 1;
+                text-align: end;
+            }
+        }
+
+        .auth__register {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 3px;
+
+            .auth__register_link {
+                color: rgb(175, 37, 37);
+                font-weight: 600;
+                cursor: pointer;
+            }
+        }
+    }
+}

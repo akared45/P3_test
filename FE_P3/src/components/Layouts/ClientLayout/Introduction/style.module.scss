@@ -1,0 +1,61 @@
+@import "@styles/_variables.module.scss";
+@import "@styles/_mixins.module.scss";
+
+// Container chính
+.introduction {
+  @include flex(space-between, center, 40px);
+
+ 
+}
+
+.introduction__reverse {
+  @include flex(space-between, center, 40px);
+  flex-direction: row-reverse;
+
+
+}
+
+// Cột bên trái
+.col__left {
+  width: 40%;
+
+ 
+}
+
+// Tiêu đề và mô tả
+.intro__title {
+  color: $color-blue-dark;
+  font-size: 50px;
+  font-weight: $font-weight-normal;
+  padding: 10px 0;
+
+
+}
+
+.intro__des {
+  color: $color-dark-blur;
+  font-size: 20px;
+  padding: 10px 0;
+}
+
+// Hình ảnh
+.intro__img {
+  max-width: 100%;
+  height: 500px;
+  object-fit: contain;
+  
+}
+
+
+// Nút bấm
+.intro__btns {
+  @include flex(flex-start, center, 10px);
+  width: 400px;
+  margin-top: 15px;
+}
+
+.intro__subBtn {
+  width: 250px;
+
+  margin-top: 15px;
+}
