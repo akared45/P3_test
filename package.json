@@ -15,15 +15,10 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-  "start": "npm install && cd FE_P3 && npm install && cd ../BE_P3 && npm install && (npm run seed || npm run seed:dev || echo Running without seed...) && cd .. && npx concurrently \"npm run dev-fe\" \"npm run dev-be\"",
-
-    
+    "start": "npm install && cd FE_P3 && npm install && cd ../BE_P3 && npm install && (npm run seed || npm run seed:dev || echo Running without seed...) && cd .. && npx concurrently \"npm run dev-fe\" \"npm run dev-be\"",
     "dev": "npx concurrently \"npm run dev-fe\" \"npm run dev-be\"",
-    
     "dev-fe": "cd FE_P3 && npm run dev",
-    
-    "dev-be": "cd BE_P3 && npm run dev",
-    
+    "dev-be": "cd BE_P3 && npm start"
     "seed": "cd BE_P3 && (npm run seed 2>/dev/null || npm run seed:dev 2>/dev/null || echo 'No seed script found')"
   },
   "devDependencies": {
