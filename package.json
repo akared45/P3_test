@@ -15,9 +15,9 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "npm install && cd frontend && npm install && cd ../backend && npm install && (cd ../backend && npm run seed 2>/dev/null || cd ../backend && npm run seed:dev 2>/dev/null || echo 'Running without seed...') && cd .. && npx npm-run-all --parallel \"cd frontend && npm run dev\" \"cd backend && npm run dev\"",
-    "dev": "npx npm-run-all --parallel \"cd frontend && npm run dev\" \"cd backend && npm run dev\"",
-    "seed": "cd backend && (npm run seed 2>/dev/null || npm run seed:dev 2>/dev/null || echo 'No seed script found')"
+    "start": "npm install && cd FE_P3 && npm install && cd ../BE_P3 && npm install && (npm run seed 2>/dev/null || npm run seed:dev 2>/dev/null || echo 'Running without seed...') && cd .. && npx npm-run-all --parallel \"cd FE_P3 && npm run dev\" \"cd BE_P3 && npm run dev\"",
+    "dev": "npx npm-run-all --parallel \"cd FE_P3 && npm run dev\" \"cd BE_P3 && npm run dev\"",
+    "seed": "cd BE_P3 && (npm run seed 2>/dev/null || npm run seed:dev 2>/dev/null || echo 'No seed script found')"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5"
