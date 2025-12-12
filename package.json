@@ -15,11 +15,17 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "npm install && cd FE_P3 && npm install && cd ../BE_P3 && npm install && (npm run seed 2>/dev/null || npm run seed:dev 2>/dev/null || echo 'Running without seed...') && cd .. && npx npm-run-all --parallel \"cd FE_P3 && npm run dev\" \"cd BE_P3 && npm run dev\"",
-    "dev": "npx npm-run-all --parallel \"cd FE_P3 && npm run dev\" \"cd BE_P3 && npm run dev\"",
+    "start": "npm install && cd FE_P3 && npm install && cd ../BE_P3 && npm install && (npm run seed 2>/dev/null || npm run seed:dev 2>/dev/null || echo 'Running without seed...') && cd .. && npx concurrently \"npm run dev-fe\" \"npm run dev-be\"",
+    
+    "dev": "npx concurrently \"npm run dev-fe\" \"npm run dev-be\"",
+    
+    "dev-fe": "cd FE_P3 && npm run dev",
+    
+    "dev-be": "cd BE_P3 && npm run dev",
+    
     "seed": "cd BE_P3 && (npm run seed 2>/dev/null || npm run seed:dev 2>/dev/null || echo 'No seed script found')"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5"
+    "concurrently": "^8.0.0"
   }
 }
