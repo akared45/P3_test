@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const ITokenService = require("../../application/interfaces/ITokenService");
 require("dotenv").config();
 
@@ -6,8 +7,12 @@ class JwtTokenService extends ITokenService {
     constructor() {
         super();
         this.secretKey = process.env.JWT_SECRET_KEY || "fallback_secret_dev";
-        this.accessTokenExpiresIn = Number(process.env.JWT_ACCESS_EXPIRY) || 3600;
-        this.refreshTokenExpiresIn = Number(process.env.JWT_REFRESH_EXPIRY) || 604800;
+        this.accessTokenExpiresIn = process.env.JWT_ACCESS_EXPIRY || '1h';
+        this.refreshTokenExpiresIn = process.env.JWT_REFRESH_EXPIRY || '7d';
+    }
+
+    generateToken(payload) {
+        return this.generateAccessToken(payload);
     }
 
     generateAccessToken(payload) {
@@ -23,6 +28,25 @@ class JwtTokenService extends ITokenService {
         });
     }
 
+    generateVerificationToken() {
+        return crypto.randomBytes(32).toString('hex');
+    }
+    _parseDuration(duration) {
+        if (typeof duration === 'number') return duration;
+
+        const unit = duration.slice(-1);
+        const value = parseInt(duration.slice(0, -1));
+
+        if (isNaN(value)) return 3600; 
+
+        switch (unit) {
+            case 's': return value;          
+            case 'm': return value * 60;      
+            case 'h': return value * 60 * 60; 
+            case 'd': return value * 24 * 60 * 60; 
+            default: return value;
+        }
+    }
     verifyToken(token) {
         try {
             return jwt.verify(token, this.secretKey);
@@ -32,11 +56,12 @@ class JwtTokenService extends ITokenService {
     }
 
     getAccessTokenExpiry() {
-        return this.accessTokenExpiresIn;
+        return this._parseDuration(this.accessTokenExpiresIn);
     }
 
     getRefreshTokenExpiry() {
-        return new Date(Date.now() + (this.refreshTokenExpiresIn * 1000));
+        const seconds = this._parseDuration(this.refreshTokenExpiresIn);
+        return new Date(Date.now() + (seconds * 1000));
     }
 }
 

@@ -1,4 +1,3 @@
-const { MessageType } = require('./MessageType');
 const { Action, Resource } = require('./Permission');
 module.exports = {
   UserType: require('./UserType'),
@@ -9,6 +8,7 @@ module.exports = {
   NotificationType: require('./NotificationType'),
   MedicalConditionStatus: require('./MedicalConditionStatus'),
   MessageType: require('./MessageType'),
+  TokenType: require('./TokenType'),
   Action,
   Resource
 };

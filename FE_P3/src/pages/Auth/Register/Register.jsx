@@ -39,13 +39,15 @@ const Register = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const user = await register(values);
-        console.log(user);
-        toast.success("Đăng ký thành công");
+        await register(values);
+        toast.success("Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.", {
+            autoClose: 5000
+        })
         navigate("/dang-nhap");
       } catch (err) {
         console.log(err);
-        toast.error("Đăng ký thất bại");
+        const errorMessage = err.response?.data?.message || "Đăng ký thất bại";
+        toast.error(errorMessage);
       } finally {
         setLoading(false);
       }

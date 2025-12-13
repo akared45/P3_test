@@ -10,7 +10,13 @@ export const authApi = {
 
   refreshToken: () => axiosClient.post("/auth/refresh"),
 
-  logout: () => axiosClient.post("/auth/logout")
+  logout: () => axiosClient.post("/auth/logout"),
+
+  verifyEmail: (data) => axiosClient.post('/auth/verify-email', data),
+
+  forgotPassword: (data) => axiosClient.post("/auth/forgot-password", data),
+
+  resetPassword: (data) => axiosClient.post("/auth/reset-password", data),
 };
 
 /* ============================

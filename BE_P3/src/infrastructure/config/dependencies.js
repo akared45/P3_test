@@ -1,40 +1,56 @@
 const { repositories } = require("../database/database");
 
-//--SERVICES--//
+//--SERVICES (INFRASTRUCTURE)--//
 const BcryptAuthenticationService = require("../services/BcryptAuthenticationService");
 const JwtTokenService = require("../services/JwtTokenService");
 const AuthorizationService = require("../../domain/policies/AuthorizationService");
 const OpenAIService = require('../services/OpenAIService');
 const LocalDiskStorageService = require('../storage/LocalDiskStorageService');
 const SocketService = require('../services/SocketService');
+const NodemailerEmailService = require("../services/NodemailerEmailService"); 
+// [MỚI] Import Security Service
+const SecurityService = require('../services/SecurityService'); 
 
+//--INSTANTIATE SERVICES--//
 const authenticationService = new BcryptAuthenticationService();
 const tokenService = new JwtTokenService();
 const authorizationService = new AuthorizationService();
 const aiService = new OpenAIService();
 const storageService = new LocalDiskStorageService();
-const socketService = new SocketService(); 
+const socketService = new SocketService();
+const emailService = new NodemailerEmailService(); 
+// [MỚI] Khởi tạo Security Service
+const securityService = new SecurityService();
 
-// Destructure Repositories
+//--REPOSITORIES--//
 const {
     userRepository,
     userSessionRepository,
     appointmentRepository,
     specializationRepository,
-    messageRepository 
+    messageRepository,
+    verificationTokenRepository // Đã có sẵn từ bước trước
 } = repositories;
 
 //--USE_CASES--//
 
-// 1. Auth
-const RegisterUserUseCase = require("../../application/use_cases/auth/RegisterUserUseCase");
+// 1. Auth Module
+const RegisterPatientUseCase = require("../../application/use_cases/auth/RegisterPatientUseCase");
 const LoginUserUseCase = require("../../application/use_cases/auth/LoginUserUseCase");
 const RefreshTokenUseCase = require("../../application/use_cases/auth/RefreshTokenUseCase");
 const LogoutUserUseCase = require("../../application/use_cases/auth/LogoutUserUseCase");
+const VerifyEmailUseCase = require("../../application/use_cases/auth/VerifyEmailUseCase");
 
-const registerPatientUseCase = new RegisterUserUseCase({
+// [MỚI] Import Use Cases Quên Mật Khẩu
+const GeneratePasswordResetTokenUseCase = require("../../application/use_cases/auth/GeneratePasswordResetTokenUseCase");
+const ResetPasswordUseCase = require("../../application/use_cases/auth/ResetPasswordUseCase");
+
+const registerPatientUseCase = new RegisterPatientUseCase({
     userRepository,
-    authenticationService
+    authenticationService,
+    tokenService, 
+    emailService,
+    verificationTokenRepository 
 });
 
 const loginUserUseCase = new LoginUserUseCase({
@@ -52,6 +68,26 @@ const refreshTokenUseCase = new RefreshTokenUseCase({
 
 const logoutUserUseCase = new LogoutUserUseCase({
     userSessionRepository
+});
+
+const verifyEmailUseCase = new VerifyEmailUseCase({
+    userRepository,
+    verificationTokenRepository 
+});
+
+// [MỚI] Khởi tạo Use Case: Yêu cầu Token
+const generatePasswordResetTokenUseCase = new GeneratePasswordResetTokenUseCase({
+    userRepository,
+    verificationTokenRepository,
+    emailService,
+    securityService
+});
+
+// [MỚI] Khởi tạo Use Case: Đặt lại Mật khẩu
+const resetPasswordUseCase = new ResetPasswordUseCase({
+    userRepository,
+    verificationTokenRepository,
+    authenticationService // Dùng để hash password mới
 });
 
 // 2. Admin Module
@@ -110,6 +146,7 @@ const getAvailableSlotsUseCase = new GetDoctorAvailableSlots({
     appointmentRepository
 });
 
+// 5. Chat Module
 const SendMessageUseCase = require('../../application/use_cases/chat/SendMessageUseCase');
 const GetChatHistoryUseCase = require('../../application/use_cases/chat/GetChatHistoryUseCase');
 
@@ -123,6 +160,7 @@ const getChatHistoryUseCase = new GetChatHistoryUseCase({
     messageRepository
 });
 
+// 6. Booking & Slots Module
 const BookAppointmentUseCase = require("../../application/use_cases/appointment/BookAppointmentUseCase");
 const UpdateAppointmentStatusUseCase = require("../../application/use_cases/appointment/UpdateAppointmentStatusUseCase");
 const GetMyAppointmentsUseCase = require("../../application/use_cases/appointment/GetMyAppointmentsUseCase"); 
@@ -149,6 +187,8 @@ const getBusySlotsUseCase = new GetBusySlotsUseCase({
 const SuggestSpecialtyUseCase = require('../../application/use_cases/ai/SuggestSpecialtyUseCase');
 const suggestSpecialtyUseCase = new SuggestSpecialtyUseCase({ aiService });
 
+
+//--CONTROLLERS--//
 const AuthController = require("../../presentation/controllers/AuthController");
 const AdminController = require("../../presentation/controllers/AdminController");
 const DoctorController = require("../../presentation/controllers/DoctorController");
@@ -160,11 +200,15 @@ const AIController = require('../../presentation/controllers/AIController');
 const UploadController = require('../../presentation/controllers/UploadController');
 const ChatController = require("../../presentation/controllers/ChatController");
 
+// [MỚI] Cập nhật AuthController với các Use Cases mới
 const authController = new AuthController({
     registerPatientUseCase,
     loginUserUseCase,
     refreshTokenUseCase,
-    logoutUserUseCase
+    logoutUserUseCase,
+    verifyEmailUseCase,
+    generatePasswordResetTokenUseCase, // <--- THÊM VÀO
+    resetPasswordUseCase               // <--- THÊM VÀO
 });
 
 const adminController = new AdminController({
@@ -230,5 +274,6 @@ module.exports = {
     uploadController,
     chatController,
     socketService,
+    tokenService,
     sendMessageUseCase
 };

@@ -6,5 +6,6 @@ module.exports = {
   Specialization: require('./Specialization'),
   Medication: require('./Medication'),
   Notification: require('./Notification'),
-  UserSession: require('./UserSession')
+  UserSession: require('./UserSession'),
+  VerificationToken: require('./VerificationToken'),
 };

@@ -43,6 +43,19 @@ const UserSchema = new mongoose.Schema({
         },
         avatarUrl: { type: String, default: null },
     },
+
+    contacts: [{
+        type: { type: String, required: true },
+        value: { type: String, required: true },
+        isPrimary: { type: Boolean, default: false },
+        _id: false
+    }],
+
+    isEmailVerified: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
     isDeleted: {
         type: Boolean,
         default: false
@@ -51,19 +64,15 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: null
     },
-}, {    
+}, {
     discriminatorKey: 'userType',
     timestamps: true,
     _id: false
 });
+
 const UserModel = mongoose.model("User", UserSchema);
 
 const PatientSchema = new mongoose.Schema({
-    contacts: [{
-        type: { type: String },
-        value: String,
-        isPrimary: Boolean
-    }],
     medicalConditions: [{
         name: String,
         diagnosedDate: Date,
@@ -96,8 +105,8 @@ const DoctorSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    timeZone: { 
-        type: String, 
+    timeZone: {
+        type: String,
         default: 'Asia/Ho_Chi_Minh'
     },
     unavailableDates: [Date],
@@ -120,6 +129,8 @@ const DoctorSchema = new mongoose.Schema({
         _id: false
     }],
 });
+
 const PatientModel = UserModel.discriminator(UserType.PATIENT, PatientSchema);
 const DoctorModel = UserModel.discriminator(UserType.DOCTOR, DoctorSchema);
+
 module.exports = { UserModel, PatientModel, DoctorModel };

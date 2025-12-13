@@ -9,7 +9,6 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
-      console.log("🟢 App Init: Connecting socket...");
       connectSocket(token);
     }
     return () => {

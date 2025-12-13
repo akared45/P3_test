@@ -1,20 +1,31 @@
 const RegisterRequest = require("../../application/dtos/auth/RegisterRequest");
 const LoginRequest = require("../../application/dtos/auth/LoginRequest");
 const RefreshTokenRequest = require("../../application/dtos/auth/RefreshTokenRequest");
+const VerifyEmailRequest = require("../../application/dtos/auth/VerifyEmailRequest");
+const ForgotPasswordRequest = require('../../application/dtos/auth/ForgotPasswordRequest');
+const ResetPasswordRequest = require('../../application/dtos/auth/ResetPasswordRequest');
 
 class AuthController {
   constructor({
     registerPatientUseCase,
     loginUserUseCase,
     refreshTokenUseCase,
-    logoutUserUseCase
+    logoutUserUseCase,
+    verifyEmailUseCase,
+    generatePasswordResetTokenUseCase,
+    resetPasswordUseCase
   }) {
     this.registerPatientUseCase = registerPatientUseCase;
     this.loginUserUseCase = loginUserUseCase;
     this.refreshTokenUseCase = refreshTokenUseCase;
     this.logoutUserUseCase = logoutUserUseCase;
+    this.verifyEmailUseCase = verifyEmailUseCase;
+    this.generatePasswordResetTokenUseCase = generatePasswordResetTokenUseCase;
+    this.resetPasswordUseCase = resetPasswordUseCase;
+    this.forgotPassword = this.forgotPassword.bind(this);
+    this.resetPassword = this.resetPassword.bind(this);
   }
-  
+
   register = async (req, res, next) => {
     try {
       const requestDto = new RegisterRequest(req.body);
@@ -29,7 +40,9 @@ class AuthController {
     try {
       const requestDto = new LoginRequest(req.body);
       const result = await this.loginUserUseCase.execute(requestDto);
+
       const refreshToken = result.auth?.refreshToken || result.refreshToken;
+
       if (refreshToken) {
         res.cookie('refreshToken', refreshToken, {
           httpOnly: true,
@@ -38,10 +51,28 @@ class AuthController {
           maxAge: 7 * 24 * 60 * 60 * 1000
         });
       } else {
-        console.log('No token ');
+        console.log('No token generated');
       }
 
       return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  verifyEmail = async (req, res, next) => {
+    try {
+      console.log("Body nhận được từ FE:", req.body);
+            
+            // 1. Lấy chuỗi token từ body (Bất kể req.body là Object thường hay VerifyEmailRequest)
+            const { token } = req.body;
+
+            // 2. [QUAN TRỌNG] Đóng gói lại thành Object trước khi truyền vào UseCase
+            // Nếu bạn truyền execute(token) -> LỖI
+            // Bạn phải truyền execute({ token }) -> ĐÚNG
+            const result = await this.verifyEmailUseCase.execute({ token });
+            
+            return res.status(200).json(result);
     } catch (error) {
       next(error);
     }
@@ -55,6 +86,7 @@ class AuthController {
       }
       const requestDto = new RefreshTokenRequest({ refreshToken: token });
       const result = await this.refreshTokenUseCase.execute(requestDto);
+
       if (result.refreshToken) {
         res.cookie('refreshToken', result.refreshToken, {
           httpOnly: true,
@@ -80,12 +112,32 @@ class AuthController {
         secure: false,
         sameSite: 'lax',
         path: '/'
-      })
+      });
       return res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
       next(error);
     }
   };
+
+  forgotPassword = async (req, res, next) => {
+    try {
+      const requestDto = new ForgotPasswordRequest(req.body);
+      const result = await this.generatePasswordResetTokenUseCase.execute(requestDto);
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  resetPassword = async (req, res, next) => {
+    try {
+      const requestDto = new ResetPasswordRequest(req.body);
+      const result = await this.resetPasswordUseCase.execute(requestDto);
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = AuthController;

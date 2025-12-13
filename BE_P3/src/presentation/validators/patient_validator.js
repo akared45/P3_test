@@ -20,7 +20,7 @@ const schemas = {
     updatePatientProfile: Joi.object({
         fullName: Joi.string().required().messages({
             'string.empty': 'Họ tên không được để trống',
-            'any.required': 'Họ tên là bắt buộc'
+            'any.required': 'Họ tên là bắt buộc',
         }),
 
         gender: Joi.string().valid('Male', 'Female', 'Other').default('Other'),
@@ -30,22 +30,36 @@ const schemas = {
         }),
 
         avatarUrl: Joi.string().allow('', null).optional(),
+        contacts: Joi.array().items(
+            Joi.object({
+                type: Joi.string()
+                    .valid('phone', 'email', 'facebook', 'zalo', 'address')
+                    .required()
+                    .messages({
+                        'any.only': 'Loại liên hệ không hợp lệ'
+                    }),
 
-        email: Joi.string().email().optional(),
-        phone: Joi.string().pattern(/^[0-9+]{9,15}$/).required().messages({
-            'string.pattern.base': 'Số điện thoại không hợp lệ (9-15 số)',
-            'any.required': 'Số điện thoại là bắt buộc'
-        }),
+                value: Joi.string().required().when('type', {
+                    is: 'phone',
+                    then: Joi.string().pattern(/^[0-9+]{9,15}$/).messages({
+                        'string.pattern.base': 'Số điện thoại không hợp lệ (9-15 số)',
+                        'any.required': 'Số điện thoại là bắt buộc'
+                    }),
+                    otherwise: Joi.string()
+                }),
+                isPrimary: Joi.boolean().optional()
+            }).unknown(false)
+        ).optional(),
 
         medicalConditions: Joi.array().items(
             Joi.object({
                 name: Joi.string().required().messages({ 'any.required': 'Tên bệnh lý là bắt buộc' }),
                 status: Joi.string().valid('active', 'chronic', 'cured').default('active'),
-                diagnosedDate: Joi.date().allow(null).optional(),
+                diagnosedDate: Joi.date().iso().allow(null).optional(),
                 treatmentPlan: Joi.string().allow('', null).optional(),
                 notes: Joi.string().allow('', null).optional()
-            })
-        ).default([]),
+            }).unknown(false)
+        ).optional(),
 
         allergies: Joi.array().items(
             Joi.object({
@@ -53,9 +67,9 @@ const schemas = {
                 severity: Joi.string().valid('low', 'medium', 'high').default('low'),
                 reaction: Joi.string().allow('', null).optional(),
                 notes: Joi.string().allow('', null).optional()
-            })
-        ).default([])
-    })
+            }).unknown(false)
+        ).optional()
+    }).unknown(false)
 };
 
 module.exports = {

@@ -1,5 +1,5 @@
 const User = require('./User');
-const { Contact, MedicalCondition, Allergy } = require('../value_objects');
+const { MedicalCondition, Allergy } = require('../value_objects');
 const { UserType } = require('../enums');
 
 class Patient extends User {
@@ -7,18 +7,22 @@ class Patient extends User {
     super({
       ...data,
       userType: UserType.PATIENT,
-      profile: data.profile || {}
+      profile: data.profile || {},
+      isEmailVerified: data.isEmailVerified
     });
 
-    this.contacts = (data.contacts || []).map(c => c instanceof Contact ? c : new Contact(c));
-    this.medicalConditions = (data.medicalConditions || []).map(m => m instanceof MedicalCondition ? m : new MedicalCondition(m));
-    this.allergies = (data.allergies || []).map(a => a instanceof Allergy ? a : new Allergy(a));
+    this.medicalConditions = (data.medicalConditions || []).map(m =>
+      m instanceof MedicalCondition ? m : new MedicalCondition(m)
+    );
+    this.allergies = (data.allergies || []).map(a =>
+      a instanceof Allergy ? a : new Allergy(a)
+    );
 
     Object.freeze(this);
   }
 
   getPrimaryPhone() {
-    return this.contacts.find(c => c.type === 'phone' && c.isPrimary)?.value || null;
+    return this.getContactByType('phone');
   }
 
   hasAllergyTo(medName) {
@@ -26,31 +30,22 @@ class Patient extends User {
   }
 
   updateProfile(newProfileData) {
+    const {
+      contacts,
+      medicalConditions,
+      allergies,
+      ...otherProfileData
+    } = newProfileData;
+
     return new Patient({
       ...this,
+      contacts: contacts || this.contacts,
+      medicalConditions: medicalConditions || this.medicalConditions,
+      allergies: allergies || this.allergies,
       profile: {
         ...this.profile,
-        ...newProfileData
+        ...otherProfileData
       }
-    });
-  }
-
-  updateContactInfo(phone, address) {
-    let newContacts = [...this.contacts];
-
-    if (phone) {
-      newContacts = newContacts.filter(c => c.type !== 'phone');
-      newContacts.push(new Contact({ type: 'phone', value: phone, isPrimary: true }));
-    }
-
-    if (address) {
-      newContacts = newContacts.filter(c => c.type !== 'address');
-      newContacts.push(new Contact({ type: 'address', value: address, isPrimary: true }));
-    }
-
-    return new Patient({
-      ...this,
-      contacts: newContacts
     });
   }
 

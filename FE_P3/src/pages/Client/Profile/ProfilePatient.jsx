@@ -4,6 +4,7 @@ import { patientApi, uploadApi } from "../../../services/api";
 import ProfileForm from "./ProfileForm";
 import dayjs from "dayjs";
 import { AuthContext } from "../../../providers/AuthProvider";
+
 const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,14 +16,15 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         const { data } = await patientApi.getById(user.id);
-        console.log(data);
         const userData = data.data || data;
+        const phoneContact = userData.contacts?.find(c => c.type === 'phone');
+
         const formattedData = {
           ...userData,
           dateOfBirth: userData.dateOfBirth ? dayjs(userData.dateOfBirth).format("YYYY-MM-DD") : "",
           medicalConditions: userData.medicalConditions || [],
           allergies: userData.allergies || [],
-          phone: userData.phone || ""
+          phone: phoneContact ? phoneContact.value : ""
         };
 
         setProfile(formattedData);
@@ -33,28 +35,39 @@ const Profile = () => {
       }
     };
     fetchProfile();
-  }, []);
+  }, [user?.id]);
 
   const handleUpdateProfile = async (values, { setSubmitting }) => {
     try {
+      let updatedContacts = [];
+      if (profile?.contacts) {
+        updatedContacts = profile.contacts.filter(c => c.type !== 'phone');
+      }
+      if (values.phone) {
+        updatedContacts.push({
+          type: 'phone',
+          value: values.phone,
+          isPrimary: true
+        });
+      }
       const payload = {
         fullName: values.fullName,
         gender: values.gender,
         dateOfBirth: values.dateOfBirth,
         avatarUrl: values.avatarUrl,
-        phone: values.phone,
         medicalConditions: values.medicalConditions,
-        allergies: values.allergies
+        allergies: values.allergies,
+        contacts: updatedContacts
       };
 
       const res = await patientApi.updateMe(payload);
-      setProfile(values);
+      setProfile({ ...values, contacts: updatedContacts });
       setNotification({ open: true, message: "Cập nhật hồ sơ thành công!", severity: "success" });
-
     } catch (error) {
       console.error("Error updating profile", error);
       const errorMsg = error.response?.data?.message || "Có lỗi xảy ra khi cập nhật";
       const detailError = error.response?.data?.errors?.[0];
+
       setNotification({
         open: true,
         message: detailError || errorMsg,

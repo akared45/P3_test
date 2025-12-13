@@ -13,7 +13,7 @@ const validationSchema = Yup.object({
     fullName: Yup.string()
         .required("Họ và tên là bắt buộc")
         .min(3, "Tên quá ngắn"),
-
+        
     phone: Yup.string()
         .required("Số điện thoại là bắt buộc")
         .matches(/^[0-9+]{9,15}$/, "Số điện thoại không hợp lệ"),

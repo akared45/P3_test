@@ -17,7 +17,9 @@ import ProfilePatient from "../pages/Client/Profile/ProfilePatient";
 import AdminSchedule from "../pages/Admin/Schedule/AdminSchedule";
 import Specialty from "../pages/Admin/Specialty/Specialty";
 import Contact from "../pages/Client/Contact/Contact";
-
+import VerifyEmail from "../pages/Auth/Register/VerifyEmail";
+import ForgotPassword from "../pages/Auth/ForgotPassword";
+import ResetPassword from "../pages/Auth/ResetPassword";
 const routes = [
   {
     path: "/",
@@ -31,6 +33,9 @@ const routes = [
       { path: "dang-nhap", element: <Login /> },
       { path: "dang-ky", element: <Register /> },
       { path: "bac-si/:id", element: <DoctorDetail /> },
+      { path: "verify-email", element: <VerifyEmail /> },
+      { path: "quen-mat-khau", element: <ForgotPassword /> },
+      { path: "reset-password", element: <ResetPassword /> },
     ],
   },
   {
@@ -40,7 +45,6 @@ const routes = [
         <AdminLayout />
       </ProtectRoutes>
     ),
-
     children: [
       { path: "bang-dieu-khien", element: <Dashboard /> },
       { path: "profile", element: <Profile /> },

@@ -6,8 +6,7 @@ class UpdatePatientRequest {
         this.gender = data.gender;
         this.dateOfBirth = data.dateOfBirth;
         this.avatarUrl = data.avatarUrl;
-        this.phone = data.phone; 
-        this.address = data.address;
+        this.contacts = data.contacts; 
         this.medicalConditions = data.medicalConditions || [];
         this.allergies = data.allergies || [];
     }

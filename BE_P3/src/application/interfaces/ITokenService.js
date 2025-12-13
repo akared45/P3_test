@@ -1,8 +1,8 @@
 const { NotImplementedException } = require('../../domain/exceptions');
 
 class ITokenService {
-    generateAccessToken(payload) {
-        throw new NotImplementedException('ITokenService.generateAccessToken');
+    generateToken(payload, expiresIn) {
+        throw new NotImplementedException('ITokenService.generateToken');
     }
 
     generateRefreshToken(payload) {

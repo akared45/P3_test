@@ -7,7 +7,8 @@ class Doctor extends User {
     super({
       ...data,
       userType: UserType.DOCTOR,
-      profile: data.profile
+      profile: data.profile || {},
+      isEmailVerified: data.isEmailVerified
     });
 
     this.licenseNumber = data.licenseNumber;
@@ -18,10 +19,11 @@ class Doctor extends User {
     this.workHistory = data.workHistory || [];
     this.rating = Number(data.rating) || 0;
     this.reviewCount = Number(data.reviewCount) || 0;
-    this.schedules = (data.schedules || []).map(s => new Schedule(s));
-    this.unavailableDates = (data.unavailableDates || []).map(d => new UnavailableDate(d));
+    this.schedules = (data.schedules || []).map(s => s instanceof Schedule ? s : new Schedule(s));
+    this.unavailableDates = (data.unavailableDates || []).map(d => d instanceof UnavailableDate ? d : new UnavailableDate(d));
     this.timeZone = data.timeZone || 'Asia/Ho_Chi_Minh';
     this.yearsExperience = this._calculateYearsExperience();
+
     Object.freeze(this);
   }
 
@@ -36,7 +38,6 @@ class Doctor extends User {
         totalMilliseconds += (end - start);
       }
     });
-
     const millisecondsPerYear = 1000 * 60 * 60 * 24 * 365.25;
     return Math.floor(totalMilliseconds / millisecondsPerYear);
   }
@@ -66,21 +67,23 @@ class Doctor extends User {
   }
 
   updateDetails(data) {
+    const { contacts, ...otherData } = data;
     return new Doctor({
       ...this,
+      contacts: contacts || this.contacts,
       id: this.id,
-      isActive: data.isActive !== undefined ? data.isActive : this.isActive,
-      licenseNumber: data.licenseNumber || this.licenseNumber,
-      specCode: data.specCode || this.specCode,
-      bio: data.bio || this.bio,
-      qualifications: data.qualifications || this.qualifications,
-      workHistory: data.workHistory || this.workHistory,
-      schedules: data.schedules || this.schedules,
-      timeZone: data.timeZone || this.timeZone,
+      isActive: otherData.isActive !== undefined ? otherData.isActive : this.isActive,
+      licenseNumber: otherData.licenseNumber || this.licenseNumber,
+      specCode: otherData.specCode || this.specCode,
+      bio: otherData.bio || this.bio,
+      qualifications: otherData.qualifications || this.qualifications,
+      workHistory: otherData.workHistory || this.workHistory,
+      schedules: otherData.schedules || this.schedules,
+      timeZone: otherData.timeZone || this.timeZone,
       profile: {
         ...this.profile,
-        fullName: data.fullName || this.profile.fullName,
-        avatarUrl: data.avatarUrl || this.profile.avatarUrl
+        fullName: otherData.fullName || this.profile.fullName,
+        avatarUrl: otherData.avatarUrl || this.profile.avatarUrl
       }
     });
   }
@@ -107,4 +110,5 @@ function getTimeStringInTimezone(dateObj, timeZone) {
     minute: '2-digit'
   });
 }
+
 module.exports = Doctor;

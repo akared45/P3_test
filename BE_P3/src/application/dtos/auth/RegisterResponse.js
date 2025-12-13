@@ -1,11 +1,14 @@
 class RegisterResponse {
-    constructor(user) {
+    constructor(user, message = null) {
         this.id = user.id.toString();
         this.email = user.email;
         this.username = user.username;
         this.userType = user.userType;
         this.fullName = user.profile?.fullName || '';
         this.createdAt = user.createdAt;
+        if (message) {
+            this.message = message;
+        }
     }
 }
 
