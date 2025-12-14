@@ -20,6 +20,7 @@ import Contact from "../pages/Client/Contact/Contact";
 import VerifyEmail from "../pages/Auth/Register/VerifyEmail";
 import ForgotPassword from "../pages/Auth/ForgotPassword";
 import ResetPassword from "../pages/Auth/ResetPassword";
+import Message from "../pages/Admin/Message/Message";
 const routes = [
   {
     path: "/",
@@ -50,6 +51,7 @@ const routes = [
       { path: "profile", element: <Profile /> },
       { path: "benh-nhan", element: <Patients /> },
       { path: "chuyen-khoa", element: <Specialty /> },
+      { path: "message", element: <Message /> },
       { path: "bac-si", element: <Doctors /> },
       { path: "lich-lam-viec", element: <AdminSchedule /> },
       { path: "bao-cao", element: <Reports /> },

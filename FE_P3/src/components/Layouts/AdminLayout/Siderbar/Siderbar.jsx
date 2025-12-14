@@ -7,8 +7,56 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
+import SmsOutlinedIcon from "@mui/icons-material/SmsOutlined";
+const menuItems = [
+  {
+    label: "Thống kê",
+    to: "bang-dieu-khien",
+    icon: <GridViewIcon />,
+    roles: ["admin", "doctor"],
+  },
+  {
+    label: "Bệnh nhân",
+    to: "benh-nhan",
+    icon: <PersonOutlineOutlinedIcon />,
+    roles: ["admin"],
+  },
+  {
+    label: "Message",
+    to: "message",
+    icon: <SmsOutlinedIcon />,
+    roles: ["doctor"],
+  },
+  {
+    label: "Bác sĩ",
+    to: "bac-si",
+    icon: <PeopleAltOutlinedIcon />,
+    roles: ["admin"],
+  },
+  {
+    label: "Lịch làm việc",
+    to: "lich-lam-viec",
+    icon: <CalendarMonthOutlinedIcon />,
+    roles: ["admin", "doctor"],
+  },
+  {
+    label: "Chuyên khoa",
+    to: "chuyen-khoa",
+    icon: <MedicalInformationOutlinedIcon />,
+    roles: ["admin"],
+  },
+  {
+    label: "Cài đặt",
+    to: "cai-dat",
+    icon: <SettingsOutlinedIcon />,
+    roles: ["admin"],
+  },
+];
 
 const Siderbar = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const role = user?.userType?.toLowerCase();
+
   return (
     <section className={styles.sidebar} id="sidebar">
       <div className={styles.sidebarHeader}>
@@ -18,48 +66,14 @@ const Siderbar = () => {
       </div>
 
       <nav className={styles.navMenu}>
-        <Link
-          to="bang-dieu-khien"
-          className={`${styles.navItem} ${styles.active}`}
-        >
-          <span className={styles.navIcon}>
-            <GridViewIcon />
-          </span>
-          <span>Thống kê</span>
-        </Link>
-
-        <Link to="benh-nhan" className={styles.navItem}>
-          <span className={styles.navIcon}>
-            <PersonOutlineOutlinedIcon />
-          </span>
-          <span>Bệnh nhân</span>
-        </Link>
-
-        <Link to="bac-si" className={styles.navItem}>
-          <span className={styles.navIcon}>
-            <PeopleAltOutlinedIcon />
-          </span>
-          <span>Bác sĩ</span>
-        </Link>
-
-        <Link to="lich-lam-viec" className={styles.navItem}>
-          <span className={styles.navIcon}>
-            <CalendarMonthOutlinedIcon />
-          </span>
-          <span>Lịch làm việc</span>
-        </Link>
-        <Link to="chuyen-khoa" className={styles.navItem}>
-          <span className={styles.navIcon}>
-            <MedicalInformationOutlinedIcon />
-          </span>
-          <span>Chuyên khoa</span>
-        </Link>
-        <Link to="cai-dat" className={styles.navItem}>
-          <span className={styles.navIcon}>
-            <SettingsOutlinedIcon />
-          </span>
-          <span>Cài đặt</span>
-        </Link>
+        {menuItems
+          .filter((item) => item.roles.includes(role))
+          .map((item) => (
+            <Link key={item.to} to={item.to} className={styles.navItem}>
+              <span className={styles.navIcon}>{item.icon}</span>
+              <span>{item.label}</span>
+            </Link>
+          ))}
       </nav>
     </section>
   );
