@@ -6,9 +6,10 @@ const UserMapper = require("../mappers/UserMapper");
 class MongoUserRepository extends IUserRepository {
     async findById(id) {
         const doc = await UserModel.findById(id)
-            .populate('specCode')
-            .lean(); 
+            .populate('specCode', 'name')
+            .lean();
         return UserMapper.toDomain(doc);
+
     }
 
     async findByEmail(email) {
@@ -16,7 +17,6 @@ class MongoUserRepository extends IUserRepository {
             email: email,
             isDeleted: false
         }).lean();
-
         return UserMapper.toDomain(doc);
     }
 
@@ -30,7 +30,7 @@ class MongoUserRepository extends IUserRepository {
             .skip(skip)
             .limit(limit)
             .sort({ createdAt: -1 })
-            .populate('specCode')
+            .populate('specCode', 'name')
             .lean();
         return docs.map(doc => UserMapper.toDomain(doc));
     }
@@ -47,16 +47,16 @@ class MongoUserRepository extends IUserRepository {
 
         const isDoctor = data.userType === UserType.DOCTOR;
         let query = ModelToUse.findByIdAndUpdate(
-             data._id,
-             data,
-             { 
-                 upsert: true,
-                 new: true,
-                 runValidators: true 
-             }
+            data._id,
+            data,
+            {
+                upsert: true,
+                new: true,
+                runValidators: true
+            }
         );
         if (isDoctor) {
-            query = query.populate('specCode');
+            query = query.populate('specCode', 'name');
         }
         const updatedDoc = await query.lean();
         return UserMapper.toDomain(updatedDoc);

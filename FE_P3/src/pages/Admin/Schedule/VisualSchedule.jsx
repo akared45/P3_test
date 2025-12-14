@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import {
-    Box, Grid, Paper, Typography, Avatar, Tooltip, Chip, Stack, Divider
+    Box, Paper, Typography, Avatar, Tooltip, Chip, Stack,
+    Grid
 } from "@mui/material";
-import { AccessTime } from "@mui/icons-material";
 import { getImageUrl } from "@utils/imageHelper";
 
 const DAYS = [
@@ -12,7 +12,6 @@ const DAYS = [
     { key: "Thursday", label: "Thứ 5" },
     { key: "Friday", label: "Thứ 6" },
     { key: "Saturday", label: "Thứ 7" },
-    { key: "Sunday", label: "CN" },
 ];
 
 const VisualSchedule = ({ doctors }) => {
@@ -40,99 +39,130 @@ const VisualSchedule = ({ doctors }) => {
     }, [doctors]);
 
     return (
-        <Box sx={{ overflowX: 'auto', pb: 2 }}>
-            <Box
-                sx={{
-                    display: 'flex',
-                    gap: 2,
-                    pb: 1,
-                }}
+        <Box sx={{ width: '100%' }}>
+            {/* Dòng 1: Thứ 2, 3, 4 */}
+            <Grid container spacing={2} sx={{ mb: 2 }}>
+                {DAYS.slice(0, 3).map((day) => (
+                    <Grid item xs={12} md={4} key={day.key} sx={{ display: 'flex' }}>
+                        <ScheduleColumn day={day} shifts={scheduleMap[day.key]} />
+                    </Grid>
+                ))}
+            </Grid>
+            
+            {/* Dòng 2: Thứ 5, 6, 7 */}
+            <Grid container spacing={2}>
+                {DAYS.slice(3, 6).map((day) => (
+                    <Grid item xs={12} md={4} key={day.key} sx={{ display: 'flex' }}>
+                        <ScheduleColumn day={day} shifts={scheduleMap[day.key]} />
+                    </Grid>
+                ))}
+            </Grid>
+        </Box>
+    );
+};
+
+// Component con cho mỗi cột
+const ScheduleColumn = ({ day, shifts }) => {
+    return (
+        <Paper
+            variant="outlined"
+            sx={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                bgcolor: '#f8fafc',
+                borderColor: shifts.length > 0 ? '#1976d2' : '#e0e0e0',
+                overflow: 'hidden',
+            }}
+        >
+            <Box 
+                p={2} 
+                textAlign="center" 
+                borderBottom="1px solid #e0e0e0" 
+                bgcolor="white"
+                sx={{ flexShrink: 0 }}
             >
-                {DAYS.map((day) => {
-                    const shifts = scheduleMap[day.key];
-                    return (
-                        <Box
-                            key={day.key}
-                            sx={{
-                                flex: '1 1 0',          
-                            }}
+                <Typography variant="h6" fontWeight="bold" color="primary">
+                    {day.label}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {shifts.length} ca trực
+                </Typography>
+            </Box>
+
+            <Box sx={{ 
+                flex: 1,
+                overflowY: 'auto',
+                p: 2
+            }}>
+                <Stack spacing={1.5}>
+                    {shifts.map((item, index) => (
+                        <Tooltip
+                            key={index}
+                            title={`${item.doctor.fullName} (${item.slot.start}-${item.slot.end})`}
+                            arrow
                         >
-                            <Paper
-                                variant="outlined"
+                            <Box
                                 sx={{
-                                    height: '100%',
-                                    minHeight: 500,
-                                    bgcolor: '#f8fafc',
-                                    borderColor: shifts.length > 0 ? '#bbdefb' : '#eee'
+                                    p: 1.5,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1.5,
+                                    borderRadius: 1,
+                                    border: '1px solid #e0e0e0',
+                                    bgcolor: 'white',
+                                    '&:hover': { 
+                                        borderColor: '#1976d2'
+                                    },
                                 }}
                             >
-                                <Box p={1.5} textAlign="center" borderBottom="1px solid #eee" bgcolor="white">
-                                    <Typography variant="subtitle2" fontWeight="bold" textTransform="uppercase" color="primary">
-                                        {day.label}
-                                    </Typography>
-                                    <Typography variant="caption" color="text.secondary">
-                                        {shifts.length} ca trực
+                                <Avatar
+                                    src={getImageUrl(item.doctor.avatarUrl)}
+                                    sx={{ 
+                                        width: 36, 
+                                        height: 36, 
+                                        border: '1px solid #eee'
+                                    }}
+                                />
+
+                                <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+                                    <Chip
+                                        label={`${item.slot.start}-${item.slot.end}`}
+                                        size="small"
+                                        color="primary"
+                                        variant="outlined"
+                                        sx={{ 
+                                            fontSize: '0.75rem', 
+                                            mb: 0.5
+                                        }}
+                                    />
+                                    <Typography 
+                                        variant="body2" 
+                                        fontWeight="bold" 
+                                        noWrap 
+                                        sx={{ fontSize: '0.9rem' }}
+                                    >
+                                        {item.doctor.fullName}
                                     </Typography>
                                 </Box>
+                            </Box>
+                        </Tooltip>
+                    ))}
 
-                                <Stack spacing={1} p={1} sx={{ maxHeight: 600, overflowY: 'auto' }}>
-                                    {shifts.map((item, index) => (
-                                        <Tooltip
-                                            key={index}
-                                            title={`${item.doctor.fullName} (${item.doctor.specCode || 'BS'})`}
-                                            placement="top"
-                                            arrow
-                                        >
-                                            <Paper
-                                                elevation={0}
-                                                sx={{
-                                                    p: 1,
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: 1,
-                                                    borderRadius: 2,
-                                                    border: '1px solid #e0e0e0',
-                                                    bgcolor: 'white',
-                                                    cursor: 'pointer',
-                                                    '&:hover': { borderColor: '#2196f3', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }
-                                                }}
-                                            >
-                                                <Avatar
-                                                    src={getImageUrl(item.doctor.avatarUrl)}
-                                                    sx={{ width: 32, height: 32, border: '1px solid #eee' }}
-                                                />
-
-                                                <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
-                                                    <Box display="flex" justifyContent="space-between" alignItems="center">
-                                                        <Chip
-                                                            label={`${item.slot.start}-${item.slot.end}`}
-                                                            size="small"
-                                                            color="primary"
-                                                            variant="outlined"
-                                                            sx={{ height: 20, fontSize: '0.65rem', borderRadius: 1 }}
-                                                        />
-                                                    </Box>
-                                                    <Typography variant="caption" fontWeight="bold" noWrap display="block" mt={0.5}>
-                                                        {item.doctor.fullName}
-                                                    </Typography>
-                                                </Box>
-                                            </Paper>
-                                        </Tooltip>
-                                    ))}
-
-                                    {shifts.length === 0 && (
-                                        <Box textAlign="center" py={4} opacity={0.4}>
-                                            <Typography variant="caption" display="block">Trống lịch</Typography>
-                                        </Box>
-                                    )}
-                                </Stack>
-                            </Paper>
+                    {shifts.length === 0 && (
+                        <Box 
+                            textAlign="center" 
+                            py={3} 
+                            sx={{ opacity: 0.5 }}
+                        >
+                            <Typography variant="body2">
+                                Không có ca trực
+                            </Typography>
                         </Box>
-                    );
-                })}
-
+                    )}
+                </Stack>
             </Box>
-        </Box>
+        </Paper>
     );
 };
 

@@ -46,7 +46,8 @@ class CreateDoctorUseCase {
             schedules: request.schedules || [],
             unavailableDates: [],
             qualifications: request.qualifications,
-            workHistory: request.workHistory
+            workHistory: request.workHistory,
+            isEmailVerified: true
         });
         const savedDoctor = await this.userRepository.save(newDoctor);
 

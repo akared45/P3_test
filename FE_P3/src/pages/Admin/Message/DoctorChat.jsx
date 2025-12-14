@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Dialog, Grid, Fab, Badge } from "@mui/material";
 import { Chat as ChatIcon } from "@mui/icons-material";
-import { socket } from "../../../../services/socket";
-import { appointmentApi } from "../../../../services/api";
-import { useChat } from "../../../../hooks/useChat";
+import { socket } from "../../../services/socket";
+import { appointmentApi } from "../../../services/api";
+import { useChat } from "../../../hooks/useChat";
 import PatientListSidebar from "./PatientListSidebar";
 import ChatWindow from "./ChatWindow";
 import PatientInfoPanel from "./PatientInfoPanel";
@@ -36,7 +36,7 @@ export default function DoctorChat() {
     setMyId(user.id || user._id);
     if (isOpen) {
       appointmentApi.getMyAppointments().then((res) => {
-        console.log(res)
+        console.log(res);
         const validApps = res.data.data.filter(a =>
           ['confirmed', 'in_progress', 'completed', 'pending'].includes(a.status)
         );
