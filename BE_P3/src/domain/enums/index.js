@@ -1,3 +1,4 @@
+const PaymentMethod = require('./PaymentMethod');
 const { Action, Resource } = require('./Permission');
 module.exports = {
   UserType: require('./UserType'),
@@ -9,6 +10,8 @@ module.exports = {
   MedicalConditionStatus: require('./MedicalConditionStatus'),
   MessageType: require('./MessageType'),
   TokenType: require('./TokenType'),
+  PaymentStatus: require('./PaymentStatus'),
+  PaymentMethod: require('./PaymentMethod'),
   Action,
   Resource
 };

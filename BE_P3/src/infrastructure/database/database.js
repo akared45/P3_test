@@ -7,6 +7,7 @@ const MongoAppointmentRepository = require('./nosql/repositories/MongoAppointmen
 const MongoSpecializationRepository = require('./nosql/repositories/MongoSpecializationRepository');
 const MongoMessageRepository = require('./nosql/repositories/MongoMessageRepository');
 const MongoVerificationTokenRepository = require('./nosql/repositories/MongoVerificationTokenRepository');
+const MongoPaymentRepository= require('./nosql/repositories/MongoPaymentRepository')
 const dbType = process.env.DB_TYPE || 'nosql';
 
 const connectDatabase = async () => {
@@ -25,7 +26,8 @@ if (dbType === 'nosql') {
     messageRepository: new MongoMessageRepository(),
     appointmentRepository: new MongoAppointmentRepository(),
     specializationRepository: new MongoSpecializationRepository(),
-    verificationTokenRepository: new MongoVerificationTokenRepository()
+    verificationTokenRepository: new MongoVerificationTokenRepository(),
+    PaymentRepository: new MongoPaymentRepository()
   };
 } else {
   repositories = {

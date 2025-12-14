@@ -19,6 +19,7 @@ const aiRoutes = require('./src/presentation/routes/ai_routes');
 const uploadRoutes = require('./src/presentation/routes/upload_routes');
 const notificationRoutes = require('./src/presentation/routes/notification_routes');
 const chatRoutes = require ('./src/presentation/routes/chat_routes');
+const paymentRoutes = require('./src/presentation/routes/payment_routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,6 +42,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
@@ -54,6 +56,7 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/chat',chatRoutes);
+app.use('/api/payment', paymentRoutes);
 
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Server is healthy' });

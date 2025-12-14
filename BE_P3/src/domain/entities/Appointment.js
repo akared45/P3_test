@@ -1,6 +1,5 @@
-const { AppointmentStatus, AppointmentType } = require('../enums');
+const { AppointmentStatus, AppointmentType, PaymentStatus, PaymentMethod } = require('../enums');
 const { SymptomDetail, Prescription } = require('../value_objects');
-
 class Appointment {
   constructor({
     id,
@@ -18,7 +17,12 @@ class Appointment {
     doctorNotes = '',
     createdAt = new Date(),
     symptomDetails = [],
-    prescriptions = []
+    prescriptions = [],
+    amount = 0,
+    paymentStatus = PaymentStatus.UNPAID,
+    paymentMethod = PaymentMethod.CASH,
+    transactionId = null,
+    paymentUrl = null
   }) {
     if (!patientId) throw new Error("Appointment must have a patient");
     if (!doctorId) throw new Error("Appointment must have a doctor");
@@ -39,6 +43,11 @@ class Appointment {
     this.createdAt = createdAt instanceof Date ? createdAt : new Date(createdAt);
     this.symptomDetails = (symptomDetails || []).map(s => new SymptomDetail(s));
     this.prescriptions = (prescriptions || []).map(p => new Prescription(p));
+    this.amount = Number(amount) || 0;
+    this.paymentStatus = paymentStatus;
+    this.paymentMethod = paymentMethod;
+    this.transactionId = transactionId;
+    this.paymentUrl = paymentUrl;
     Object.freeze(this);
   }
 
@@ -83,6 +92,23 @@ class Appointment {
   hasParticipant(userId) {
     return String(this.patientId) === String(userId) ||
       String(this.doctorId) === String(userId);
+  }
+
+  markAsPaid(method, transactionId) {
+    let newStatus = this.status;
+
+    if (this.status === AppointmentStatus.PENDING) {
+      newStatus = AppointmentStatus.CONFIRMED;
+    }
+
+    return new Appointment({
+      ...this,
+      paymentStatus: PaymentStatus.PAID,
+      paymentMethod: method,
+      transactionId: transactionId,
+      status: newStatus,
+      updatedAt: new Date()
+    });
   }
 }
 
