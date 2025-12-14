@@ -1,19 +1,27 @@
 class MessageResponse {
-  constructor(messageEntity) {
-    this.id = messageEntity.id;
-    this.senderId = messageEntity.senderId;
-    this.appointmentId = messageEntity.appointmentId;
-    this.content = messageEntity.content;
-    this.type = messageEntity.type;
-    this.fileUrl = messageEntity.fileUrl || null;
-    this.isRead = messageEntity.isRead;
-    this.createdAt = messageEntity.createdAt;
-    this.aiAnalysis = messageEntity.aiAnalysis ? {
-      sentiment: messageEntity.aiAnalysis.sentiment,
-      riskLevel: messageEntity.aiAnalysis.riskLevel,
-      intent: messageEntity.aiAnalysis.intent
-    } : null;
-  }
+    constructor({ id, senderId, appointmentId, content, type, fileUrl, isRead, createdAt }) {
+        this.id = id;
+        this.senderId = senderId;
+        this.appointmentId = appointmentId;
+        this.content = content;
+        this.type = type;
+        this.fileUrl = fileUrl;
+        this.isRead = isRead;
+        this.createdAt = createdAt;
+    }
+
+    static fromEntity(entity) {
+        return new MessageResponse({
+            id: entity.id,
+            senderId: entity.senderId,
+            appointmentId: entity.appointmentId,
+            content: entity.content,
+            type: entity.type,
+            fileUrl: entity.fileUrl,
+            isRead: entity.isRead,
+            createdAt: entity.createdAt
+        });
+    }
 }
 
 module.exports = MessageResponse;

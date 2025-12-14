@@ -8,6 +8,10 @@ class IEmailService {
     async sendPasswordResetEmail(toEmail, resetLink, fullName) {
         throw new NotImplementedException('IEmailService.sendPasswordResetEmail');
     }
+    
+    async sendAppointmentConfirmation(toEmail, appointmentDetails) {
+        throw new NotImplementedException('IEmailService.sendAppointmentConfirmation');
+    }
 }
 
 module.exports = IEmailService;

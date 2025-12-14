@@ -1,10 +1,11 @@
 class AIAnalysis {
-    constructor({ sentiment, intent, keyPhrases, riskLevel }) {
-        this.sentiment = sentiment || 'neutral';
-        this.intent = intent || 'unknown';
-        this.keyPhrases = Array.isArray(keyPhrases) ? keyPhrases : [];
-        this.riskLevel = riskLevel || 'low';
+    constructor({ suggestedSpecialty, reasoning, confidence }) {
+        if (!suggestedSpecialty) throw new Error("AIAnalysis: suggestedSpecialty is required");
+        this.suggestedSpecialty = suggestedSpecialty;
+        this.reasoning = reasoning || "";
+        this.confidence = confidence || 0;
         Object.freeze(this);
     }
 }
+
 module.exports = AIAnalysis;

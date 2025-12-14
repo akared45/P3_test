@@ -88,10 +88,9 @@ export const aiApi = {
 };
 
 export const chatApi = {
-  getHistory: (appointmentId) => axiosClient.get(`/chat/${appointmentId}`),
-
-  send: (data) => axiosClient.post("/chat/send", data),
+  getHistory: (appointmentId) => axiosClient.get(`/chat/history/${appointmentId}`)
 };
+
 /* ============================
    UPLOAD API
 ============================ */
@@ -104,4 +103,10 @@ export const uploadApi = {
       headers: { "Content-Type": "multipart/form-data" },
     });
   },
+};
+
+export const notificationApi = {
+    getAll: (params) => axiosClient.get("/notifications", { params }),
+
+    markAsRead: (id) => axiosClient.patch(`/notifications/${id}/read`),
 };

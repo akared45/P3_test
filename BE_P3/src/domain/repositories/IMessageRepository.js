@@ -1,17 +1,11 @@
 const { NotImplementedException } = require('../exceptions');
 
 class IMessageRepository {
-    async save(messageEntity) {
-        throw new NotImplementedException();
-    }
-
-    async findByAppointmentId(appointmentId, limit = 50, offset = 0) {
-        throw new NotImplementedException();
-    }
-
-    async markAsRead(appointmentId, readerId) {
-        throw new NotImplementedException();
-    }
+    async save(messageEntity) { throw new NotImplementedException(); }
+    
+    async findByAppointmentId(appointmentId, limit, offset) { throw new NotImplementedException(); }
+    
+    async markAllAsRead(appointmentId, userId) { throw new NotImplementedException(); }
 }
 
 module.exports = IMessageRepository;

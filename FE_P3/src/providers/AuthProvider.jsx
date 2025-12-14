@@ -4,7 +4,7 @@ import {
   setAccessToken,
   clearAccessToken,
 } from "../utils/authMemory";
-import { disconnectSocket } from "../services/socket";
+import { connectSocket, disconnectSocket } from "../services/socket";
 
 export const AuthContext = createContext();
 
@@ -22,13 +22,13 @@ export const AuthProvider = ({ children }) => {
         const res = await authApi.refreshToken();
 
         if (res.data && res.data.accessToken) {
-          setAccessToken(res.data.accessToken);
+          const newToken = res.data.accessToken;
+          setAccessToken(newToken);
+          connectSocket(newToken);
         }
       } catch (error) {
         console.log("Session expired or invalid");
-        clearAccessToken();
-        localStorage.removeItem("user");
-        setUser(null);
+        handleLogoutCleanup();
       } finally {
         setLoading(false);
       }
@@ -36,6 +36,13 @@ export const AuthProvider = ({ children }) => {
 
     initAuth();
   }, []);
+
+  const handleLogoutCleanup = () => {
+    clearAccessToken();
+    localStorage.removeItem("user");
+    setUser(null);
+    disconnectSocket();
+  };
 
   const register = async ({ fullName, username, email, password }) => {
     try {
@@ -58,10 +65,10 @@ export const AuthProvider = ({ children }) => {
       const res = await authApi.login({ email, password });
       const { accessToken } = res.data.auth;
       const userData = res.data.user;
-
       setAccessToken(accessToken);
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
+      connectSocket(accessToken);
 
       return userData;
     } catch (error) {
@@ -86,10 +93,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Logout API error:", error);
     } finally {
-      clearAccessToken();
-      setUser(null);
-      localStorage.removeItem("user");
-      disconnectSocket();
+      handleLogoutCleanup();
     }
   };
 

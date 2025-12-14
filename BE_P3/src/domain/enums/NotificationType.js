@@ -1,9 +1,9 @@
-const NotificationType = Object.freeze({
-  SYSTEM: 'system',                   
-  APPOINTMENT_REMINDER: 'appointment_reminder', 
-  APPOINTMENT_SUCCESS: 'appointment_success',   
-  APPOINTMENT_CANCELLED: 'appointment_cancelled', 
-  NEW_MESSAGE: 'new_message'         
-});
+const NotificationType = {
+  BOOKING_SUCCESS: 'BOOKING_SUCCESS',
+  BOOKING_CANCELLED: 'BOOKING_CANCELLED',
+  SYSTEM_ALERT: 'SYSTEM_ALERT',
+  NEW_MESSAGE: 'NEW_MESSAGE',
+  REMINDER: 'REMINDER'
+};
 
 module.exports = NotificationType;

@@ -1,40 +1,35 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
 import routes from "./routes/routes";
 import { AuthProvider } from "./providers/AuthProvider";
 import { ToastProvider } from "./providers/ToastProvider";
 import { UserProvider } from "./providers/UserProvider";
-import { connectSocket, disconnectSocket } from "./services/socket";
+// [1] Import NotificationProvider
+import { NotificationProvider } from "./providers/NotificationProvider"; 
+
 function App() {
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      connectSocket(token);
-    }
-    return () => {
-      disconnectSocket();
-    };
-  }, []); 
   return (
     <ToastProvider>
       <AuthProvider>
-        <UserProvider>
-          <BrowserRouter>
-            <Routes>
-              {routes.map((route, index) => (
-                <Route key={index} path={route.path} element={route.element}>
-                  {route.children?.map((child, idx) => (
-                    <Route
-                      key={idx}
-                      path={child.path}
-                      element={child.element}
-                    />
+        {/* [2] Bọc NotificationProvider Ở ĐÂY (Sau AuthProvider) */}
+        <NotificationProvider>
+            <UserProvider>
+              <BrowserRouter>
+                <Routes>
+                  {routes.map((route, index) => (
+                    <Route key={index} path={route.path} element={route.element}>
+                      {route.children?.map((child, idx) => (
+                        <Route
+                          key={idx}
+                          path={child.path}
+                          element={child.element}
+                        />
+                      ))}
+                    </Route>
                   ))}
-                </Route>
-              ))}
-            </Routes>
-          </BrowserRouter>
-        </UserProvider>
+                </Routes>
+              </BrowserRouter>
+            </UserProvider>
+        </NotificationProvider>
       </AuthProvider>
     </ToastProvider>
   );

@@ -1,8 +1,8 @@
-const MessageType = Object.freeze({
-    TEXT: 'text',
-    IMAGE: 'image',
-    FILE: 'file',
-    SYSTEM: 'system'
-});
+const MessageType = {
+    TEXT: 'TEXT',
+    IMAGE: 'IMAGE',
+    FILE: 'FILE',
+    SYSTEM: 'SYSTEM'
+};
 
-module.exports = { MessageType }
+module.exports = MessageType;
