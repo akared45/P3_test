@@ -38,7 +38,7 @@ export default function DoctorChat() {
       appointmentApi.getMyAppointments().then((res) => {
         console.log(res);
         const validApps = res.data.data.filter(a =>
-          ['confirmed', 'in_progress', 'completed', 'pending'].includes(a.status)
+          ['confirmed', 'in_progress', 'completed'].includes(a.status)
         );
         setAppointments(validApps);
       });
@@ -75,18 +75,18 @@ export default function DoctorChat() {
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        maxWidth={false} 
+        maxWidth={false}
         PaperProps={{
           sx: {
-            width: '95vw',    
-            height: '92vh',   
+            width: '95vw',
+            height: '92vh',
             maxWidth: '100%',
             borderRadius: 2,
-            overflow: 'hidden' 
+            overflow: 'hidden'
           }
         }}
       >
-        <Grid container sx={{ height: '100%', flexWrap: 'nowrap' }}> 
+        <Grid container sx={{ height: '100%', flexWrap: 'nowrap' }}>
           <Grid item sx={{ width: '20%', minWidth: '250px', borderRight: 1, borderColor: 'divider' }}>
             <PatientListSidebar
               appointments={appointments}

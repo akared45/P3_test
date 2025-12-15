@@ -80,7 +80,10 @@ export const appointmentApi = {
     return axiosClient.get(`/appointments/busy-slots/${doctorId}`, {
       params: { date }
     });
-  }
+  },
+
+  complete: (id, data) => axiosClient.post(`/appointments/${id}/complete`, data)
+
 };
 
 export const aiApi = {

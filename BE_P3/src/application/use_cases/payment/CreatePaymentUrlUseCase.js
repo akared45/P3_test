@@ -8,7 +8,7 @@ class CreatePaymentUrlUseCase {
         const { appointmentId, userId } = request;
 
         const appointment = await this.appointmentRepository.findById(appointmentId);
-        const orderId = `${appointmentId}_${new Date().getTime()}`;
+
         if (!appointment) {
             throw new Error("Lịch hẹn không tồn tại");
         }
@@ -17,14 +17,15 @@ class CreatePaymentUrlUseCase {
             throw new Error("Bạn không có quyền thanh toán cho lịch hẹn này");
         }
 
-        if (appointment.status !== 'pending' && appointment.paymentStatus === 'PAID') {
-            throw new Error("Lịch hẹn này đã được thanh toán hoặc không ở trạng thái chờ.");
+        if (appointment.paymentStatus === 'PAID') {
+            throw new Error("Lịch hẹn này đã được thanh toán.");
         }
 
-        const amount = 1000;
+        const amount = 50000;
         const uniqueOrderId = `${appointmentId}_${new Date().getTime()}`;
         const notifyUrl = `${process.env.BACKEND_URL}/api/payment/momo/ipn`;
         const returnUrl = `${process.env.FRONTEND_URL}/payment-result`;
+
         const payUrl = await this.momoPaymentService.createPaymentUrl({
             orderId: uniqueOrderId,
             amount: amount,
@@ -32,6 +33,9 @@ class CreatePaymentUrlUseCase {
             returnUrl,
             notifyUrl
         });
+        const updatedAppointment = appointment.updatePaymentUrl(payUrl);
+
+        await this.appointmentRepository.save(updatedAppointment);
 
         return { payUrl };
     }

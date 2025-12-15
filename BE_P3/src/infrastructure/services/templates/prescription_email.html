@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        .email-container { max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+        .header { background-color: #1976d2; color: white; padding: 20px; text-align: center; }
+        .body { padding: 20px; color: #333; }
+        .section-title { color: #1976d2; border-bottom: 2px solid #1976d2; padding-bottom: 5px; margin-top: 20px; margin-bottom: 10px; font-weight: bold; }
+        .info-table { width: 100%; margin-bottom: 20px; border-collapse: collapse; }
+        .info-table td { padding: 5px; }
+        .rx-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .rx-table th { background-color: #f2f2f2; padding: 10px; text-align: left; border-bottom: 2px solid #ddd; }
+        .rx-table td { padding: 10px; border-bottom: 1px solid #eee; }
+        .note-box { background-color: #fff3cd; padding: 15px; border-radius: 5px; border: 1px solid #ffeeba; margin-top: 20px; }
+        .footer { background-color: #f1f1f1; padding: 15px; text-align: center; font-size: 12px; color: #888; }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Đơn Thuốc Điện Tử</h1>
+        </div>
+        <div class="body">
+            <p>Chào bạn <strong>{{patientName}}</strong>,</p>
+            <p>Dưới đây là kết quả tư vấn và đơn thuốc từ buổi khám của bạn.</p>
+
+            <table class="info-table">
+                <tr><td><strong>Bác sĩ:</strong> BS. {{doctorName}}</td></tr>
+                <tr><td><strong>Ngày khám:</strong> {{date}}</td></tr>
+                <tr><td><strong>Chẩn đoán/Triệu chứng:</strong> {{symptoms}}</td></tr>
+            </table>
+
+            <div class="section-title">💊 DANH MỤC THUỐC</div>
+            <table class="rx-table">
+                <thead>
+                    <tr>
+                        <th>Tên thuốc</th>
+                        <th>Số lượng</th>
+                        <th>Cách dùng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{prescriptionRows}} 
+                    </tbody>
+            </table>
+
+            <div class="section-title">📝 LỜI DẶN CỦA BÁC SĨ</div>
+            <div class="note-box">
+                {{doctorNotes}}
+            </div>
+            
+            <p style="margin-top: 20px;">Vui lòng tuân thủ đúng liều lượng. Nếu có bất thường, hãy liên hệ lại ngay.</p>
+        </div>
+        <div class="footer">
+            <p>© 2025 BookingCare System. Prescription generated automatically.</p>
+        </div>
+    </div>
+</body>
+</html>

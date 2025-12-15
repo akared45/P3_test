@@ -16,7 +16,7 @@ class NodemailerEmailService extends IEmailService {
             }
         });
     }
-async _send(mailOptions) {
+    async _send(mailOptions) {
         try {
             await this.transporter.sendMail(mailOptions);
             console.log(`Email sent to: ${mailOptions.to}`);
@@ -42,12 +42,12 @@ async _send(mailOptions) {
         }
     }
 
-   async sendPasswordResetEmail(toEmail, resetLink, fullName) {
+    async sendPasswordResetEmail(toEmail, resetLink, fullName) {
         try {
             const templatePath = path.join(__dirname, 'templates', 'password_reset.html');
             let html = fs.readFileSync(templatePath, 'utf8');
             html = html.replace('{{name}}', fullName || 'Bạn')
-                       .replace('{{resetLink}}', resetLink);
+                .replace('{{resetLink}}', resetLink);
             const mailOptions = {
                 from: `"Doctor App Support" <${process.env.EMAIL_USER}>`,
                 to: toEmail,
@@ -60,24 +60,15 @@ async _send(mailOptions) {
         }
     }
 
-    async _send(mailOptions) {
-        try {
-            await this.transporter.sendMail(mailOptions);
-            console.log(`[Email Service] Email sent successfully to: ${mailOptions.to}`);
-        } catch (error) {
-            console.error(`[Email Service Error] Failed to send to ${mailOptions.to}:`, error);
-        }
-    }
-
     async sendAppointmentConfirmation(toEmail, { patientName, doctorName, time, date }) {
         try {
             const templatePath = path.join(__dirname, 'templates', 'appointment_confirmation.html');
             let html = fs.readFileSync(templatePath, 'utf8');
 
             html = html.replace('{{patientName}}', patientName)
-                       .replace('{{doctorName}}', doctorName)
-                       .replace('{{time}}', time)
-                       .replace('{{date}}', date);
+                .replace('{{doctorName}}', doctorName)
+                .replace('{{time}}', time)
+                .replace('{{date}}', date);
 
             const mailOptions = {
                 from: `"BookingCare System" <${process.env.EMAIL_USER}>`,
@@ -114,6 +105,41 @@ async _send(mailOptions) {
             console.log(`Đã gửi mail thanh toán cho: ${to}`);
         } catch (error) {
             console.error("Lỗi gửi email thanh toán:", error);
+        }
+    }
+
+    async sendPrescriptionEmail(toEmail, { patientName, doctorName, date, symptoms, doctorNotes, prescriptions }) {
+        try {
+            const templatePath = path.join(__dirname, 'templates', 'prescription_email.html');
+            let html = fs.readFileSync(templatePath, 'utf8');
+
+            const prescriptionRows = prescriptions.map(p => `
+                <tr>
+                    <td><strong>${p.drugName}</strong></td>
+                    <td>${p.quantity}</td>
+                    <td>${p.usage}</td>
+                </tr>
+            `).join('');
+
+            const finalRows = prescriptionRows || '<tr><td colspan="3" style="text-align:center">Không có thuốc được kê</td></tr>';
+
+            html = html.replace('{{patientName}}', patientName)
+                .replace('{{doctorName}}', doctorName)
+                .replace('{{date}}', date)
+                .replace('{{symptoms}}', symptoms || 'Không ghi nhận')
+                .replace('{{doctorNotes}}', doctorNotes || 'Không có lời dặn thêm')
+                .replace('{{prescriptionRows}}', finalRows);
+
+            const mailOptions = {
+                from: `"BookingCare System" <${process.env.EMAIL_USER}>`,
+                to: toEmail,
+                subject: `💊 Đơn thuốc từ BS ${doctorName} - ${date}`,
+                html: html
+            };
+
+            await this._send(mailOptions);
+        } catch (error) {
+            console.error("Lỗi gửi email đơn thuốc:", error);
         }
     }
 }

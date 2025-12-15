@@ -50,7 +50,12 @@ class Appointment {
     this.paymentUrl = paymentUrl;
     Object.freeze(this);
   }
-
+updatePaymentUrl(url) {
+        return new Appointment({
+            ...this, // Copy toàn bộ dữ liệu cũ
+            paymentUrl: url // Ghi đè url mới
+        });
+    }
   isConfirmed() {
     return this.status === AppointmentStatus.CONFIRMED;
   }
@@ -77,15 +82,17 @@ class Appointment {
     });
   }
 
-  complete(notes = '', prescriptions = []) {
-    if (this.status !== AppointmentStatus.CONFIRMED && this.status !== AppointmentStatus.IN_PROGRESS) {
-      throw new Error("Appointment must be confirmed or in-progress to complete");
+  complete(doctorNotes, prescriptions, updatedSymptoms = null) {
+    if (this.status !== 'confirmed' && this.status !== 'in_progress') {
+      throw new Error("Appointment must be confirmed or in-progress to complete.");
     }
+
     return new Appointment({
       ...this,
-      status: AppointmentStatus.COMPLETED,
-      doctorNotes: notes,
-      prescriptions: prescriptions.map(p => new Prescription(p))
+      status: 'completed',
+      doctorNotes: doctorNotes,
+      prescriptions: prescriptions,
+      symptoms: updatedSymptoms || this.symptoms
     });
   }
 

@@ -38,13 +38,6 @@ export default function ChatWindow({
 
   const getStatusInfo = (status) => {
     switch(status?.toLowerCase()) {
-      case 'pending':
-        return {
-          icon: <PendingIcon fontSize="small" />,
-          color: 'warning',
-          text: 'Chờ xác nhận',
-          actionButton: true
-        };
       case 'active':
       case 'confirmed':
         return {
@@ -136,22 +129,6 @@ export default function ChatWindow({
           )}
           <IconButton onClick={onClose}><CloseIcon /></IconButton>
         </Box>
-
-        {/* Action Button for Active Status */}
-        {activeApp && (activeApp.status?.toLowerCase() === 'active' || activeApp.status?.toLowerCase() === 'confirmed') && (
-          <Box sx={{ display: 'flex', gap: 2, width: '100%', justifyContent: 'flex-end' }}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              startIcon={<CheckCircleIcon />}
-              onClick={() => onCompleteAppointment && onCompleteAppointment(activeApp.id)}
-              sx={{ borderRadius: 2, textTransform: 'none', fontSize: '0.85rem' }}
-            >
-              Hoàn thành tư vấn
-            </Button>
-          </Box>
-        )}
       </Box>
 
       <Box sx={{ 

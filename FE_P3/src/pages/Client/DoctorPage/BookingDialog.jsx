@@ -51,8 +51,8 @@ const BookingDialog = ({ open, onClose, doctor }) => {
     setPaymentLoading(true);
     try {
       const res = await paymentApi.createMomoUrl(newAppointmentId);
-      if (res && res.payUrl) {
-        window.location.href = res.payUrl;
+      if (res && res.data && res.data.payUrl) {
+        window.location.href = res.data.payUrl;
       } else {
         alert("Không lấy được link thanh toán MoMo");
       }

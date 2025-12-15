@@ -18,7 +18,6 @@ export default function PatientListSidebar({
     onAcceptAppointment
 }) {
     console.log(appointments);
-
     const groupedApps = {
         pending: appointments.filter(a => a.status === 'pending' || a.status === 'PENDING'),
         in_progress: appointments.filter(a => a.status === 'in_progress' || a.status === 'IN_PROGRESS'),
@@ -27,7 +26,6 @@ export default function PatientListSidebar({
     };
 
     const statusLabels = {
-        pending: 'Chờ xác nhận',
         in_progress: 'Đang tư vấn',
         confirmed: 'Đã xác nhận',
         completed: 'Đã hoàn thành'

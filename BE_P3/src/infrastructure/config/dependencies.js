@@ -178,6 +178,7 @@ const BookAppointmentUseCase = require("../../application/use_cases/appointment/
 const UpdateAppointmentStatusUseCase = require("../../application/use_cases/appointment/UpdateAppointmentStatusUseCase");
 const GetMyAppointmentsUseCase = require("../../application/use_cases/appointment/GetMyAppointmentsUseCase"); 
 const GetBusySlotsUseCase = require("../../application/use_cases/appointment/GetBusySlotsUseCase");
+const CompleteAppointmentUseCase = require('../../application/use_cases/appointment/CompleteAppointmentUseCase');
 
 const bookAppointmentUseCase = new BookAppointmentUseCase({
     appointmentRepository,
@@ -197,6 +198,12 @@ const getMyAppointmentsUseCase = new GetMyAppointmentsUseCase({
 
 const getBusySlotsUseCase = new GetBusySlotsUseCase({
     appointmentRepository
+});
+
+const completeAppointmentUseCase = new CompleteAppointmentUseCase({
+    appointmentRepository,
+    userRepository,
+    emailService
 });
 
 // 7. AI Module
@@ -285,7 +292,8 @@ const appointmentController = new AppointmentController({
     bookAppointmentUseCase,
     updateAppointmentStatusUseCase,
     getMyAppointmentsUseCase,
-    getBusySlotsUseCase
+    getBusySlotsUseCase,
+    completeAppointmentUseCase
 });
 
 const specializationController = new SpecializationController({
