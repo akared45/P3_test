@@ -178,6 +178,7 @@ exports.userSeeds = () => {
             passwordHash: hash("123456"),
             userType: "patient",
             isActive: true,
+            isEmailVerified: true,
             createdAt: new Date(baseDate.getTime() + i * 24 * 60 * 60 * 1000),
             isDeleted: i === 9,
             deletedAt: i === 9 ? new Date("2024-06-15T14:30:00Z") : null,
@@ -254,6 +255,7 @@ exports.userSeeds = () => {
             username: `doctor${docNum}`,
             email: emailUsername,
             passwordHash: hash("123456"),
+            isEmailVerified: true,
             userType: "doctor",
             isActive: i !== 8,
             createdAt: new Date(baseDate.getTime() + i * 2 * 24 * 60 * 60 * 1000),
@@ -353,6 +355,7 @@ exports.userSeeds = () => {
             email: `admin${i}@telemedicine.com`,
             passwordHash: hash(`admin${i}123`),
             userType: "admin",
+            isEmailVerified: true,
             isActive: true,
             createdAt: new Date(baseDate.getTime() + i * 3 * 24 * 60 * 60 * 1000),
             isDeleted: i === 3,
@@ -471,6 +474,7 @@ exports.notificationSeeds = (function () {
         notifications.push({
             _id: `NOT${notifNum}`,
             userId: i % 3 === 0 ? `DOC${doctorNum}` : `PAT${patientNum}`,
+            
             type: notificationTypes[i % notificationTypes.length],
             title: ["Lịch hẹn sắp tới", "Đơn thuốc đã sẵn sàng", "Kết quả xét nghiệm",
                 "Xác nhận thanh toán", "Cảnh báo hệ thống"][i % 5],

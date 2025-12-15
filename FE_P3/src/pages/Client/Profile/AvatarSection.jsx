@@ -58,9 +58,6 @@ const AvatarSection = ({ formik, isEditing, onUpload }) => {
             <Typography variant="h6" fontWeight="bold" align="center">
                 {values.fullName || "Chưa có tên"}
             </Typography>
-            <Typography variant="body2" color="textSecondary" align="center">
-                {values.id}
-            </Typography>
         </Box>
     );
 };

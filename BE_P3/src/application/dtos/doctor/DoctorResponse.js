@@ -7,6 +7,8 @@ class DoctorResponse {
         this.avatarUrl = doctor.profile.avatarUrl;
         this.licenseNumber = doctor.licenseNumber;
         this.specCode = doctor.specCode;
+        this.isActive = doctor.isActive; 
+        this.isEmailVerified = doctor.isEmailVerified;
     }
 }
 module.exports = DoctorResponse;

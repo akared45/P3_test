@@ -1,4 +1,9 @@
-import { PersonOutline, Settings, Logout } from "@mui/icons-material";
+import {
+  PersonOutline,
+  AlternateEmailOutlined,
+  Settings,
+  Logout,
+} from "@mui/icons-material";
 
 export const pages = [
   { content: "Trang chủ", to: "/" },
@@ -16,7 +21,29 @@ export const pages = [
 ];
 
 export const settings = [
-  { id: 1, label: "Hồ sơ cá nhân", to: "/profile", icon: <PersonOutline fontSize="small" /> },
-  { id: 2, label: "Cài đặt tài khoản", to: "/settings", icon: <Settings fontSize="small" /> },
-  { id: 3, label: "Đăng xuất", action: "logout", icon: <Logout fontSize="small" />, danger: true },
+  {
+    id: 1,
+    label: "Hồ sơ cá nhân",
+    to: "/profile",
+    icon: <PersonOutline fontSize="small" />,
+  },
+  {
+    id: 2,
+    label: "Hộp thư",
+    to: "/inbox",
+    icon: <AlternateEmailOutlined fontSize="small" />,
+  },
+  {
+    id: 3,
+    label: "Cài đặt tài khoản",
+    to: "/settings",
+    icon: <Settings fontSize="small" />,
+  },
+  {
+    id: 4,
+    label: "Đăng xuất",
+    action: "logout",
+    icon: <Logout fontSize="small" />,
+    danger: true,
+  },
 ];

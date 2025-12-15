@@ -1,31 +1,38 @@
-const { NotificationType } = require('../enums');
+const NotificationType = require('../enums/NotificationType');
 
 class Notification {
   constructor({
     id,
     userId,
-    type = NotificationType.SYSTEM,
     title,
     message,
+    type = NotificationType.SYSTEM_ALERT,
     isRead = false,
-    createdAt = new Date(),
-    metadata = {}
+    link = null,
+    createdAt = new Date()
   }) {
-    this.id = id || require('crypto').randomUUID();
+    if (!userId) throw new Error("Notification: userId is required");
+    if (!title) throw new Error("Notification: title is required");
+    if (!message) throw new Error("Notification: message is required");
+
+    if (!Object.values(NotificationType).includes(type)) {
+      throw new Error(`Notification: Invalid type ${type}`);
+    }
+
+    this.id = id;
     this.userId = userId;
-    this.type = type;
     this.title = title;
     this.message = message;
-    this.isRead = Boolean(isRead);
-    this.createdAt = createdAt instanceof Date ? createdAt : new Date(createdAt);
-    this.metadata = metadata; 
-
-    Object.freeze(this);
+    this.type = type;
+    this.isRead = isRead;
+    this.link = link;
+    this.createdAt = createdAt;
   }
-
-  // Logic nghiệp vụ: Đánh dấu đã đọc
   markAsRead() {
-    return new Notification({
+    if (this.isRead) return this;
+
+    const Constructor = this.constructor;
+    return new Constructor({
       ...this,
       isRead: true
     });

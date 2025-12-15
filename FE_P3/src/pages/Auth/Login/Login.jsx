@@ -32,23 +32,27 @@ const Login = () => {
       setLoading(true);
       try {
         const user = await login(values);
-
         toast.success("Đăng nhập thành công");
-        if (user?.userType === "ADMIN") {
+        console.log(user.userType);
+        if (user?.userType === "admin") {
           navigate("/admin/bang-dieu-khien");
-        } else if (user?.userType === "DOCTOR") {
+        } else if (user?.userType === "doctor") {
           navigate("/admin/lich-lam-viec");
         } else {
           navigate("/");
         }
-
       } catch (err) {
         console.log(err);
+        const errorMessage =
+          err.response?.data?.message || "Đăng nhập thất bại.";
 
-        const errorMessage = err.response?.data?.message || "Đăng nhập thất bại.";
-
-        if (errorMessage.includes("verify") || errorMessage.includes("kích hoạt")) {
-          toast.error("Tài khoản chưa được kích hoạt. Vui lòng kiểm tra email.");
+        if (
+          errorMessage.includes("verify") ||
+          errorMessage.includes("kích hoạt")
+        ) {
+          toast.error(
+            "Tài khoản chưa được kích hoạt. Vui lòng kiểm tra email."
+          );
         } else {
           toast.error(errorMessage);
         }
@@ -91,7 +95,9 @@ const Login = () => {
 
           <div className={styles.auth__actions}>
             <input type="checkbox" id="remember" />
-            <label htmlFor="remember" className="m-0 ml-2 cursor-pointer">Remember me</label>
+            <label htmlFor="remember" className="m-0 ml-2 cursor-pointer">
+              Remember me
+            </label>
             <Link to="/quen-mat-khau" className={styles.auth__forgot}>
               Quên mật khẩu?
             </Link>

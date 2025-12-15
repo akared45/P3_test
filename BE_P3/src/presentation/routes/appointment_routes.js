@@ -13,4 +13,8 @@ router.get('/', appointmentController.getMyAppointments);
 
 router.get('/busy-slots/:doctorId', appointmentController.getBusySlots);
 
+router.use(verifyToken, requireRole('doctor'));
+
+router.post('/:id/complete', (req, res, next) => appointmentController.complete(req, res, next));
+
 module.exports = router;

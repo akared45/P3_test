@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Dialog, Grid, Fab, Badge } from "@mui/material";
 import { Chat as ChatIcon } from "@mui/icons-material";
-import { socket } from "../../../../services/socket";
-import { appointmentApi } from "../../../../services/api";
-import { useChat } from "../../../../hooks/useChat";
+import { socket } from "../../../services/socket";
+import { appointmentApi } from "../../../services/api";
+import { useChat } from "../../../hooks/useChat";
 import PatientListSidebar from "./PatientListSidebar";
 import ChatWindow from "./ChatWindow";
 import PatientInfoPanel from "./PatientInfoPanel";
@@ -36,9 +36,9 @@ export default function DoctorChat() {
     setMyId(user.id || user._id);
     if (isOpen) {
       appointmentApi.getMyAppointments().then((res) => {
-        console.log(res)
+        console.log(res);
         const validApps = res.data.data.filter(a =>
-          ['confirmed', 'in_progress', 'completed', 'pending'].includes(a.status)
+          ['confirmed', 'in_progress', 'completed'].includes(a.status)
         );
         setAppointments(validApps);
       });
@@ -75,18 +75,18 @@ export default function DoctorChat() {
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        maxWidth={false} 
+        maxWidth={false}
         PaperProps={{
           sx: {
-            width: '95vw',    
-            height: '92vh',   
+            width: '95vw',
+            height: '92vh',
             maxWidth: '100%',
             borderRadius: 2,
-            overflow: 'hidden' 
+            overflow: 'hidden'
           }
         }}
       >
-        <Grid container sx={{ height: '100%', flexWrap: 'nowrap' }}> 
+        <Grid container sx={{ height: '100%', flexWrap: 'nowrap' }}>
           <Grid item sx={{ width: '20%', minWidth: '250px', borderRight: 1, borderColor: 'divider' }}>
             <PatientListSidebar
               appointments={appointments}

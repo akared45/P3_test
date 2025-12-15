@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Box, Button, IconButton, Tooltip, Avatar, Menu, MenuItem, Divider, Typography, Badge, Skeleton } from "@mui/material";
-import { Notifications as BellIcon } from "@mui/icons-material";
+import { Box, Button, IconButton, Tooltip, Avatar, Menu, MenuItem, Divider, Typography, Skeleton } from "@mui/material";
 import { Link } from "react-router-dom";
 import { settings } from "./menuData";
+import NotificationBell from "../../../ui/NotificationBell";
 
 const UserSection = ({ user, isLoggedIn, onLogoutRequest }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -13,7 +13,7 @@ const UserSection = ({ user, isLoggedIn, onLogoutRequest }) => {
   const getAvatarUrl = (url) => {
     if (!url) return "";
     if (url.startsWith("http")) return url;
-    return "http://localhost:3000" + url;
+    return import.meta.env.VITE_API_URL + url; // Nên dùng biến môi trường
   };
 
   if (isLoggedIn && !user) {
@@ -38,11 +38,10 @@ const UserSection = ({ user, isLoggedIn, onLogoutRequest }) => {
         </>
       ) : (
         <>
-          <IconButton size="small" sx={{ color: 'text.secondary', display: { xs: 'none', sm: 'flex' } }}>
-            <Badge badgeContent={2} color="error">
-              <BellIcon />
-            </Badge>
-          </IconButton>
+          {/* [THAY THẾ] Thay đoạn IconButton cũ bằng NotificationBell */}
+          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+             <NotificationBell />
+          </Box>
 
           <Tooltip title="Tài khoản">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -71,6 +70,7 @@ const UserSection = ({ user, isLoggedIn, onLogoutRequest }) => {
               }
             }}
           >
+            {/* ... (Phần Menu User giữ nguyên như cũ) */}
             <Box sx={{ px: 2, py: 1.5 }}>
               <Typography variant="subtitle2" noWrap sx={{ fontWeight: 700 }}>
                 {user?.fullName || "Người dùng"}

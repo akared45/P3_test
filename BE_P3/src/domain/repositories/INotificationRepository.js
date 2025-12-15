@@ -1,7 +1,7 @@
 const { NotImplementedException } = require('../exceptions');
 
 class INotificationRepository {
-    async save(notification) {
+    async save(notificationEntity) {
         throw new NotImplementedException('INotificationRepository.save');
     }
 
@@ -13,12 +13,12 @@ class INotificationRepository {
         throw new NotImplementedException('INotificationRepository.countUnread');
     }
 
-    async markAsRead(id) {
-        throw new NotImplementedException('INotificationRepository.markAsRead');
-    }
-
     async markAllAsRead(userId) {
         throw new NotImplementedException('INotificationRepository.markAllAsRead');
+    }
+
+    async markAsRead(notificationId) {
+        throw new NotImplementedException('INotificationRepository.markAsRead');
     }
 }
 

@@ -1,7 +1,9 @@
 const nodemailer = require('nodemailer');
+const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
-const IEmailService = require('../../domain/services/IEmailService'); 
+const IEmailService = require('../../domain/services/IEmailService');
 
 class NodemailerEmailService extends IEmailService {
     constructor() {
@@ -14,51 +16,130 @@ class NodemailerEmailService extends IEmailService {
             }
         });
     }
-
-    async sendVerificationEmail(to, verificationLink) {
-        const mailOptions = {
-            from: `"Doctor App" <${process.env.EMAIL_USER}>`,
-            to: to,
-            subject: 'Xác minh tài khoản',
-            html: `
-                <div style="font-family: Arial, sans-serif; padding: 20px;">
-                    <h2 style="color: #2c3e50;">Chào mừng bạn đến với Doctor App!</h2>
-                    <p>Cảm ơn bạn đã đăng ký. Vui lòng bấm vào nút bên dưới để xác minh tài khoản:</p>
-                    <a href="${verificationLink}" style="background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Xác minh ngay</a>
-                    <p style="margin-top: 20px; color: #7f8c8d; font-size: 12px;">Link này sẽ hết hạn trong 24 giờ.</p>
-                </div>
-            `
-        };
-        await this._send(mailOptions);
-    }
-
-    async sendPasswordResetEmail(toEmail, resetLink, fullName) {
-        const mailOptions = {
-            from: `"Doctor App Support" <${process.env.EMAIL_USER}>`,
-            to: toEmail,
-            subject: 'Yêu cầu đặt lại mật khẩu',
-            html: `
-                <div style="font-family: Arial, sans-serif; padding: 20px;">
-                    <h3 style="color: #2c3e50;">Xin chào ${fullName || 'Bạn'},</h3>
-                    <p>Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn.</p>
-                    <p>Vui lòng bấm vào liên kết bên dưới để tạo mật khẩu mới:</p>
-                    
-                    <a href="${resetLink}" style="background-color: #e74c3c; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 0;">Đặt lại mật khẩu</a>
-                    
-                    <p><strong>Lưu ý:</strong> Liên kết này chỉ có hiệu lực trong vòng <strong>1 giờ</strong>.</p>
-                    <p style="color: #7f8c8d; font-size: 14px;">Nếu bạn không yêu cầu thay đổi này, vui lòng bỏ qua email này. Mật khẩu của bạn sẽ không bị thay đổi.</p>
-                </div>
-            `
-        };
-        await this._send(mailOptions);
-    }
-
     async _send(mailOptions) {
         try {
             await this.transporter.sendMail(mailOptions);
-            console.log(`[Email Service] Email sent successfully to: ${mailOptions.to}`);
+            console.log(`Email sent to: ${mailOptions.to}`);
         } catch (error) {
-            console.error(`[Email Service Error] Failed to send to ${mailOptions.to}:`, error);
+            console.error("Error sending email:", error);
+        }
+    }
+
+    async sendVerificationEmail(to, verificationLink) {
+        try {
+            const templatePath = path.join(__dirname, 'templates', 'verification_email.html');
+            let html = fs.readFileSync(templatePath, 'utf8');
+            html = html.replace('{{verificationLink}}', verificationLink);
+            const mailOptions = {
+                from: `"Doctor App" <${process.env.EMAIL_USER}>`,
+                to: to,
+                subject: 'Xác minh tài khoản Doctor App',
+                html: html
+            };
+            await this._send(mailOptions);
+        } catch (error) {
+            console.error("Lỗi đọc template verification:", error);
+        }
+    }
+
+    async sendPasswordResetEmail(toEmail, resetLink, fullName) {
+        try {
+            const templatePath = path.join(__dirname, 'templates', 'password_reset.html');
+            let html = fs.readFileSync(templatePath, 'utf8');
+            html = html.replace('{{name}}', fullName || 'Bạn')
+                .replace('{{resetLink}}', resetLink);
+            const mailOptions = {
+                from: `"Doctor App Support" <${process.env.EMAIL_USER}>`,
+                to: toEmail,
+                subject: 'Yêu cầu đặt lại mật khẩu',
+                html: html
+            };
+            await this._send(mailOptions);
+        } catch (error) {
+            console.error("Lỗi đọc template reset password:", error);
+        }
+    }
+
+    async sendAppointmentConfirmation(toEmail, { patientName, doctorName, time, date }) {
+        try {
+            const templatePath = path.join(__dirname, 'templates', 'appointment_confirmation.html');
+            let html = fs.readFileSync(templatePath, 'utf8');
+
+            html = html.replace('{{patientName}}', patientName)
+                .replace('{{doctorName}}', doctorName)
+                .replace('{{time}}', time)
+                .replace('{{date}}', date);
+
+            const mailOptions = {
+                from: `"BookingCare System" <${process.env.EMAIL_USER}>`,
+                to: toEmail,
+                subject: `📅 Xác nhận lịch khám với BS ${doctorName} - ${date}`,
+                html: html
+            };
+
+            await this._send(mailOptions);
+        } catch (error) {
+            console.error("Lỗi đọc template appointment confirmation:", error);
+        }
+    }
+    async sendPaymentSuccessEmail({ to, name, appointmentId, doctorName, date, time, amount, transactionId }) {
+        try {
+            const templatePath = path.join(__dirname, 'templates', 'payment_success.html');
+            let html = fs.readFileSync(templatePath, 'utf8');
+            html = html.replace('{{name}}', name)
+                .replace('{{appointmentId}}', appointmentId)
+                .replace('{{doctorName}}', doctorName)
+                .replace('{{date}}', date)
+                .replace('{{time}}', time)
+                .replace('{{amount}}', amount.toLocaleString('vi-VN'))
+                .replace('{{transactionId}}', transactionId);
+
+            const mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: to,
+                subject: `Thanh toán thành công - Lịch hẹn #${appointmentId}`,
+                html: html
+            };
+
+            await this.transporter.sendMail(mailOptions);
+            console.log(`Đã gửi mail thanh toán cho: ${to}`);
+        } catch (error) {
+            console.error("Lỗi gửi email thanh toán:", error);
+        }
+    }
+
+    async sendPrescriptionEmail(toEmail, { patientName, doctorName, date, symptoms, doctorNotes, prescriptions }) {
+        try {
+            const templatePath = path.join(__dirname, 'templates', 'prescription_email.html');
+            let html = fs.readFileSync(templatePath, 'utf8');
+
+            const prescriptionRows = prescriptions.map(p => `
+                <tr>
+                    <td><strong>${p.drugName}</strong></td>
+                    <td>${p.quantity}</td>
+                    <td>${p.usage}</td>
+                </tr>
+            `).join('');
+
+            const finalRows = prescriptionRows || '<tr><td colspan="3" style="text-align:center">Không có thuốc được kê</td></tr>';
+
+            html = html.replace('{{patientName}}', patientName)
+                .replace('{{doctorName}}', doctorName)
+                .replace('{{date}}', date)
+                .replace('{{symptoms}}', symptoms || 'Không ghi nhận')
+                .replace('{{doctorNotes}}', doctorNotes || 'Không có lời dặn thêm')
+                .replace('{{prescriptionRows}}', finalRows);
+
+            const mailOptions = {
+                from: `"BookingCare System" <${process.env.EMAIL_USER}>`,
+                to: toEmail,
+                subject: `💊 Đơn thuốc từ BS ${doctorName} - ${date}`,
+                html: html
+            };
+
+            await this._send(mailOptions);
+        } catch (error) {
+            console.error("Lỗi gửi email đơn thuốc:", error);
         }
     }
 }

@@ -80,7 +80,10 @@ export const appointmentApi = {
     return axiosClient.get(`/appointments/busy-slots/${doctorId}`, {
       params: { date }
     });
-  }
+  },
+
+  complete: (id, data) => axiosClient.post(`/appointments/${id}/complete`, data)
+
 };
 
 export const aiApi = {
@@ -88,10 +91,9 @@ export const aiApi = {
 };
 
 export const chatApi = {
-  getHistory: (appointmentId) => axiosClient.get(`/chat/${appointmentId}`),
-
-  send: (data) => axiosClient.post("/chat/send", data),
+  getHistory: (appointmentId) => axiosClient.get(`/chat/history/${appointmentId}`)
 };
+
 /* ============================
    UPLOAD API
 ============================ */
@@ -105,3 +107,14 @@ export const uploadApi = {
     });
   },
 };
+
+export const notificationApi = {
+  getAll: (params) => axiosClient.get("/notifications", { params }),
+
+  markAsRead: (id) => axiosClient.patch(`/notifications/${id}/read`),
+};
+
+
+export const paymentApi = {
+  createMomoUrl: (appointmentId) => axiosClient.post("/payment/momo/create-url", { appointmentId })
+}

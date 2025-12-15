@@ -6,42 +6,52 @@ const { UserType } = require("../../../../domain/enums");
 class UserMapper {
   static toDomain(rawDoc) {
     if (!rawDoc) return null;
+    const doc = rawDoc.toObject ? rawDoc.toObject() : rawDoc;
     const baseData = {
-      id: rawDoc._id,
-      username: rawDoc.username,
-      email: rawDoc.email,
-      passwordHash: rawDoc.passwordHash,
-      userType: rawDoc.userType,
-      isActive: rawDoc.isActive,
-      isEmailVerified: rawDoc.isEmailVerified,
-      isDeleted: rawDoc.isDeleted,
-      deletedAt: rawDoc.deletedAt,
-      createdAt: rawDoc.createdAt,
+      id: doc._id,
+      username: doc.username,
+      email: doc.email,
+      passwordHash: doc.passwordHash,
+      userType: doc.userType,
+      isActive: doc.isActive,
+      isEmailVerified: doc.isEmailVerified,
+      isDeleted: doc.isDeleted,
+      deletedAt: doc.deletedAt,
+      createdAt: doc.createdAt,
       profile: {
-        fullName: rawDoc.profile?.fullName,
-        dateOfBirth: rawDoc.profile?.dateOfBirth,
-        gender: rawDoc.profile?.gender,
-        avatarUrl: rawDoc.profile?.avatarUrl
+        fullName: doc.profile?.fullName,
+        dateOfBirth: doc.profile?.dateOfBirth,
+        gender: doc.profile?.gender,
+        avatarUrl: doc.profile?.avatarUrl
       },
     };
 
-    switch (rawDoc.userType) {
+    switch (doc.userType) {
       case UserType.PATIENT:
         return new Patient({
           ...baseData,
-          contacts: rawDoc.contacts || [],
-          medicalConditions: rawDoc.medicalConditions || [],
-          allergies: rawDoc.allergies || []
+          contacts: doc.contacts || [],
+          medicalConditions: doc.medicalConditions || [],
+          allergies: doc.allergies || []
         });
 
       case UserType.DOCTOR:
+        const isPopulated = typeof doc.specCode === "object" && doc.specCode !== null;
         return new Doctor({
           ...baseData,
-          licenseNumber: rawDoc.licenseNumber,
-          specializationId: rawDoc.specializationId || rawDoc.specCode,
-          bio: rawDoc.bio,
-          rating: rawDoc.rating,
-          schedules: rawDoc.schedules || []
+          licenseNumber: doc.licenseNumber,
+          specCode: isPopulated
+            ? doc.specCode._id
+            : doc.code,
+          specializationName: isPopulated
+            ? doc.specCode.name
+            : null,
+          bio: doc.bio,
+          qualifications: doc.qualifications || [],
+          workHistory: doc.workHistory || [],
+          unavailableDates: doc.unavailableDates || [],
+          rating: doc.rating ?? 0,
+          schedules: doc.schedules || []
         });
 
       default:
@@ -81,9 +91,19 @@ class UserMapper {
     }
     else if (entity instanceof Doctor) {
       data.licenseNumber = entity.licenseNumber;
-      data.specializationId = entity.specializationId;
+      data.specCode = entity.specCode;
       data.bio = entity.bio;
-      data.schedules = entity.schedules;
+      data.qualifications = entity.qualifications || [];
+      data.workHistory = entity.workHistory || [];
+      data.unavailableDates = entity.unavailableDates?.map(u => ({
+            date: u.date,
+            start: u.start,
+            end: u.end,
+            reason: u.reason,
+            allDay: u.allDay
+        })) || [];
+      data.rating = entity.rating ?? 0;
+      data.schedules = entity.schedules || [];
     }
 
     return data;

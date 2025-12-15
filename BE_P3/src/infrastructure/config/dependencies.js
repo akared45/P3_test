@@ -4,33 +4,50 @@ const { repositories } = require("../database/database");
 const BcryptAuthenticationService = require("../services/BcryptAuthenticationService");
 const JwtTokenService = require("../services/JwtTokenService");
 const AuthorizationService = require("../../domain/policies/AuthorizationService");
-const OpenAIService = require('../services/OpenAIService');
+const GeminiAIService = require('../services/OpenAIService'); 
 const LocalDiskStorageService = require('../storage/LocalDiskStorageService');
 const SocketService = require('../services/SocketService');
 const NodemailerEmailService = require("../services/NodemailerEmailService"); 
-// [MỚI] Import Security Service
 const SecurityService = require('../services/SecurityService'); 
+
+// [MỚI] Payment Service
+const MomoPaymentService = require('../services/MomoPaymentService');
+
+//--REPOSITORIES (INFRASTRUCTURE)--//
+const MongoNotificationRepository = require('../../infrastructure/database/nosql/repositories/MongoNotificationRepository');
+const MongoMessageRepository = require('../../infrastructure/database/nosql/repositories/MongoMessageRepository');
+
+// [MỚI] Payment Repository
+const MongoPaymentRepository = require('../../infrastructure/database/nosql/repositories/MongoPaymentRepository');
 
 //--INSTANTIATE SERVICES--//
 const authenticationService = new BcryptAuthenticationService();
 const tokenService = new JwtTokenService();
 const authorizationService = new AuthorizationService();
-const aiService = new OpenAIService();
+const aiService = new GeminiAIService(); 
 const storageService = new LocalDiskStorageService();
 const socketService = new SocketService();
 const emailService = new NodemailerEmailService(); 
-// [MỚI] Khởi tạo Security Service
 const securityService = new SecurityService();
 
-//--REPOSITORIES--//
+// [MỚI] Khởi tạo Momo Service
+const momoPaymentService = new MomoPaymentService();
+
+//--INSTANTIATE REPOSITORIES--//
 const {
     userRepository,
     userSessionRepository,
     appointmentRepository,
     specializationRepository,
-    messageRepository,
-    verificationTokenRepository // Đã có sẵn từ bước trước
+    verificationTokenRepository
 } = repositories;
+
+const notificationRepository = new MongoNotificationRepository();
+const messageRepository = new MongoMessageRepository();
+
+// [MỚI] Khởi tạo Payment Repository
+const paymentRepository = new MongoPaymentRepository();
+
 
 //--USE_CASES--//
 
@@ -40,8 +57,6 @@ const LoginUserUseCase = require("../../application/use_cases/auth/LoginUserUseC
 const RefreshTokenUseCase = require("../../application/use_cases/auth/RefreshTokenUseCase");
 const LogoutUserUseCase = require("../../application/use_cases/auth/LogoutUserUseCase");
 const VerifyEmailUseCase = require("../../application/use_cases/auth/VerifyEmailUseCase");
-
-// [MỚI] Import Use Cases Quên Mật Khẩu
 const GeneratePasswordResetTokenUseCase = require("../../application/use_cases/auth/GeneratePasswordResetTokenUseCase");
 const ResetPasswordUseCase = require("../../application/use_cases/auth/ResetPasswordUseCase");
 
@@ -75,7 +90,6 @@ const verifyEmailUseCase = new VerifyEmailUseCase({
     verificationTokenRepository 
 });
 
-// [MỚI] Khởi tạo Use Case: Yêu cầu Token
 const generatePasswordResetTokenUseCase = new GeneratePasswordResetTokenUseCase({
     userRepository,
     verificationTokenRepository,
@@ -83,11 +97,10 @@ const generatePasswordResetTokenUseCase = new GeneratePasswordResetTokenUseCase(
     securityService
 });
 
-// [MỚI] Khởi tạo Use Case: Đặt lại Mật khẩu
 const resetPasswordUseCase = new ResetPasswordUseCase({
     userRepository,
     verificationTokenRepository,
-    authenticationService // Dùng để hash password mới
+    authenticationService 
 });
 
 // 2. Admin Module
@@ -165,10 +178,14 @@ const BookAppointmentUseCase = require("../../application/use_cases/appointment/
 const UpdateAppointmentStatusUseCase = require("../../application/use_cases/appointment/UpdateAppointmentStatusUseCase");
 const GetMyAppointmentsUseCase = require("../../application/use_cases/appointment/GetMyAppointmentsUseCase"); 
 const GetBusySlotsUseCase = require("../../application/use_cases/appointment/GetBusySlotsUseCase");
+const CompleteAppointmentUseCase = require('../../application/use_cases/appointment/CompleteAppointmentUseCase');
 
 const bookAppointmentUseCase = new BookAppointmentUseCase({
     appointmentRepository,
-    userRepository 
+    userRepository,
+    emailService,
+    socketService,
+    notificationRepository
 });
 
 const updateAppointmentStatusUseCase = new UpdateAppointmentStatusUseCase({
@@ -183,9 +200,44 @@ const getBusySlotsUseCase = new GetBusySlotsUseCase({
     appointmentRepository
 });
 
+const completeAppointmentUseCase = new CompleteAppointmentUseCase({
+    appointmentRepository,
+    userRepository,
+    emailService
+});
+
 // 7. AI Module
 const SuggestSpecialtyUseCase = require('../../application/use_cases/ai/SuggestSpecialtyUseCase');
-const suggestSpecialtyUseCase = new SuggestSpecialtyUseCase({ aiService });
+const suggestSpecialtyUseCase = new SuggestSpecialtyUseCase({ 
+    aiService,
+    specializationRepository 
+});
+
+// 8. Notification Module
+const GetNotificationsUseCase = require('../../application/use_cases/notification/GetNotificationsUseCase');
+const MarkNotificationAsReadUseCase = require('../../application/use_cases/notification/MarkNotificationAsReadUseCase');
+
+const getNotificationsUseCase = new GetNotificationsUseCase({ notificationRepository });
+const markNotificationAsReadUseCase = new MarkNotificationAsReadUseCase({ notificationRepository });
+
+// 9. [MỚI] PAYMENT MODULE
+const CreatePaymentUrlUseCase = require('../../application/use_cases/payment/CreatePaymentUrlUseCase');
+const HandleMomoCallbackUseCase = require('../../application/use_cases/payment/HandleMomoCallbackUseCase');
+
+const createPaymentUrlUseCase = new CreatePaymentUrlUseCase({
+    appointmentRepository,
+    momoPaymentService
+});
+
+const handleMomoCallbackUseCase = new HandleMomoCallbackUseCase({
+    appointmentRepository,
+    paymentRepository,
+    momoPaymentService,
+    socketService,
+    notificationRepository,
+    userRepository,
+    emailService
+});
 
 
 //--CONTROLLERS--//
@@ -199,16 +251,19 @@ const SpecializationController = require("../../presentation/controllers/Special
 const AIController = require('../../presentation/controllers/AIController');
 const UploadController = require('../../presentation/controllers/UploadController');
 const ChatController = require("../../presentation/controllers/ChatController");
+const NotificationController = require('../../presentation/controllers/NotificationController');
 
-// [MỚI] Cập nhật AuthController với các Use Cases mới
+// [MỚI] Payment Controller
+const PaymentController = require('../../presentation/controllers/PaymentController');
+
 const authController = new AuthController({
     registerPatientUseCase,
     loginUserUseCase,
     refreshTokenUseCase,
     logoutUserUseCase,
     verifyEmailUseCase,
-    generatePasswordResetTokenUseCase, // <--- THÊM VÀO
-    resetPasswordUseCase               // <--- THÊM VÀO
+    generatePasswordResetTokenUseCase,
+    resetPasswordUseCase
 });
 
 const adminController = new AdminController({
@@ -237,7 +292,8 @@ const appointmentController = new AppointmentController({
     bookAppointmentUseCase,
     updateAppointmentStatusUseCase,
     getMyAppointmentsUseCase,
-    getBusySlotsUseCase
+    getBusySlotsUseCase,
+    completeAppointmentUseCase
 });
 
 const specializationController = new SpecializationController({
@@ -249,7 +305,6 @@ const specializationController = new SpecializationController({
 });
 
 const chatController = new ChatController({
-    sendMessageUseCase,
     getChatHistoryUseCase
 });
 
@@ -261,7 +316,17 @@ const uploadController = new UploadController({
     storageService
 });
 
-//--EXPORT--//
+const notificationController = new NotificationController({
+    getNotificationsUseCase,
+    markNotificationAsReadUseCase
+});
+
+// [MỚI] Khởi tạo Payment Controller
+const paymentController = new PaymentController({
+    createPaymentUrlUseCase,
+    handleMomoCallbackUseCase
+});
+
 module.exports = {
     authController,
     adminController,
@@ -273,6 +338,10 @@ module.exports = {
     aiController,
     uploadController,
     chatController,
+    notificationController,
+    // [MỚI] Xuất Payment Controller
+    paymentController,
+    
     socketService,
     tokenService,
     sendMessageUseCase

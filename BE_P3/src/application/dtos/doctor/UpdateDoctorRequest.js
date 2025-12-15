@@ -4,6 +4,7 @@ class UpdateDoctorRequest {
         this.targetDoctorId = data.targetDoctorId;
         this.bio = data.bio;
         this.avatarUrl = data.avatarUrl;
+        this.specCode = data.specCode;
         this.isActive = data.isActive;
         this.qualifications = data.qualifications;
         this.workHistory = data.workHistory;

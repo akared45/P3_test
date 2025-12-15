@@ -5,9 +5,9 @@ class GetChatHistoryUseCase {
         this.messageRepository = messageRepository;
     }
 
-    async execute({ appointmentId, limit, offset }) {
-        const messages = await this.messageRepository.findByAppointmentId(appointmentId, limit, offset);
-        return messages.map(msg => new MessageResponse(msg));
+    async execute(appointmentId) {
+        const messages = await this.messageRepository.findByAppointmentId(appointmentId);
+        return messages.map(msg => MessageResponse.fromEntity(msg));
     }
 }
 

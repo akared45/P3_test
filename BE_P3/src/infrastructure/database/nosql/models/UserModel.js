@@ -109,7 +109,13 @@ const DoctorSchema = new mongoose.Schema({
         type: String,
         default: 'Asia/Ho_Chi_Minh'
     },
-    unavailableDates: [Date],
+    unavailableDates: [{
+        date: { type: Date, required: true },
+        start: { type: Date, default: null },
+        end: { type: Date, default: null },
+        reason: { type: String, default: '' },
+        allDay: { type: Boolean, default: true }
+    }],
     qualifications: [{
         degree: String,
         institution: String,

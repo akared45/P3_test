@@ -20,6 +20,11 @@ class AppointmentResponse {
 
         this.symptoms = appointmentEntity.symptoms;
         this.doctorNotes = appointmentEntity.doctorNotes;
+        this.amount = appointmentEntity.amount;
+        this.paymentStatus = appointmentEntity.paymentStatus;
+        this.paymentMethod = appointmentEntity.paymentMethod;
+        this.paymentUrl = appointmentEntity.paymentStatus === 'UNPAID' ? appointmentEntity.paymentUrl : null;
+        this.createdAt = appointmentEntity.createdAt;
     }
 }
 

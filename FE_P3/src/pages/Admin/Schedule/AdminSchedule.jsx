@@ -77,10 +77,17 @@ const AdminSchedule = () => {
     setLoadingSave(true);
     try {
       const payload = {
-        ...selectedDoctor,
-        schedules: editorSchedules
+        schedules: editorSchedules,
+        fullName: selectedDoctor.fullName,
+        licenseNumber: selectedDoctor.licenseNumber,
+        bio: selectedDoctor.bio,
+        isActive: selectedDoctor.isActive,
+        avatarUrl: selectedDoctor.avatarUrl,
+        specCode: selectedDoctor.specialization?.code || selectedDoctor.specCode,
+        qualifications: selectedDoctor.qualifications?.map(({_id, ...rest}) => rest),
+        workHistory: selectedDoctor.workHistory?.map(({_id, ...rest}) => rest),
+        unavailableDates: selectedDoctor.unavailableDates?.map(({_id, ...rest}) => rest),
       };
-
       await doctorApi.update(selectedDoctor.id, payload);
       alert("Đã cập nhật lịch làm việc thành công!");
       fetchDoctors();

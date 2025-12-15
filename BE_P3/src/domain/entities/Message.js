@@ -1,4 +1,4 @@
-const { MessageType } = require('../enums');
+const MessageType = require('../enums/MessageType');
 const AIAnalysis = require('../value_objects/AIAnalysis');
 
 class Message {
@@ -29,6 +29,11 @@ class Message {
         this.aiAnalysis = aiAnalysis ? new AIAnalysis(aiAnalysis) : null;
         this.createdAt = createdAt instanceof Date ? createdAt : new Date(createdAt);
         Object.freeze(this);
+    }
+
+    markAsRead() {
+        if (this.isRead) return this;
+        return new Message({ ...this, isRead: true });
     }
 }
 
