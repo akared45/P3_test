@@ -170,7 +170,8 @@ const sendMessageUseCase = new SendMessageUseCase({
 });
 
 const getChatHistoryUseCase = new GetChatHistoryUseCase({
-    messageRepository
+    messageRepository,
+    appointmentRepository
 });
 
 // 6. Booking & Slots Module
@@ -339,9 +340,7 @@ module.exports = {
     uploadController,
     chatController,
     notificationController,
-    // [MỚI] Xuất Payment Controller
     paymentController,
-    
     socketService,
     tokenService,
     sendMessageUseCase

@@ -22,7 +22,9 @@ class Appointment {
     paymentStatus = PaymentStatus.UNPAID,
     paymentMethod = PaymentMethod.CASH,
     transactionId = null,
-    paymentUrl = null
+    paymentUrl = null,
+    startTime,
+    endTime
   }) {
     if (!patientId) throw new Error("Appointment must have a patient");
     if (!doctorId) throw new Error("Appointment must have a doctor");
@@ -48,14 +50,16 @@ class Appointment {
     this.paymentMethod = paymentMethod;
     this.transactionId = transactionId;
     this.paymentUrl = paymentUrl;
+    this.startTime = startTime; 
+    this.endTime = endTime;
     Object.freeze(this);
   }
-updatePaymentUrl(url) {
-        return new Appointment({
-            ...this, // Copy toàn bộ dữ liệu cũ
-            paymentUrl: url // Ghi đè url mới
-        });
-    }
+  updatePaymentUrl(url) {
+    return new Appointment({
+      ...this,
+      paymentUrl: url
+    });
+  }
   isConfirmed() {
     return this.status === AppointmentStatus.CONFIRMED;
   }
@@ -116,6 +120,32 @@ updatePaymentUrl(url) {
       status: newStatus,
       updatedAt: new Date()
     });
+  }
+
+  isSessionActive() {
+    const now = new Date().getTime();
+    const start = new Date(this.startTime).getTime();
+    const end = new Date(this.endTime).getTime();
+
+    const ALLOWED_EARLY_MS = 5 * 60 * 1000;
+    if (now < (start - ALLOWED_EARLY_MS)) {
+      return {
+        allowed: false,
+        code: 'TOO_EARLY',
+        message: "Chưa đến giờ hẹn. Vui lòng quay lại sau."
+      };
+    }
+
+    const GRACE_PERIOD = 30 * 60 * 1000;
+    if (now > (end + GRACE_PERIOD)) {
+      return {
+        allowed: false,
+        code: 'EXPIRED',
+        message: "Phiên tư vấn đã kết thúc."
+      };
+    }
+
+    return { allowed: true };
   }
 }
 
