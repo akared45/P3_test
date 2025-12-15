@@ -227,7 +227,9 @@ const handleMomoCallbackUseCase = new HandleMomoCallbackUseCase({
     paymentRepository,
     momoPaymentService,
     socketService,
-    notificationRepository
+    notificationRepository,
+    userRepository,
+    emailService
 });
 
 

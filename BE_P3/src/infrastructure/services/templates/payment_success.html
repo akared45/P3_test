@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        .header { background-color: #A50064; color: white; padding: 15px; text-align: center; border-radius: 5px 5px 0 0; }
+        .content { padding: 20px; }
+        .details { background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .row { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .label { font-weight: bold; color: #666; }
+        .footer { text-align: center; font-size: 12px; color: #999; margin-top: 20px; }
+        .success-icon { font-size: 40px; color: #28a745; text-align: center; display: block; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Xác Nhận Thanh Toán Thành Công</h2>
+        </div>
+        <div class="content">
+            <div class="success-icon">✔</div>
+            <p>Xin chào <strong>{{name}}</strong>,</p>
+            <p>Chúng tôi đã nhận được khoản thanh toán của bạn. Lịch hẹn khám bệnh của bạn đã được xác nhận thành công.</p>
+            
+            <div class="details">
+                <div class="row">
+                    <span class="label">Mã lịch hẹn:</span>
+                    <span>#{{appointmentId}}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Bác sĩ:</span>
+                    <span>{{doctorName}}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Thời gian:</span>
+                    <span>{{time}} - {{date}}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Số tiền:</span>
+                    <span style="color: #A50064; font-weight: bold;">{{amount}} VNĐ</span>
+                </div>
+                <div class="row">
+                    <span class="label">Phương thức:</span>
+                    <span>Ví MoMo</span>
+                </div>
+                <div class="row">
+                    <span class="label">Mã giao dịch:</span>
+                    <span>{{transactionId}}</span>
+                </div>
+            </div>
+
+            <p>Vui lòng đăng nhập vào hệ thống đúng giờ để tham gia tư vấn.</p>
+            <p>Cảm ơn bạn đã tin tưởng sử dụng dịch vụ!</p>
+        </div>
+        <div class="footer">
+            <p>Email này được gửi tự động, vui lòng không trả lời.</p>
+        </div>
+    </div>
+</body>
+</html>

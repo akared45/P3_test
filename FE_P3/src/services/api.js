@@ -106,7 +106,12 @@ export const uploadApi = {
 };
 
 export const notificationApi = {
-    getAll: (params) => axiosClient.get("/notifications", { params }),
+  getAll: (params) => axiosClient.get("/notifications", { params }),
 
-    markAsRead: (id) => axiosClient.patch(`/notifications/${id}/read`),
+  markAsRead: (id) => axiosClient.patch(`/notifications/${id}/read`),
 };
+
+
+export const paymentApi = {
+  createMomoUrl: (appointmentId) => axiosClient.post("/payment/momo/create-url", { appointmentId })
+}

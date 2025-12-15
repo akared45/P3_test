@@ -2,20 +2,24 @@ const PaymentTransaction = require('../../../domain/entities/PaymentTransaction'
 const Notification = require('../../../domain/entities/Notification');
 const NotificationType = require('../../../domain/enums/NotificationType');
 const { PaymentMethod, PaymentStatus } = require('../../../domain/enums');
-
+const { format } = require('date-fns');
 class HandleMomoCallbackUseCase {
     constructor({
         appointmentRepository,
         paymentRepository,
         momoPaymentService,
         socketService,
-        notificationRepository
+        notificationRepository,
+        userRepository, 
+        emailService
     }) {
         this.appointmentRepository = appointmentRepository;
         this.paymentRepository = paymentRepository;
         this.momoPaymentService = momoPaymentService;
         this.socketService = socketService;
         this.notificationRepository = notificationRepository;
+        this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     async execute(momoRequest) {
@@ -41,8 +45,9 @@ class HandleMomoCallbackUseCase {
             return { success: false, message: "Invalid Signature" };
         }
 
-        const appointmentId = momoRequest.orderId;
-        const appointment = await this.appointmentRepository.findById(appointmentId);
+        const realAppointmentId = momoRequest.orderId.split('_')[0];
+        console.log("👉 ID Lịch hẹn gốc:", realAppointmentId);
+        const appointment = await this.appointmentRepository.findById(realAppointmentId);
 
         if (!appointment) {
             console.error(`Không tìm thấy Appointment ID: ${appointmentId}`);
@@ -60,17 +65,33 @@ class HandleMomoCallbackUseCase {
             transactionId: momoRequest.transId,
             rawResponse: JSON.stringify(momoRequest)
         });
+
         await this.paymentRepository.save(transaction);
 
         if (isSuccess) {
             const paidAppointment = appointment.markAsPaid(PaymentMethod.MOMO, momoRequest.transId);
-
             await this.appointmentRepository.save(paidAppointment);
-            console.log(`Appointment ${appointmentId} đã được xác nhận thanh toán.`);
+            
+            const patient = await this.userRepository.findById(paidAppointment.patientId);
+            if (patient && patient.email) {
+                const apptDate = new Date(paidAppointment.appointmentDate);
+                const dateStr = format(apptDate, 'dd/MM/yyyy');
+                const timeStr = format(apptDate, 'HH:mm');
+                this.emailService.sendPaymentSuccessEmail({
+                    to: patient.email,
+                    name: patient.profile?.fullName || patient.username,
+                    appointmentId: realAppointmentId,
+                    doctorName: paidAppointment.doctorName,
+                    date: dateStr,
+                    time: timeStr,
+                    amount: momoRequest.amount,
+                    transactionId: momoRequest.transId
+                });
+            }
 
             const patientIdStr = paidAppointment.patientId.toString();
             this.socketService.sendToUser(patientIdStr, 'payment_success', {
-                appointmentId,
+                realAppointmentId,
                 status: 'PAID',
                 message: "Thanh toán thành công! Lịch hẹn đã được xác nhận."
             });
