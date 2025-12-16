@@ -1,5 +1,3 @@
-// src/components/Chat/DoctorChat/ChatWindow.jsx
-
 import { useEffect } from "react";
 import {
   Box, Avatar, Typography, IconButton, Paper, CircularProgress,
@@ -15,7 +13,7 @@ import {
   Block as BlockIcon,
   FiberManualRecord as DotIcon
 } from "@mui/icons-material";
-
+import SuggestionStrip from "./SuggestionStrip";
 export default function ChatWindow({
   activeApp,
   messages,
@@ -27,9 +25,10 @@ export default function ChatWindow({
   isConnected,
   messagesEndRef,
   onClose,
-  onAcceptAppointment, // Thêm prop mới cho nút chấp nhận
-  onCompleteAppointment // Thêm prop cho nút hoàn thành
+  suggestions,           
+  onSelectSuggestion
 }) {
+  console.log(suggestions);
   const getAvatarUrl = (url) => {
     if (!url) return "";
     if (url.startsWith("http")) return url;
@@ -75,7 +74,6 @@ export default function ChatWindow({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', bgcolor: '#f5f7fb', overflow: 'hidden' }}>
-      {/* Header */}
       <Box sx={{ 
         p: 2, 
         borderBottom: 1, 
@@ -89,6 +87,10 @@ export default function ChatWindow({
         flexDirection: 'column',
         gap: 2
       }}>
+        <SuggestionStrip 
+                suggestions={suggestions} 
+                onSelect={onSelectSuggestion} 
+             />
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
           {activeApp ? (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -256,6 +258,13 @@ export default function ChatWindow({
           opacity: !isConnected || activeApp.status?.toLowerCase() === 'completed' ? 0.5 : 1,
           pointerEvents: !isConnected || activeApp.status?.toLowerCase() === 'completed' ? 'none' : 'auto'
         }}>
+          {activeApp.status?.toLowerCase() !== 'completed' && (
+             <SuggestionStrip 
+                suggestions={suggestions} 
+                onSelect={onSelectSuggestion} 
+             />
+          )}
+          
           <TextField
             fullWidth
             placeholder={

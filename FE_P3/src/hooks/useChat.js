@@ -5,6 +5,7 @@ import { AuthContext } from "../providers/AuthProvider";
 
 export const useChat = (appointmentId) => {
   const [messages, setMessages] = useState([]);
+  const [suggestions, setSuggestions] = useState([]); // [MỚI] State chứa gợi ý AI
   const [loading, setLoading] = useState(false);
   const { user, token } = useContext(AuthContext);
 
@@ -23,6 +24,16 @@ export const useChat = (appointmentId) => {
 
     joinRoom();
     socket.on("connect", joinRoom);
+
+    // [MỚI] Lắng nghe gợi ý từ AI
+    const handleSuggestions = (data) => {
+      if (String(data.appointmentId) === String(appointmentId)) {
+        console.log("🤖 AI Suggestions:", data.suggestions);
+        setSuggestions(data.suggestions);
+      }
+    };
+    socket.on("receive_suggestions", handleSuggestions);
+
     const fetchHistory = async () => {
       setLoading(true);
       try {
@@ -38,6 +49,7 @@ export const useChat = (appointmentId) => {
 
     return () => {
       socket.off("connect", joinRoom);
+      socket.off("receive_suggestions", handleSuggestions); // [MỚI] Cleanup
     };
   }, [appointmentId, token]);
 
@@ -49,15 +61,19 @@ export const useChat = (appointmentId) => {
         setMessages((prev) => {
           const msgId = newMessage.id || newMessage._id;
           if (prev.some((m) => (m.id || m._id) === msgId)) return prev;
-
           return [...prev, newMessage];
         });
+
+        // [MỚI] Nếu tin nhắn mới là của chính mình (Bác sĩ) -> Xóa gợi ý đi
+        if (user && newMessage.senderId === user.id) {
+            setSuggestions([]); 
+        }
       }
     };
 
     socket.on("receive_message", handleNewMessage);
     return () => socket.off("receive_message", handleNewMessage);
-  }, [appointmentId]);
+  }, [appointmentId, user]);
 
   const sendMessage = useCallback(
     (content) => {
@@ -66,26 +82,22 @@ export const useChat = (appointmentId) => {
         console.error("Chưa đăng nhập, không thể gửi tin");
         return;
       }
-
+      console.log(user);
       const payload = {
         appointmentId,
         content,
         type: "text",
         senderId: user.id,
+        senderRole: user.userType || (user.id.includes('DOC') ? 'doctor' : 'patient')
       };
 
-      socket.emit("send_message", payload);
+      console.log("📤 Sending message payload:", payload); 
 
-    // setMessages(prev => [...prev, {
-    //     ...payload,
-    //     id: Date.now(), 
-    //     createdAt: new Date(),
-    //     isRead: false
-    // }]);
-    
+      socket.emit("send_message", payload);
+      setSuggestions([]);
     },
     [appointmentId, user]
   );
 
-  return { messages, sendMessage, loading };
+  return { messages, sendMessage, loading, suggestions, setSuggestions };
 };

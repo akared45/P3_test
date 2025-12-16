@@ -16,8 +16,9 @@ export default function DoctorChat() {
   const [myId, setMyId] = useState(null);
   const [isConnected, setIsConnected] = useState(socket.connected);
   const messagesEndRef = useRef(null);
+  
 
-  const { messages, sendMessage, loading } = useChat(activeId);
+  const { messages, sendMessage, loading, suggestions } = useChat(activeId);
 
   useEffect(() => {
     const onConnect = () => setIsConnected(true);
@@ -108,6 +109,10 @@ export default function DoctorChat() {
               isConnected={isConnected}
               messagesEndRef={messagesEndRef}
               onClose={() => setIsOpen(false)}
+              suggestions={suggestions}
+              onSelectSuggestion={(suggestionText) => {
+                  sendMessage(suggestionText); 
+              }}
             />
           </Grid>
 

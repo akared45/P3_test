@@ -8,8 +8,8 @@ import {
     Send as SendIcon,
     AccountCircle as UserIcon
 } from "@mui/icons-material";
-import React, { useMemo } from 'react';
-import ChatAccessControl from './ChatAccessControl'; // [1] Import Component vừa tạo
+import React, { useState, useEffect } from 'react';
+import ChatAccessControl from './ChatAccessControl';
 
 export default function PatientChatWindow({
     activeApp,
@@ -23,31 +23,39 @@ export default function PatientChatWindow({
     messagesEndRef,
     onClose
 }) {
-    // console.log(activeApp);
     const getAvatarUrl = (url) => {
         if (!url) return "";
         if (url.startsWith("http")) return url;
         return "http://localhost:3000" + url;
     };
 
-    // [2] Logic kiểm tra xem có được chat không (để ẩn hiện UI)
-    const isSessionActive = useMemo(() => {
-        if (!activeApp) return false;
-        const now = new Date().getTime();
-        // Lấy startTime chuẩn từ activeApp (Backend đã fix)
-        const start = new Date(activeApp.startTime).getTime(); 
-        const end = new Date(activeApp.endTime).getTime();
-        
-        const openTime = start - (15 * 60 * 1000); // 15p buffer
-        const closeTime = end + (30 * 60 * 1000); // 30p grace period
+    const [isSessionActive, setIsSessionActive] = useState(false);
+    useEffect(() => {
+        if (!activeApp) return;
 
-        return now >= openTime && now <= closeTime;
+        const checkTime = () => {
+            const now = new Date().getTime();
+            const start = activeApp.startTime ? new Date(activeApp.startTime).getTime() : new Date(activeApp.appointmentDate).getTime();
+            const end = activeApp.endTime ? new Date(activeApp.endTime).getTime() : (start + (activeApp.durationMinutes || 30) * 60000);
+            
+            const BUFFER_TIME = 15 * 60 * 1000; 
+            const GRACE_PERIOD = 30 * 60 * 1000;
+            const openTime = start - BUFFER_TIME;
+            const closeTime = end + GRACE_PERIOD;
+
+            const isActive = now >= openTime && now <= closeTime;
+            setIsSessionActive(isActive);
+        };
+
+        checkTime();
+        const timer = setInterval(checkTime, 1000);
+
+        return () => clearInterval(timer);
     }, [activeApp]);
 
     return (
         <Grid item sx={{ flex: 1, display: 'flex', flexDirection: 'column', bgcolor: '#f0f2f5', height: '100%', overflow: 'hidden' }}>
             
-            {/* --- HEADER (LUÔN HIỆN) --- */}
             <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider', bgcolor: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '70px', flexShrink: 0 }}>
                 {activeApp ? (
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -71,8 +79,6 @@ export default function PatientChatWindow({
                 </IconButton>
             </Box>
 
-            {/* --- BODY --- */}
-            {/* Trường hợp 1: Chưa chọn ai */}
             {!activeApp ? (
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', opacity: 0.6 }}>
                     <HospitalIcon sx={{ fontSize: 100, color: 'grey.400', mb: 2 }} />
@@ -80,12 +86,10 @@ export default function PatientChatWindow({
                 </Box>
             ) : (
                 <>
-                    {/* Trường hợp 2: Kiểm tra thời gian */}
-                    {/* Nếu chưa đến giờ -> Hiện ChatAccessControl (Phòng chờ) */}
+                 
                     {!isSessionActive ? (
                         <ChatAccessControl appointment={activeApp} />
                     ) : (
-                        /* Trường hợp 3: Đúng giờ -> Hiện khung chat */
                         <>
                             <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
                                 {loading && <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}><CircularProgress size={30} /></Box>}

@@ -343,5 +343,6 @@ module.exports = {
     paymentController,
     socketService,
     tokenService,
-    sendMessageUseCase
+    sendMessageUseCase,
+    aiService
 };
