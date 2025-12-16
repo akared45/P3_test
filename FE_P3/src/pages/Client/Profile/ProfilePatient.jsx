@@ -1,5 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Box, CircularProgress, Container, Paper, Typography, Alert, Snackbar } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Paper,
+  Typography,
+  Alert,
+  Snackbar,
+} from "@mui/material";
 import { patientApi, uploadApi } from "../../../services/api";
 import ProfileForm from "./ProfileForm";
 import dayjs from "dayjs";
@@ -9,7 +17,11 @@ const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user } = useContext(AuthContext);
-  const [notification, setNotification] = useState({ open: false, message: "", severity: "success" });
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   useEffect(() => {
     if (!user?.id) return;
@@ -17,14 +29,16 @@ const Profile = () => {
       try {
         const { data } = await patientApi.getById(user.id);
         const userData = data.data || data;
-        const phoneContact = userData.contacts?.find(c => c.type === 'phone');
+        const phoneContact = userData.contacts?.find((c) => c.type === "phone");
 
         const formattedData = {
           ...userData,
-          dateOfBirth: userData.dateOfBirth ? dayjs(userData.dateOfBirth).format("YYYY-MM-DD") : "",
+          dateOfBirth: userData.dateOfBirth
+            ? dayjs(userData.dateOfBirth).format("YYYY-MM-DD")
+            : "",
           medicalConditions: userData.medicalConditions || [],
           allergies: userData.allergies || [],
-          phone: phoneContact ? phoneContact.value : ""
+          phone: phoneContact ? phoneContact.value : "",
         };
 
         setProfile(formattedData);
@@ -41,13 +55,13 @@ const Profile = () => {
     try {
       let updatedContacts = [];
       if (profile?.contacts) {
-        updatedContacts = profile.contacts.filter(c => c.type !== 'phone');
+        updatedContacts = profile.contacts.filter((c) => c.type !== "phone");
       }
       if (values.phone) {
         updatedContacts.push({
-          type: 'phone',
+          type: "phone",
           value: values.phone,
-          isPrimary: true
+          isPrimary: true,
         });
       }
       const payload = {
@@ -57,21 +71,26 @@ const Profile = () => {
         avatarUrl: values.avatarUrl,
         medicalConditions: values.medicalConditions,
         allergies: values.allergies,
-        contacts: updatedContacts
+        contacts: updatedContacts,
       };
 
       const res = await patientApi.updateMe(payload);
       setProfile({ ...values, contacts: updatedContacts });
-      setNotification({ open: true, message: "Cập nhật hồ sơ thành công!", severity: "success" });
+      setNotification({
+        open: true,
+        message: "Cập nhật hồ sơ thành công!",
+        severity: "success",
+      });
     } catch (error) {
       console.error("Error updating profile", error);
-      const errorMsg = error.response?.data?.message || "Có lỗi xảy ra khi cập nhật";
+      const errorMsg =
+        error.response?.data?.message || "Có lỗi xảy ra khi cập nhật";
       const detailError = error.response?.data?.errors?.[0];
 
       setNotification({
         open: true,
         message: detailError || errorMsg,
-        severity: "error"
+        severity: "error",
       });
     } finally {
       setSubmitting(false);
@@ -83,7 +102,11 @@ const Profile = () => {
       const { data } = await uploadApi.uploadImage(file);
       return data.url || data.data.url;
     } catch (error) {
-      setNotification({ open: true, message: "Lỗi upload ảnh", severity: "error" });
+      setNotification({
+        open: true,
+        message: "Lỗi upload ảnh",
+        severity: "error",
+      });
       throw error;
     }
   };
@@ -98,7 +121,12 @@ const Profile = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom fontWeight="bold" sx={{ color: '#1976d2' }}>
+      <Typography
+        variant="h4"
+        gutterBottom
+        fontWeight="bold"
+        sx={{ color: "#1976d2" }}
+      >
         Hồ sơ bệnh nhân
       </Typography>
 
@@ -118,9 +146,14 @@ const Profile = () => {
         open={notification.open}
         autoHideDuration={6000}
         onClose={() => setNotification({ ...notification, open: false })}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{ mt: "80px" }}
       >
-        <Alert onClose={() => setNotification({ ...notification, open: false })} severity={notification.severity} sx={{ width: '100%' }}>
+        <Alert
+          onClose={() => setNotification({ ...notification, open: false })}
+          severity={notification.severity}
+          sx={{ width: "100%" }}
+        >
           {notification.message}
         </Alert>
       </Snackbar>

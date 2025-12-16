@@ -7,13 +7,16 @@ import MobileMenu from "./MobileMenu";
 import UserSection from "./UserSection";
 import Modal from "../../../ui/modal";
 import { patientApi } from "../../../../services/api";
+import { useNavigate } from "react-router-dom";
 const Header = () => {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const { user, logout } = useContext(AuthContext);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
 
   const handleConfirmLogout = () => {
     logout();
+    navigate("/");
     setOpenLogoutModal(false);
   };
 
@@ -30,12 +33,16 @@ const Header = () => {
     };
     fetchProfile();
   }, [user?.id]);
-  
+
   return (
     <>
       <AppBar
         position="sticky"
-        sx={{ bgcolor: 'white', color: 'text.primary', boxShadow: '0px 4px 20px rgba(0,0,0,0.05)' }}
+        sx={{
+          bgcolor: "white",
+          color: "text.primary",
+          boxShadow: "0px 4px 20px rgba(0,0,0,0.05)",
+        }}
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters sx={{ height: 70 }}>
@@ -48,7 +55,6 @@ const Header = () => {
               isLoggedIn={!!user}
               onLogoutRequest={() => setOpenLogoutModal(true)}
             />
-
           </Toolbar>
         </Container>
       </AppBar>

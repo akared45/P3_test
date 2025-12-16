@@ -1,9 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { authApi } from "../services/api";
-import {
-  setAccessToken,
-  clearAccessToken,
-} from "../utils/authMemory";
+import { setAccessToken, clearAccessToken } from "../utils/authMemory";
 import { connectSocket, disconnectSocket } from "../services/socket";
 
 export const AuthContext = createContext();
@@ -98,7 +95,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, register, verifyEmail }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, loading, register, verifyEmail }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );

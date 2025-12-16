@@ -27,7 +27,7 @@ const BasicInfo = ({ formik, isEditing }) => {
           label="Email"
           name="email"
           value={values.email}
-          disabled 
+          disabled
           variant="filled"
         />
       </Grid>
