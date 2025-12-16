@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Snackbar, Alert } from "@mui/material";
 import Button from "@components/ui/button";
 import { UserContext } from "@/providers/UserProvider";
 import { TableBase } from "../../../components/ui/table";
@@ -19,8 +19,18 @@ const Doctors = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-
-  console.log(doctors);
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const showNotification = (message, severity = "success") => {
+    setNotification({
+      open: true,
+      message,
+      severity,
+    });
+  };
   const handleOpenEdit = (doctor) => {
     setSelectedDoctor(doctor);
     setOpenEdit(true);
@@ -40,10 +50,10 @@ const Doctors = () => {
     if (!deleteId) return;
     try {
       await doctorApi.delete(deleteId);
-      alert("Xóa thành công!");
+      showNotification("Xóa bác sĩ thành công", "success");
       refreshDoctors();
     } catch (error) {
-      alert("Xóa thất bại!");
+      showNotification("Xóa bác sĩ thất bại", "error");
     } finally {
       setOpenDeleteModal(false);
       setDeleteId(null);
@@ -58,12 +68,20 @@ const Doctors = () => {
 
   return (
     <>
-      <Box sx={{ p: 3, height: "100vh", display: "flex", flexDirection: "column" }}>
-        <Box >
+      <Box
+        sx={{ p: 3, height: "100vh", display: "flex", flexDirection: "column" }}
+      >
+        <Box>
           <Typography variant="h4">Danh sách Bác sĩ</Typography>
-          
         </Box>
-        <Box my={3} sx={{ display: "flex", justifyContent: "space-between" , alignItems:"center"}}>
+        <Box
+          my={3}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <DoctorStatistic />
           <div style={{ width: "250px" }}>
             <Button
@@ -102,7 +120,6 @@ const Doctors = () => {
           />
 
           {/* Thống kê */}
-
         </Box>
 
         {/* Modal xác nhận xóa */}
@@ -114,6 +131,20 @@ const Doctors = () => {
           onConfirm={handleConfirmDelete}
         />
       </Box>
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={4000}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        onClose={() => setNotification({ ...notification, open: false })}
+      >
+        <Alert
+          severity={notification.severity}
+          onClose={() => setNotification({ ...notification, open: false })}
+          sx={{ width: "100%" }}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
