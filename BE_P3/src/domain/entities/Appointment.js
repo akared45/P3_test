@@ -22,7 +22,9 @@ class Appointment {
     paymentStatus = PaymentStatus.UNPAID,
     paymentMethod = PaymentMethod.CASH,
     transactionId = null,
-    paymentUrl = null
+    paymentUrl = null,
+    startTime,
+    endTime
   }) {
     if (!patientId) throw new Error("Appointment must have a patient");
     if (!doctorId) throw new Error("Appointment must have a doctor");
@@ -48,14 +50,16 @@ class Appointment {
     this.paymentMethod = paymentMethod;
     this.transactionId = transactionId;
     this.paymentUrl = paymentUrl;
+    this.startTime = startTime; 
+    this.endTime = endTime;
     Object.freeze(this);
   }
-updatePaymentUrl(url) {
-        return new Appointment({
-            ...this, // Copy toàn bộ dữ liệu cũ
-            paymentUrl: url // Ghi đè url mới
-        });
-    }
+  updatePaymentUrl(url) {
+    return new Appointment({
+      ...this,
+      paymentUrl: url
+    });
+  }
   isConfirmed() {
     return this.status === AppointmentStatus.CONFIRMED;
   }
@@ -117,6 +121,44 @@ updatePaymentUrl(url) {
       updatedAt: new Date()
     });
   }
+
+  isSessionActive() {
+        const now = new Date().getTime();
+        const start = this.startTime.getTime();
+        const end = this.endTime.getTime();
+        
+        // Cho phép vào sớm 15 phút
+        const BUFFER_MS = 15 * 60 * 1000; 
+        const allowedStart = start - BUFFER_MS;
+        
+        // Cho phép xem lại 30 phút sau khi kết thúc
+        const GRACE_MS = 30 * 60 * 1000;
+        const allowedEnd = end + GRACE_MS;
+
+        // --- [DEBUG LOG: XEM SERVER TÍNH TOÁN GÌ] ---
+        console.log("=== CHECK TIME DEBUG ===");
+        console.log(`🕒 Hiện tại (Now)     : ${new Date(now).toLocaleString("vi-VN")}`);
+        console.log(`🏁 Giờ Hẹn (Start)    : ${new Date(start).toLocaleString("vi-VN")}`);
+        console.log(`✅ Được vào từ        : ${new Date(allowedStart).toLocaleString("vi-VN")} (Đã trừ 15p)`);
+        console.log(`❌ Kết quả so sánh    : ${now} >= ${allowedStart} ? -> ${now >= allowedStart}`);
+        console.log("========================");
+
+        if (now < allowedStart) {
+            // Tính xem còn bao nhiêu phút
+            const diffMinutes = Math.ceil((allowedStart - now) / 60000);
+            return { 
+                active: false, 
+                reason: 'too_early', 
+                message: `Chưa đến giờ hẹn. Vui lòng quay lại sau ${diffMinutes} phút nữa.` 
+            };
+        }
+
+        if (now > allowedEnd) {
+            return { active: false, reason: 'ended', message: "Phiên tư vấn đã kết thúc." };
+        }
+
+        return { active: true };
+    }
 }
 
 module.exports = Appointment;

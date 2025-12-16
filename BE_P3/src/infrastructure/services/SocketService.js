@@ -7,7 +7,7 @@ class SocketService extends ISocketService {
         this.io = null;
     }
 
-    init(httpServer, { sendMessageUseCase } = {}) {
+    init(httpServer, { sendMessageUseCase, aiService } = {}) {
         this.io = new Server(httpServer, {
             cors: {
                 origin: process.env.CLIENT_URL || "*",
@@ -41,7 +41,21 @@ class SocketService extends ISocketService {
                         type: payload.type || 'TEXT',
                         fileUrl: payload.fileUrl
                     });
+
                     this.sendMessageToRoom(payload.appointmentId, savedMessageDto);
+
+                    if (aiService && payload.senderRole === 'patient' && payload.type === 'text') {
+                        aiService.generateSmartReplies(payload.content)
+                            .then(suggestions => {
+                                if (suggestions && suggestions.length > 0) {
+                                    this.io.to(payload.appointmentId).emit('receive_suggestions', {
+                                        appointmentId: payload.appointmentId,
+                                        suggestions: suggestions
+                                    });
+                                }
+                            })
+                            .catch(err => console.error("AI Reply Failed:", err));
+                        }
 
                 } catch (error) {
                     console.error("Socket Message Error:", error);

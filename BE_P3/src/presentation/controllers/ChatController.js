@@ -6,8 +6,11 @@ class ChatController {
     async getHistory(req, res, next) {
         try {
             const { appointmentId } = req.params;
-            const messages = await this.getChatHistoryUseCase.execute(appointmentId);
-            return res.status(200).json({ data: messages });
+            const userId = req.user.id;
+
+            const messages = await this.getChatHistoryUseCase.execute(appointmentId, userId);
+            
+            res.json({ success: true, data: messages });
         } catch (error) {
             next(error);
         }
