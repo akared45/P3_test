@@ -43,8 +43,6 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const fileInputRef = useRef(null);
-
-  // State quản lý lỗi
   const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
@@ -64,12 +62,10 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
   });
 
   const showNotification = (message, severity = "success") => {
-    setNotification({
-      open: true,
-      message,
-      severity,
-    });
+    setNotification({ open: true, message, severity });
   };
+
+  const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     if (open && doctorData.id) {
@@ -96,13 +92,9 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
             })),
             avatarUrl: doc.avatarUrl || "",
           });
-          if (doc.avatarUrl) {
-            setPreviewUrl(getImageUrl(doc.avatarUrl));
-          } else {
-            setPreviewUrl("");
-          }
+          setPreviewUrl(doc.avatarUrl ? getImageUrl(doc.avatarUrl) : "");
           setSelectedFile(null);
-          setErrors({}); // Reset lỗi khi mở form mới
+          setErrors({});
         } catch (error) {
           showNotification("Lỗi tải dữ liệu", "warning");
           onClose();
@@ -110,102 +102,8 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
       };
       fetchData();
     }
-  }, [open, doctorData]);
+  }, [open, doctorData, onClose]);
 
-  const handleFileSelect = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      if (!file.type.startsWith("image/")) {
-        showNotification("Vui lòng chọn file ảnh", "warning");
-        return;
-      }
-      setSelectedFile(file);
-      const objectUrl = URL.createObjectURL(file);
-      setPreviewUrl(objectUrl);
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl && previewUrl.startsWith("blob:")) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    // Xóa lỗi của trường đó khi người dùng nhập
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
-
-  // --- Logic cho Qualifications ---
-  const addQualification = () => {
-    setFormData((prev) => ({
-      ...prev,
-      qualifications: [
-        ...prev.qualifications,
-        { degree: "", institution: "", year: new Date().getFullYear() },
-      ],
-    }));
-  };
-  const removeQualification = (index) => {
-    const newList = [...formData.qualifications];
-    newList.splice(index, 1);
-    setFormData((prev) => ({ ...prev, qualifications: newList }));
-  };
-  const changeQualification = (index, field, value) => {
-    const newList = [...formData.qualifications];
-    newList[index][field] = value;
-    setFormData((prev) => ({ ...prev, qualifications: newList }));
-  };
-
-  // --- Logic cho Work History ---
-  const addWorkHistory = () => {
-    setFormData((prev) => ({
-      ...prev,
-      workHistory: [
-        ...prev.workHistory,
-        { position: "", place: "", from: "", to: "" },
-      ],
-    }));
-  };
-  const removeWorkHistory = (index) => {
-    const newList = [...formData.workHistory];
-    newList.splice(index, 1);
-    setFormData((prev) => ({ ...prev, workHistory: newList }));
-  };
-  const changeWorkHistory = (index, field, value) => {
-    const newList = [...formData.workHistory];
-    newList[index][field] = value;
-    setFormData((prev) => ({ ...prev, workHistory: newList }));
-  };
-
-  // --- Logic cho Schedules ---
-  const addSchedule = () => {
-    setFormData((prev) => ({
-      ...prev,
-      schedules: [
-        ...prev.schedules,
-        { day: "Monday", start: "08:00", end: "12:00", maxPatients: 10 },
-      ],
-    }));
-  };
-  const removeSchedule = (index) => {
-    const newList = [...formData.schedules];
-    newList.splice(index, 1);
-    setFormData((prev) => ({ ...prev, schedules: newList }));
-  };
-  const changeSchedule = (index, field, value) => {
-    const newList = [...formData.schedules];
-    newList[index][field] = value;
-    setFormData((prev) => ({ ...prev, schedules: newList }));
-  };
-
-  // --- VALIDATION LOGIC ---
   const validateForm = () => {
     let tempErrors = {};
     if (!formData.fullName) tempErrors.fullName = "Họ tên không được để trống";
@@ -213,31 +111,97 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
     if (!formData.licenseNumber)
       tempErrors.licenseNumber = "Số chứng chỉ không được để trống";
 
-    // Kiểm tra mảng qualifications
     formData.qualifications.forEach((q, index) => {
-      if (!q.degree) tempErrors[`qual_degree_${index}`] = "Trống";
-      if (!q.institution) tempErrors[`qual_inst_${index}`] = "Trống";
+      if (!q.degree)
+        tempErrors[`qual_degree_${index}`] = "Tên bằng cấp không được để trống";
+      if (!q.institution)
+        tempErrors[`qual_inst_${index}`] = "Nơi cấp không được để trống";
+      if (!q.year) tempErrors[`qual_year_${index}`] = "Năm không được để trống";
     });
 
-    // Kiểm tra mảng schedules
+    formData.workHistory.forEach((w, index) => {
+      if (!w.position)
+        tempErrors[`work_pos_${index}`] = "Chức vụ không được để trống";
+      if (!w.place)
+        tempErrors[`work_place_${index}`] = "Nơi làm việc không được để trống";
+      if (!w.from)
+        tempErrors[`work_from_${index}`] = "Ngày bắt đầu không được để trống";
+
+      if (w.to) {
+        if (w.to > today) {
+          tempErrors[`work_to_${index}`] =
+            "Ngày kết thúc không được ở tương lai";
+        }
+        if (w.from && w.to < w.from) {
+          tempErrors[`work_to_${index}`] =
+            "Ngày kết thúc phải sau ngày bắt đầu";
+        }
+      }
+    });
+
     formData.schedules.forEach((s, index) => {
-      if (!s.start) tempErrors[`sched_start_${index}`] = "Trống";
-      if (!s.end) tempErrors[`sched_end_${index}`] = "Trống";
+      if (!s.day) tempErrors[`sched_day_${index}`] = "Vui lòng chọn thứ";
+      if (!s.start)
+        tempErrors[`sched_start_${index}`] = "Giờ bắt đầu không được để trống";
+      if (!s.end)
+        tempErrors[`sched_end_${index}`] = "Giờ kết thúc không được để trống";
+      if (!s.maxPatients || s.maxPatients <= 0)
+        tempErrors[`sched_max_${index}`] = "Số BN phải lớn hơn 0";
     });
 
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
 
+  const clearError = (fieldName) => {
+    if (errors[fieldName]) {
+      setErrors((prev) => {
+        const newErrs = { ...prev };
+        delete newErrs[fieldName];
+        return newErrs;
+      });
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    clearError(name);
+  };
+
+  const changeQualification = (index, field, value) => {
+    const newList = [...formData.qualifications];
+    newList[index][field] = value;
+    setFormData((prev) => ({ ...prev, qualifications: newList }));
+    clearError(`qual_${field === "institution" ? "inst" : field}_${index}`);
+  };
+
+  const changeWorkHistory = (index, field, value) => {
+    const newList = [...formData.workHistory];
+    newList[index][field] = value;
+    setFormData((prev) => ({ ...prev, workHistory: newList }));
+
+    const errorMap = {
+      position: "pos",
+      place: "place",
+      from: "from",
+      to: "to",
+    };
+    clearError(`work_${errorMap[field]}_${index}`);
+  };
+
+  const changeSchedule = (index, field, value) => {
+    const newList = [...formData.schedules];
+    newList[index][field] = value;
+    setFormData((prev) => ({ ...prev, schedules: newList }));
+    clearError(`sched_${field === "maxPatients" ? "max" : field}_${index}`);
+  };
+
   const handleSubmit = async () => {
     if (!validateForm()) {
-      showNotification(
-        "Vui lòng kiểm tra các trường thông tin màu đỏ",
-        "error"
-      );
+      showNotification("Vui lòng kiểm tra lại thông tin", "error");
       return;
     }
-
     setLoading(true);
     try {
       let currentAvatarUrl = formData.avatarUrl;
@@ -250,7 +214,7 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
         avatarUrl: currentAvatarUrl,
         workHistory: formData.workHistory.map((w) => ({
           ...w,
-          to: w.to ? w.to : null,
+          to: w.to || null,
         })),
       };
       await doctorApi.update(doctorData.id, payload);
@@ -258,10 +222,7 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
       onSuccess();
       onClose();
     } catch (error) {
-      showNotification(
-        error.response?.data?.message || "Lỗi cập nhật dữ liệu",
-        "error"
-      );
+      showNotification("Lỗi cập nhật dữ liệu", "error");
     } finally {
       setLoading(false);
     }
@@ -300,7 +261,13 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                   accept="image/*"
                   hidden
                   ref={fileInputRef}
-                  onChange={handleFileSelect}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      setSelectedFile(file);
+                      setPreviewUrl(URL.createObjectURL(file));
+                    }
+                  }}
                 />
                 <IconButton
                   color="primary"
@@ -319,9 +286,6 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
               </Box>
               <Box>
                 <Typography variant="subtitle2">Ảnh đại diện</Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Thay đổi ảnh mới nếu cần.
-                </Typography>
               </Box>
             </Stack>
 
@@ -335,7 +299,6 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                   disabled
                   error={!!errors.fullName}
                   helperText={errors.fullName}
-                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -345,9 +308,9 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                   label="Chuyên khoa"
                   name="specCode"
                   value={formData.specCode}
+                  onChange={handleChange}
                   error={!!errors.specCode}
                   helperText={errors.specCode}
-                  onChange={handleChange}
                 >
                   {specializations.map((s) => (
                     <MenuItem key={s.code} value={s.code}>
@@ -362,65 +325,57 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                   label="Số chứng chỉ"
                   name="licenseNumber"
                   value={formData.licenseNumber}
+                  onChange={handleChange}
                   error={!!errors.licenseNumber}
                   helperText={errors.licenseNumber}
-                  onChange={handleChange}
                 />
-              </Grid>
-              <Grid item xs={4}>
-                <TextField
-                  select
-                  fullWidth
-                  label="Trạng thái"
-                  name="isActive"
-                  value={formData.isActive}
-                  onChange={(e) =>
-                    setFormData({ ...formData, isActive: e.target.value })
-                  }
-                >
-                  <MenuItem value={true}>Hoạt động</MenuItem>
-                  <MenuItem value={false}>Dừng hoạt động</MenuItem>
-                </TextField>
               </Grid>
             </Grid>
 
             <Divider sx={{ my: 3 }} />
 
             <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mb: 1,
-              }}
+              sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
             >
               <Typography variant="h6" color="primary">
                 2. Bằng cấp / Học vấn
               </Typography>
               <Button
                 startIcon={<AddCircleOutline />}
-                onClick={addQualification}
+                onClick={() =>
+                  setFormData((p) => ({
+                    ...p,
+                    qualifications: [
+                      ...p.qualifications,
+                      {
+                        degree: "",
+                        institution: "",
+                        year: new Date().getFullYear(),
+                      },
+                    ],
+                  }))
+                }
                 variant="outlined"
                 size="small"
               >
-                Thêm bằng cấp
+                Thêm
               </Button>
             </Box>
-
             {formData.qualifications.map((item, index) => (
               <Paper
                 key={index}
                 variant="outlined"
                 sx={{ p: 2, mb: 2, bgcolor: "#f9fafb" }}
               >
-                <Grid container spacing={2} alignItems="center">
-                  <Grid item xs={5}>
+                <Grid container spacing={2}>
+                  <Grid item xs={4}>
                     <TextField
                       fullWidth
                       label="Tên bằng cấp"
                       size="small"
                       value={item.degree}
                       error={!!errors[`qual_degree_${index}`]}
+                      helperText={errors[`qual_degree_${index}`]}
                       onChange={(e) =>
                         changeQualification(index, "degree", e.target.value)
                       }
@@ -433,6 +388,7 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                       size="small"
                       value={item.institution}
                       error={!!errors[`qual_inst_${index}`]}
+                      helperText={errors[`qual_inst_${index}`]}
                       onChange={(e) =>
                         changeQualification(
                           index,
@@ -442,13 +398,15 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                       }
                     />
                   </Grid>
-                  <Grid item xs={2}>
+                  <Grid item xs={3}>
                     <TextField
                       fullWidth
                       label="Năm"
                       type="number"
                       size="small"
                       value={item.year}
+                      error={!!errors[`qual_year_${index}`]}
+                      helperText={errors[`qual_year_${index}`]}
                       onChange={(e) =>
                         changeQualification(index, "year", e.target.value)
                       }
@@ -457,7 +415,11 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                   <Grid item xs={1}>
                     <IconButton
                       color="error"
-                      onClick={() => removeQualification(index)}
+                      onClick={() => {
+                        const nl = [...formData.qualifications];
+                        nl.splice(index, 1);
+                        setFormData((p) => ({ ...p, qualifications: nl }));
+                      }}
                     >
                       <DeleteOutline />
                     </IconButton>
@@ -469,56 +431,62 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
             <Divider sx={{ my: 3 }} />
 
             <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mb: 1,
-              }}
+              sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
             >
               <Typography variant="h6" color="primary">
                 3. Quá trình Công tác
               </Typography>
               <Button
                 startIcon={<AddCircleOutline />}
-                onClick={addWorkHistory}
+                onClick={() =>
+                  setFormData((p) => ({
+                    ...p,
+                    workHistory: [
+                      ...p.workHistory,
+                      { position: "", place: "", from: "", to: "" },
+                    ],
+                  }))
+                }
                 variant="outlined"
                 size="small"
               >
-                Thêm công tác
+                Thêm
               </Button>
             </Box>
-
             {formData.workHistory.map((item, index) => (
               <Paper
                 key={index}
                 variant="outlined"
                 sx={{ p: 2, mb: 2, bgcolor: "#f9fafb" }}
               >
-                <Grid container spacing={2} alignItems="center">
+                <Grid container spacing={2}>
                   <Grid item xs={3}>
                     <TextField
                       fullWidth
                       label="Chức vụ"
                       size="small"
                       value={item.position}
+                      error={!!errors[`work_pos_${index}`]}
+                      helperText={errors[`work_pos_${index}`]}
                       onChange={(e) =>
                         changeWorkHistory(index, "position", e.target.value)
                       }
                     />
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={3}>
                     <TextField
                       fullWidth
                       label="Nơi làm việc"
                       size="small"
                       value={item.place}
+                      error={!!errors[`work_place_${index}`]}
+                      helperText={errors[`work_place_${index}`]}
                       onChange={(e) =>
                         changeWorkHistory(index, "place", e.target.value)
                       }
                     />
                   </Grid>
-                  <Grid item xs={2}>
+                  <Grid item xs={3}>
                     <TextField
                       fullWidth
                       label="Từ ngày"
@@ -526,6 +494,8 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                       size="small"
                       InputLabelProps={{ shrink: true }}
                       value={item.from}
+                      error={!!errors[`work_from_${index}`]}
+                      helperText={errors[`work_from_${index}`]}
                       onChange={(e) =>
                         changeWorkHistory(index, "from", e.target.value)
                       }
@@ -538,7 +508,10 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                       type="date"
                       size="small"
                       InputLabelProps={{ shrink: true }}
-                      value={item.to}
+                      inputProps={{ max: today }}
+                      value={item.to || ""}
+                      error={!!errors[`work_to_${index}`]}
+                      helperText={errors[`work_to_${index}`]}
                       onChange={(e) =>
                         changeWorkHistory(index, "to", e.target.value)
                       }
@@ -547,7 +520,11 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                   <Grid item xs={1}>
                     <IconButton
                       color="error"
-                      onClick={() => removeWorkHistory(index)}
+                      onClick={() => {
+                        const nl = [...formData.workHistory];
+                        nl.splice(index, 1);
+                        setFormData((p) => ({ ...p, workHistory: nl }));
+                      }}
                     >
                       <DeleteOutline />
                     </IconButton>
@@ -559,33 +536,40 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
             <Divider sx={{ my: 3 }} />
 
             <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mb: 1,
-              }}
+              sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
             >
               <Typography variant="h6" color="primary">
                 4. Lịch làm việc
               </Typography>
               <Button
                 startIcon={<AddCircleOutline />}
-                onClick={addSchedule}
+                onClick={() =>
+                  setFormData((p) => ({
+                    ...p,
+                    schedules: [
+                      ...p.schedules,
+                      {
+                        day: "Monday",
+                        start: "08:00",
+                        end: "12:00",
+                        maxPatients: 10,
+                      },
+                    ],
+                  }))
+                }
                 variant="outlined"
                 size="small"
               >
-                Thêm lịch
+                Thêm
               </Button>
             </Box>
-
             {formData.schedules.map((item, index) => (
               <Paper
                 key={index}
                 variant="outlined"
                 sx={{ p: 2, mb: 2, bgcolor: "#f9fafb" }}
               >
-                <Grid container spacing={2} alignItems="center">
+                <Grid container spacing={2}>
                   <Grid item xs={3}>
                     <TextField
                       select
@@ -593,13 +577,15 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                       label="Thứ"
                       size="small"
                       value={item.day}
+                      error={!!errors[`sched_day_${index}`]}
+                      helperText={errors[`sched_day_${index}`]}
                       onChange={(e) =>
                         changeSchedule(index, "day", e.target.value)
                       }
                     >
-                      {DAYS_OF_WEEK.map((day) => (
-                        <MenuItem key={day.value} value={day.value}>
-                          {day.label}
+                      {DAYS_OF_WEEK.map((d) => (
+                        <MenuItem key={d.value} value={d.value}>
+                          {d.label}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -613,6 +599,7 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                       InputLabelProps={{ shrink: true }}
                       value={item.start}
                       error={!!errors[`sched_start_${index}`]}
+                      helperText={errors[`sched_start_${index}`]}
                       onChange={(e) =>
                         changeSchedule(index, "start", e.target.value)
                       }
@@ -627,6 +614,7 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                       InputLabelProps={{ shrink: true }}
                       value={item.end}
                       error={!!errors[`sched_end_${index}`]}
+                      helperText={errors[`sched_end_${index}`]}
                       onChange={(e) =>
                         changeSchedule(index, "end", e.target.value)
                       }
@@ -635,10 +623,12 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                   <Grid item xs={2}>
                     <TextField
                       fullWidth
-                      label="Max BN"
+                      label="BN tối đa"
                       type="number"
                       size="small"
                       value={item.maxPatients}
+                      error={!!errors[`sched_max_${index}`]}
+                      helperText={errors[`sched_max_${index}`]}
                       onChange={(e) =>
                         changeSchedule(index, "maxPatients", e.target.value)
                       }
@@ -647,7 +637,11 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
                   <Grid item xs={1}>
                     <IconButton
                       color="error"
-                      onClick={() => removeSchedule(index)}
+                      onClick={() => {
+                        const nl = [...formData.schedules];
+                        nl.splice(index, 1);
+                        setFormData((p) => ({ ...p, schedules: nl }));
+                      }}
                     >
                       <DeleteOutline />
                     </IconButton>
@@ -672,12 +666,11 @@ const EditDoctorDialog = ({ open, onClose, doctorData, onSuccess }) => {
         autoHideDuration={6000}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         onClose={() => setNotification({ ...notification, open: false })}
-        sx={{ mt: "80px" }}
       >
         <Alert
           severity={notification.severity}
           onClose={() => setNotification({ ...notification, open: false })}
-          sx={{ width: "100%" }}
+          variant="filled"
         >
           {notification.message}
         </Alert>
