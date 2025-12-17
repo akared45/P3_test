@@ -1,0 +1,59 @@
+{
+  "header": {
+    "title": "System Overview",
+    "subtitle": "General statistics and system performance",
+    "select_range": "Select time range",
+    "ranges": {
+      "7": "Last 7 days",
+      "30": "Last 30 days",
+      "90": "Last 3 months",
+      "365": "Last 1 year"
+    },
+    "no_data": "No data available to display"
+  },
+
+  "stat_cards": {
+    "total_revenue": "Total Revenue",
+    "total_appointments": "Total Appointments",
+    "new_patients": "New Patients",
+    "active_doctors": "Active Doctors",
+    "compare_previous": "compared to previous period"
+  },
+
+  "revenue_chart": {
+    "title": "Revenue & Appointment Trends",
+    "subtitle": "Chart showing revenue and appointment volume over time",
+    "revenue": "Revenue",
+    "appointments": "Appointments"
+  },
+
+  "status_chart": {
+    "title": "Appointment Status Distribution",
+    "total": "Total Appointments",
+    "quantity": "Quantity",
+    "statuses": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "done": "Completed",
+      "cancelled": "Cancelled"
+    }
+  },
+
+  "doctors_chart": {
+    "title": "Top Performing Doctors",
+    "subtitle": "Ranking based on revenue and work performance",
+    "high_performance": "High Performance",
+    "booking_count": "Appointments",
+    "revenue": "Revenue",
+    "total_revenue": "Total Revenue",
+    "total_bookings": "Total Appointments",
+    "top_doctor": "Top Doctor",
+    "no_data": "N/A"
+  },
+
+  "tooltip": {
+    "revenue": "Revenue",
+    "appointments": "Appointments",
+    "booking_count": "Number of appointments"
+  }
+}

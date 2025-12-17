@@ -1,0 +1,64 @@
+{
+  "columns": {
+    "doctorInfo": "Bác sĩ",
+    "specialization": "Chuyên khoa",
+    "experience": "Kinh nghiệm",
+    "isActive": "Trạng thái",
+    "actions": "Thao tác"
+  },
+  "status": {
+    "active": "Hoạt động",
+    "inactive": "Đã khóa"
+  },
+  "actions": {
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa"
+  },
+  "form": {
+    "title": "Chỉnh sửa thông tin Bác sĩ",
+    "section": {
+      "general": "1. Thông tin chung",
+      "qualifications": "2. Bằng cấp / Học vấn",
+      "workHistory": "3. Quá trình Công tác",
+      "schedules": "4. Lịch làm việc"
+    },
+    "fields": {
+      "fullName": "Họ tên",
+      "licenseNumber": "Số chứng chỉ",
+      "specCode": "Chuyên khoa",
+      "avatar": "Ảnh đại diện",
+      "degree": "Tên bằng cấp",
+      "institution": "Nơi cấp",
+      "year": "Năm",
+      "position": "Chức vụ",
+      "place": "Nơi làm việc",
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "day": "Thứ",
+      "start": "Bắt đầu",
+      "end": "Kết thúc",
+      "maxPatients": "BN tối đa"
+    },
+    "buttons": {
+      "add": "Thêm",
+      "close": "Đóng",
+      "submit": "Cập nhật thay đổi",
+      "upload": "Tải ảnh lên"
+    }
+  },
+  "notifications": {
+    "fetchError": "Lỗi tải dữ liệu",
+    "updateSuccess": "Cập nhật thành công!",
+    "updateError": "Lỗi cập nhật dữ liệu",
+    "validationError": "Vui lòng kiểm tra lại thông tin"
+  },
+  "daysOfWeek": {
+    "Monday": "Thứ 2",
+    "Tuesday": "Thứ 3",
+    "Wednesday": "Thứ 4",
+    "Thursday": "Thứ 5",
+    "Friday": "Thứ 6",
+    "Saturday": "Thứ 7",
+    "Sunday": "Chủ nhật"
+  }
+}

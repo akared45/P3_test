@@ -83,6 +83,7 @@ const Doctors = () => {
           }}
         >
           <DoctorStatistic />
+
           <div style={{ width: "250px" }}>
             <Button
               content="+ Thêm bác sĩ"

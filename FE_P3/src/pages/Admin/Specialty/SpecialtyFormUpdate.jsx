@@ -4,8 +4,11 @@ import * as Yup from "yup";
 import styles from "./style.module.scss";
 import TextFields from "../../../components/ui/textFields";
 import { specApi } from "../../../services/api";
+import { useTranslation } from "react-i18next";
 
 const SpecialtyFormUpdate = ({ onClose, initialData }) => {
+  const { t } = useTranslation("specialty");
+
   const formik = useFormik({
     initialValues: {
       code: initialData?.code || "",
@@ -13,33 +16,32 @@ const SpecialtyFormUpdate = ({ onClose, initialData }) => {
       category: initialData?.category || "",
     },
     enableReinitialize: true,
+
     validationSchema: Yup.object({
-      name: Yup.string().required("Tên không được để trống"),
-      category: Yup.string().required("Danh mục không được để trống"),
+      name: Yup.string().required(t("form.validation.nameRequired")),
+      category: Yup.string().required(t("form.validation.categoryRequired")),
     }),
+
     onSubmit: async (values) => {
       try {
         const { code, name, category } = values;
-        const res = await specApi.update(code, {
-          name,
-          category
-        });
+        await specApi.update(code, { name, category });
         onClose();
       } catch (error) {
         console.log(error);
       }
-    }
+    },
   });
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <h2 className={styles.title}>Cập nhật chuyên khoa</h2>
+        <h2 className={styles.title}>{t("form.updateTitle")}</h2>
 
         <form onSubmit={formik.handleSubmit} className={styles.form}>
           <TextFields
             name="code"
-            label="Mã"
+            label={t("form.fields.code")}
             formik={formik}
             fullWidth
             size="small"
@@ -48,7 +50,7 @@ const SpecialtyFormUpdate = ({ onClose, initialData }) => {
 
           <TextFields
             name="name"
-            label="Tên"
+            label={t("form.fields.name")}
             formik={formik}
             fullWidth
             size="small"
@@ -56,7 +58,7 @@ const SpecialtyFormUpdate = ({ onClose, initialData }) => {
 
           <TextFields
             name="category"
-            label="Danh mục"
+            label={t("form.fields.category")}
             formik={formik}
             fullWidth
             size="small"
@@ -68,10 +70,11 @@ const SpecialtyFormUpdate = ({ onClose, initialData }) => {
               className={styles.cancelBtn}
               onClick={onClose}
             >
-              Hủy
+              {t("form.buttons.cancel")}
             </button>
+
             <button type="submit" className={styles.saveBtn}>
-              Cập nhật
+              {t("form.buttons.update")}
             </button>
           </div>
         </form>

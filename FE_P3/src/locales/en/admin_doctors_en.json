@@ -1,0 +1,64 @@
+{
+  "columns": {
+    "doctorInfo": "Doctor",
+    "specialization": "Specialization",
+    "experience": "Experience",
+    "isActive": "Status",
+    "actions": "Actions"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "actions": {
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "form": {
+    "title": "Edit Doctor Information",
+    "section": {
+      "general": "1. General Information",
+      "qualifications": "2. Qualifications / Education",
+      "workHistory": "3. Work History",
+      "schedules": "4. Work Schedule"
+    },
+    "fields": {
+      "fullName": "Full Name",
+      "licenseNumber": "License Number",
+      "specCode": "Specialization",
+      "avatar": "Avatar",
+      "degree": "Degree",
+      "institution": "Institution",
+      "year": "Year",
+      "position": "Position",
+      "place": "Workplace",
+      "from": "From",
+      "to": "To",
+      "day": "Day",
+      "start": "Start",
+      "end": "End",
+      "maxPatients": "Max Patients"
+    },
+    "buttons": {
+      "add": "Add",
+      "close": "Close",
+      "submit": "Update Changes",
+      "upload": "Upload Image"
+    }
+  },
+  "notifications": {
+    "fetchError": "Failed to fetch data",
+    "updateSuccess": "Update successful!",
+    "updateError": "Failed to update data",
+    "validationError": "Please check the information"
+  },
+  "daysOfWeek": {
+    "Monday": "Monday",
+    "Tuesday": "Tuesday",
+    "Wednesday": "Wednesday",
+    "Thursday": "Thursday",
+    "Friday": "Friday",
+    "Saturday": "Saturday",
+    "Sunday": "Sunday"
+  }
+}

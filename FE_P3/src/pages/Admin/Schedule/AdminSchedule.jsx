@@ -1,11 +1,28 @@
 import React, { useState, useEffect } from "react";
+
 import {
-  Box, Typography, Paper, Autocomplete, TextField,
-  Tabs, Tab, Button, Grid, Chip, IconButton,
-  Dialog, DialogTitle, DialogContent, DialogActions
+  Box,
+  Typography,
+  Paper,
+  Autocomplete,
+  TextField,
+  Tabs,
+  Tab,
+  Button,
+  Grid,
+  Chip,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
-  CalendarMonth, Settings, Save, Add, Delete
+  CalendarMonth,
+  Settings,
+  Save,
+  Add,
+  Delete,
 } from "@mui/icons-material";
 import { doctorApi } from "@services/api";
 
@@ -30,7 +47,11 @@ const AdminSchedule = () => {
   const [loadingSave, setLoadingSave] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [currentDay, setCurrentDay] = useState("Monday");
-  const [newSlot, setNewSlot] = useState({ start: "08:00", end: "17:00", maxPatients: 10 });
+  const [newSlot, setNewSlot] = useState({
+    start: "08:00",
+    end: "17:00",
+    maxPatients: 10,
+  });
 
   const fetchDoctors = async () => {
     try {
@@ -45,7 +66,9 @@ const AdminSchedule = () => {
     }
   };
 
-  useEffect(() => { fetchDoctors(); }, []);
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
 
   useEffect(() => {
     if (selectedDoctor) {
@@ -62,14 +85,16 @@ const AdminSchedule = () => {
 
     setEditorSchedules([
       ...editorSchedules,
-      { ...newSlot, day: currentDay, maxPatients: Number(newSlot.maxPatients) }
+      { ...newSlot, day: currentDay, maxPatients: Number(newSlot.maxPatients) },
     ]);
     setOpenDialog(false);
   };
 
   const handleDeleteSlot = (indexToDelete) => {
-    const slotToRemove = editorSchedules.filter(s => s.day === currentDay)[indexToDelete];
-    setEditorSchedules(editorSchedules.filter(s => s !== slotToRemove));
+    const slotToRemove = editorSchedules.filter((s) => s.day === currentDay)[
+      indexToDelete
+    ];
+    setEditorSchedules(editorSchedules.filter((s) => s !== slotToRemove));
   };
 
   const handleSaveSchedules = async () => {
@@ -83,17 +108,23 @@ const AdminSchedule = () => {
         bio: selectedDoctor.bio,
         isActive: selectedDoctor.isActive,
         avatarUrl: selectedDoctor.avatarUrl,
-        specCode: selectedDoctor.specialization?.code || selectedDoctor.specCode,
-        qualifications: selectedDoctor.qualifications?.map(({_id, ...rest}) => rest),
-        workHistory: selectedDoctor.workHistory?.map(({_id, ...rest}) => rest),
-        unavailableDates: selectedDoctor.unavailableDates?.map(({_id, ...rest}) => rest),
+        specCode:
+          selectedDoctor.specialization?.code || selectedDoctor.specCode,
+        qualifications: selectedDoctor.qualifications?.map(
+          ({ _id, ...rest }) => rest
+        ),
+        workHistory: selectedDoctor.workHistory?.map(
+          ({ _id, ...rest }) => rest
+        ),
+        unavailableDates: selectedDoctor.unavailableDates?.map(
+          ({ _id, ...rest }) => rest
+        ),
       };
       await doctorApi.update(selectedDoctor.id, payload);
       alert("Đã cập nhật lịch làm việc thành công!");
       fetchDoctors();
       const res = await doctorApi.getById(selectedDoctor.id);
       setSelectedDoctor(res.data || res);
-
     } catch (error) {
       console.error(error);
       alert("Lỗi khi lưu lịch!");
@@ -104,8 +135,14 @@ const AdminSchedule = () => {
 
   return (
     <Box sx={{ p: 3, bgcolor: "#f4f6f8", minHeight: "100vh" }}>
-
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+        }}
+      >
         <Typography variant="h4" fontWeight="bold" color="#1a202c">
           Quản lý Lịch Bác sĩ
         </Typography>
@@ -119,15 +156,21 @@ const AdminSchedule = () => {
           indicatorColor="primary"
           centered
         >
-          <Tab icon={<CalendarMonth />} iconPosition="start" label="Lịch trực toàn viện" />
-          <Tab icon={<Settings />} iconPosition="start" label="Xếp lịch cá nhân" />
+          <Tab
+            icon={<CalendarMonth />}
+            iconPosition="start"
+            label="Lịch trực toàn viện"
+          />
+          <Tab
+            icon={<Settings />}
+            iconPosition="start"
+            label="Xếp lịch cá nhân"
+          />
         </Tabs>
       </Paper>
 
       <div role="tabpanel" hidden={tabValue !== 0}>
-        {tabValue === 0 && (
-          <VisualSchedule doctors={doctors} />
-        )}
+        {tabValue === 0 && <VisualSchedule doctors={doctors} />}
       </div>
 
       <div role="tabpanel" hidden={tabValue !== 1}>
@@ -136,11 +179,17 @@ const AdminSchedule = () => {
             <Paper sx={{ p: 3, mb: 3, borderRadius: 3 }}>
               <Autocomplete
                 options={doctors}
-                getOptionLabel={(option) => `${option.fullName} - ${option.specCode || ''}`}
+                getOptionLabel={(option) =>
+                  `${option.fullName} - ${option.specCode || ""}`
+                }
                 value={selectedDoctor}
                 onChange={(event, newValue) => setSelectedDoctor(newValue)}
                 renderInput={(params) => (
-                  <TextField {...params} label="Chọn Bác sĩ để xếp lịch" placeholder="Tìm tên bác sĩ..." />
+                  <TextField
+                    {...params}
+                    label="Chọn Bác sĩ để xếp lịch"
+                    placeholder="Tìm tên bác sĩ..."
+                  />
                 )}
                 noOptionsText="Không tìm thấy bác sĩ"
               />
@@ -148,9 +197,15 @@ const AdminSchedule = () => {
 
             {selectedDoctor ? (
               <Box>
-                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mb={2}
+                >
                   <Typography variant="h6">
-                    Đang xếp lịch cho: <strong>{selectedDoctor.fullName}</strong>
+                    Đang xếp lịch cho:{" "}
+                    <strong>{selectedDoctor.fullName}</strong>
                   </Typography>
                   <Button
                     variant="contained"
@@ -164,15 +219,46 @@ const AdminSchedule = () => {
                   </Button>
                 </Box>
 
-                <Grid container spacing={2} columns={{ xs: 12, sm: 12, md: 7, lg: 7, xl: 7 }}>
+                <Grid
+                  container
+                  spacing={2}
+                  columns={{ xs: 12, sm: 12, md: 7, lg: 7, xl: 7 }}
+                >
                   {DAYS.map((day) => {
-                    const daySlots = editorSchedules.filter(s => s.day === day.key);
+                    const daySlots = editorSchedules.filter(
+                      (s) => s.day === day.key
+                    );
                     return (
-                      <Grid item xs={12} sm={6} md={1} lg={1} xl={1} key={day.key}>
-                        <Paper variant="outlined" sx={{ minHeight: 350, p: 1.5, bgcolor: '#fff', display: 'flex', flexDirection: 'column' }}>
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={1}
+                        lg={1}
+                        xl={1}
+                        key={day.key}
+                      >
+                        <Paper
+                          variant="outlined"
+                          sx={{
+                            minHeight: 350,
+                            p: 1.5,
+                            bgcolor: "#fff",
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
                           <Typography
-                            align="center" variant="subtitle2"
-                            sx={{ mb: 2, fontWeight: 'bold', color: '#1976d2', textTransform: 'uppercase', borderBottom: '1px solid #eee', pb: 1 }}
+                            align="center"
+                            variant="subtitle2"
+                            sx={{
+                              mb: 2,
+                              fontWeight: "bold",
+                              color: "#1976d2",
+                              textTransform: "uppercase",
+                              borderBottom: "1px solid #eee",
+                              pb: 1,
+                            }}
                           >
                             {day.label}
                           </Typography>
@@ -186,16 +272,29 @@ const AdminSchedule = () => {
                                   setCurrentDay(day.key);
                                   handleDeleteSlot(idx);
                                 }}
-                                color="primary" variant="outlined"
-                                sx={{ width: '100%', mb: 1, justifyContent: 'space-between', height: 'auto', py: 0.5 }}
+                                color="primary"
+                                variant="outlined"
+                                sx={{
+                                  width: "100%",
+                                  mb: 1,
+                                  justifyContent: "space-between",
+                                  height: "auto",
+                                  py: 0.5,
+                                }}
                               />
                             ))}
                           </Box>
 
                           <Button
-                            fullWidth size="small" startIcon={<Add />}
-                            sx={{ mt: 1, borderStyle: 'dashed' }} variant="outlined"
-                            onClick={() => { setCurrentDay(day.key); setOpenDialog(true); }}
+                            fullWidth
+                            size="small"
+                            startIcon={<Add />}
+                            sx={{ mt: 1, borderStyle: "dashed" }}
+                            variant="outlined"
+                            onClick={() => {
+                              setCurrentDay(day.key);
+                              setOpenDialog(true);
+                            }}
                           >
                             Thêm ca
                           </Button>
@@ -207,7 +306,12 @@ const AdminSchedule = () => {
               </Box>
             ) : (
               <Box textAlign="center" py={8} bgcolor="#fff" borderRadius={2}>
-                <img src="https://cdn-icons-png.flaticon.com/512/7486/7486754.png" width={120} style={{ opacity: 0.5 }} alt="" />
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/7486/7486754.png"
+                  width={120}
+                  style={{ opacity: 0.5 }}
+                  alt=""
+                />
                 <Typography variant="h6" color="text.secondary" mt={2}>
                   Vui lòng chọn bác sĩ ở trên để bắt đầu xếp lịch.
                 </Typography>
@@ -217,27 +321,53 @@ const AdminSchedule = () => {
         )}
       </div>
 
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="xs" fullWidth>
-        <DialogTitle>Thêm ca làm việc ({DAYS.find(d => d.key === currentDay)?.label})</DialogTitle>
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>
+          Thêm ca làm việc ({DAYS.find((d) => d.key === currentDay)?.label})
+        </DialogTitle>
         <DialogContent>
           <Box mt={2} display="flex" flexDirection="column" gap={3}>
             <TextField
-              label="Giờ bắt đầu" type="time" fullWidth InputLabelProps={{ shrink: true }}
-              value={newSlot.start} onChange={(e) => setNewSlot({ ...newSlot, start: e.target.value })}
+              label="Giờ bắt đầu"
+              type="time"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              value={newSlot.start}
+              onChange={(e) =>
+                setNewSlot({ ...newSlot, start: e.target.value })
+              }
             />
             <TextField
-              label="Giờ kết thúc" type="time" fullWidth InputLabelProps={{ shrink: true }}
-              value={newSlot.end} onChange={(e) => setNewSlot({ ...newSlot, end: e.target.value })}
+              label="Giờ kết thúc"
+              type="time"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              value={newSlot.end}
+              onChange={(e) => setNewSlot({ ...newSlot, end: e.target.value })}
             />
             <TextField
-              label="Số khách tối đa" type="number" fullWidth
-              value={newSlot.maxPatients} onChange={(e) => setNewSlot({ ...newSlot, maxPatients: e.target.value })}
+              label="Số khách tối đa"
+              type="number"
+              fullWidth
+              value={newSlot.maxPatients}
+              onChange={(e) =>
+                setNewSlot({ ...newSlot, maxPatients: e.target.value })
+              }
             />
           </Box>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
-          <Button onClick={() => setOpenDialog(false)} color="inherit">Hủy</Button>
-          <Button variant="contained" onClick={handleAddSlot}>Thêm Mới</Button>
+          <Button onClick={() => setOpenDialog(false)} color="inherit">
+            Hủy
+          </Button>
+          <Button variant="contained" onClick={handleAddSlot}>
+            Thêm Mới
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>

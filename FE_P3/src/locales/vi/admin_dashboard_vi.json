@@ -1,0 +1,59 @@
+{
+  "header": {
+    "title": "Tổng quan hệ thống",
+    "subtitle": "Thống kê tổng quan và hiệu suất hoạt động",
+    "select_range": "Chọn khoảng thời gian",
+    "ranges": {
+      "7": "7 ngày qua",
+      "30": "30 ngày qua",
+      "90": "3 tháng qua",
+      "365": "1 năm qua"
+    },
+    "no_data": "Không có dữ liệu để hiển thị"
+  },
+
+  "stat_cards": {
+    "total_revenue": "Tổng doanh thu",
+    "total_appointments": "Tổng lịch hẹn",
+    "new_patients": "Bệnh nhân mới",
+    "active_doctors": "Bác sĩ hoạt động",
+    "compare_previous": "so với kỳ trước"
+  },
+
+  "revenue_chart": {
+    "title": "Xu hướng Doanh thu & Đặt lịch",
+    "subtitle": "Biểu đồ thể hiện doanh thu và số lượng đặt lịch theo thời gian",
+    "revenue": "Doanh thu",
+    "appointments": "Số lịch hẹn"
+  },
+
+  "status_chart": {
+    "title": "Phân bố trạng thái lịch hẹn",
+    "total": "Tổng lịch hẹn",
+    "quantity": "Số lượng",
+    "statuses": {
+      "pending": "Chờ xác nhận",
+      "confirmed": "Đã xác nhận",
+      "done": "Hoàn thành",
+      "cancelled": "Đã hủy"
+    }
+  },
+
+  "doctors_chart": {
+    "title": "Top bác sĩ xuất sắc",
+    "subtitle": "Xếp hạng dựa trên doanh thu và hiệu suất làm việc",
+    "high_performance": "Hiệu suất cao",
+    "booking_count": "Số lịch",
+    "revenue": "Doanh thu",
+    "total_revenue": "Tổng doanh thu",
+    "total_bookings": "Tổng số lịch",
+    "top_doctor": "Bác sĩ hàng đầu",
+    "no_data": "Không có"
+  },
+
+  "tooltip": {
+    "revenue": "Doanh thu",
+    "appointments": "Lượt đặt",
+    "booking_count": "Số lịch"
+  }
+}

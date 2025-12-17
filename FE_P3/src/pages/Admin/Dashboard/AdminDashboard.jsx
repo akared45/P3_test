@@ -1,25 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  Box, Grid, Paper, Typography, CircularProgress,
-  Select, MenuItem, FormControl, InputLabel, alpha
-} from '@mui/material';
+  Box,
+  Grid,
+  Paper,
+  Typography,
+  CircularProgress,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  alpha,
+} from "@mui/material";
 import {
-  AttachMoney, CalendarToday, People, MedicalServices
-} from '@mui/icons-material';
-import { statisticsApi } from '../../../services/api';
-import dayjs from 'dayjs';
+  AttachMoney,
+  CalendarToday,
+  People,
+  MedicalServices,
+} from "@mui/icons-material";
+import { statisticsApi } from "../../../services/api";
 
-import StatCard from './StatCard';
-import RevenueChart from './RevenueChart';
-import StatusChart from './StatusChart';
-import DoctorsChart from './DoctorsChart';
-import { STAT_CARD_COLORS } from './colors';
-import { formatCurrency } from './formatters';
+import StatCard from "./StatCard";
+import RevenueChart from "./RevenueChart";
+import StatusChart from "./StatusChart";
+import DoctorsChart from "./DoctorsChart";
+import { STAT_CARD_COLORS } from "./colors";
+import { formatCurrency } from "./formatters";
+import { useTranslation } from "react-i18next";
 
 const AdminDashboard = () => {
+  const { t } = useTranslation("admin_dashboard");
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
-  const [range, setRange] = useState('30');
+  const [range, setRange] = useState("30");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +43,7 @@ const AdminDashboard = () => {
 
         const res = await statisticsApi.getDashboardStats({
           startDate: startDate.toISOString(),
-          endDate: endDate.toISOString()
+          endDate: endDate.toISOString(),
         });
 
         setData(res.data.data || res.data);
@@ -49,10 +61,10 @@ const AdminDashboard = () => {
     return (
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '60vh'
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "60vh",
         }}
       >
         <CircularProgress />
@@ -62,47 +74,50 @@ const AdminDashboard = () => {
 
   if (!data) {
     return (
-      <Paper sx={{ p: 4, textAlign: 'center', borderRadius: 3 }}>
-        <Typography color="text.secondary">
-          Không có dữ liệu để hiển thị
-        </Typography>
+      <Paper sx={{ p: 4, textAlign: "center", borderRadius: 3 }}>
+        <Typography color="text.secondary">{t("header.no_data")}</Typography>
       </Paper>
     );
   }
 
   const statusData = [
     {
-      name: 'Chờ xác nhận',
+      name: t("status_chart.statuses.pending"),
       value: data.charts.statusDistribution.pending || 0,
-      color: '#f59e0b'
+      color: "#f59e0b",
     },
     {
-      name: 'Đã xác nhận',
+      name: t("status_chart.statuses.confirmed"),
       value: data.charts.statusDistribution.confirmed || 0,
-      color: '#3b82f6'
+      color: "#3b82f6",
     },
     {
-      name: 'Hoàn thành',
+      name: t("status_chart.statuses.done"),
       value: data.charts.statusDistribution.done || 0,
-      color: '#10b981'
+      color: "#10b981",
     },
     {
-      name: 'Đã hủy',
+      name: t("status_chart.statuses.cancelled"),
       value: data.charts.statusDistribution.cancelled || 0,
-      color: '#ef4444'
+      color: "#ef4444",
     },
-  ].filter(item => item.value > 0);
+  ].filter((item) => item.value > 0);
 
   return (
     <Box p={3}>
       {/* HEADER */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={4}
+      >
         <Box>
           <Typography variant="h4" fontWeight="bold" gutterBottom>
-            Tổng quan hệ thống
+            {t("header.title")}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            Thống kê tổng quan và hiệu suất hoạt động
+            {t("header.subtitle")}
           </Typography>
         </Box>
 
@@ -110,37 +125,37 @@ const AdminDashboard = () => {
           size="small"
           sx={{
             width: 200,
-            '& .MuiOutlinedInput-root': {
+            "& .MuiOutlinedInput-root": {
               borderRadius: 2,
-              bgcolor: 'background.paper'
-            }
+              bgcolor: "background.paper",
+            },
           }}
         >
-          <InputLabel>Chọn khoảng thời gian</InputLabel>
+          <InputLabel>{t("header.select_range")}</InputLabel>
           <Select
             value={range}
-            label="Chọn khoảng thời gian"
+            label={t("header.select_range")}
             onChange={(e) => setRange(e.target.value)}
           >
-            <MenuItem value="7">7 ngày qua</MenuItem>
-            <MenuItem value="30">30 ngày qua</MenuItem>
-            <MenuItem value="90">3 tháng qua</MenuItem>
-            <MenuItem value="365">1 năm qua</MenuItem>
+            <MenuItem value="7">{t("header.ranges.7")}</MenuItem>
+            <MenuItem value="30">{t("header.ranges.30")}</MenuItem>
+            <MenuItem value="90">{t("header.ranges.90")}</MenuItem>
+            <MenuItem value="365">{t("header.ranges.365")}</MenuItem>
           </Select>
         </FormControl>
       </Box>
 
       <Box
         sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
+          display: "flex",
+          flexWrap: "wrap",
           gap: 3,
-          mb: 4
+          mb: 4,
         }}
       >
-        <Box sx={{ flex: '1 1 calc(25% - 24px)', minWidth: 250 }}>
+        <Box sx={{ flex: "1 1 calc(25% - 24px)", minWidth: 250 }}>
           <StatCard
-            title="Tổng Doanh Thu"
+            title={t("stat_cards.total_revenue")}
             value={formatCurrency(data.summary.totalRevenue)}
             icon={<AttachMoney />}
             color={STAT_CARD_COLORS.revenue}
@@ -148,9 +163,9 @@ const AdminDashboard = () => {
             trendValue={12.5}
           />
         </Box>
-        <Box sx={{ flex: '1 1 calc(25% - 24px)', minWidth: 250 }}>
+        <Box sx={{ flex: "1 1 calc(25% - 24px)", minWidth: 250 }}>
           <StatCard
-            title="Tổng Lịch Hẹn"
+            title={t("stat_cards.total_appointments")}
             value={data.summary.totalAppointments}
             icon={<CalendarToday />}
             color={STAT_CARD_COLORS.appointments}
@@ -158,9 +173,9 @@ const AdminDashboard = () => {
             trendValue={8.2}
           />
         </Box>
-        <Box sx={{ flex: '1 1 calc(25% - 24px)', minWidth: 250 }}>
+        <Box sx={{ flex: "1 1 calc(25% - 24px)", minWidth: 250 }}>
           <StatCard
-            title="Bệnh Nhân Mới"
+            title={t("stat_cards.new_patients")}
             value={data.summary.totalPatients}
             icon={<People />}
             color={STAT_CARD_COLORS.patients}
@@ -168,9 +183,9 @@ const AdminDashboard = () => {
             trendValue={15.3}
           />
         </Box>
-        <Box sx={{ flex: '1 1 calc(25% - 24px)', minWidth: 250 }}>
+        <Box sx={{ flex: "1 1 calc(25% - 24px)", minWidth: 250 }}>
           <StatCard
-            title="Bác Sĩ Hoạt Động"
+            title={t("stat_cards.active_doctors")}
             value={data.summary.totalDoctors}
             icon={<MedicalServices />}
             color={STAT_CARD_COLORS.doctors}
@@ -182,22 +197,15 @@ const AdminDashboard = () => {
 
       <Grid container spacing={3}>
         <Grid item xs={12} lg={6}>
-          <RevenueChart
-            data={data.charts.revenueOverTime}
-            range={range}
-          />
+          <RevenueChart data={data.charts.revenueOverTime} range={range} />
         </Grid>
 
         <Grid item xs={12} lg={4}>
-          <StatusChart
-            statusData={statusData}
-          />
+          <StatusChart statusData={statusData} />
         </Grid>
 
         <Grid item xs={12} lg={2}>
-          <DoctorsChart
-            data={data.charts.topDoctors}
-          />
+          <DoctorsChart data={data.charts.topDoctors} />
         </Grid>
       </Grid>
     </Box>
