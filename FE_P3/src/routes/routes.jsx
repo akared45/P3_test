@@ -1,7 +1,6 @@
 import ClientLayout from "@components/Layouts/ClientLayout/ClientLayout";
 import AdminLayout from "@components/Layouts/AdminLayout/AdminLayout";
 import HomePage from "@pages/Client/HomePage/HomePage";
-import Dashboard from "@pages/Admin/Dashboard/Dashboard";
 import Patients from "@pages/Admin/Patients/Patients";
 import Doctors from "@pages/Admin/Doctors/Doctors";
 import Reports from "@pages/Admin/Reports/Reports";
@@ -22,6 +21,7 @@ import ForgotPassword from "../pages/Auth/ForgotPassword";
 import ResetPassword from "../pages/Auth/ResetPassword";
 import DoctorChat from "../pages/Admin/Message/DoctorChat";
 import NotificationPage from "../pages/Client/Notification/NotificationPage";
+import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
 const routes = [
   {
     path: "/",
@@ -49,7 +49,7 @@ const routes = [
       </ProtectRoutes>
     ),
     children: [
-      { path: "bang-dieu-khien", element: <Dashboard /> },
+      { path: "bang-dieu-khien", element: <AdminDashboard /> },
       { path: "profile", element: <Profile /> },
       { path: "benh-nhan", element: <Patients /> },
       { path: "chuyen-khoa", element: <Specialty /> },

@@ -120,3 +120,7 @@ export const notificationApi = {
 export const paymentApi = {
   createMomoUrl: (appointmentId) => axiosClient.post("/payment/momo/create-url", { appointmentId })
 }
+
+export const statisticsApi = {
+  getDashboardStats: (params) => axiosClient.get('/admin/stats', { params }),
+};

@@ -20,6 +20,9 @@ const MongoMessageRepository = require('../../infrastructure/database/nosql/repo
 // [MỚI] Payment Repository
 const MongoPaymentRepository = require('../../infrastructure/database/nosql/repositories/MongoPaymentRepository');
 
+// [MỚI] Statistics Repository 👇
+const MongoStatisticsRepository = require('../../infrastructure/database/nosql/repositories/MongoStatisticsRepository');
+
 //--INSTANTIATE SERVICES--//
 const authenticationService = new BcryptAuthenticationService();
 const tokenService = new JwtTokenService();
@@ -47,6 +50,9 @@ const messageRepository = new MongoMessageRepository();
 
 // [MỚI] Khởi tạo Payment Repository
 const paymentRepository = new MongoPaymentRepository();
+
+// [MỚI] Khởi tạo Statistics Repository 👇
+const statisticsRepository = new MongoStatisticsRepository();
 
 
 //--USE_CASES--//
@@ -108,6 +114,9 @@ const CreateDoctorUseCase = require("../../application/use_cases/admin/CreateDoc
 const UpdateDoctorUseCase = require("../../application/use_cases/admin/UpdateDoctorUseCase");
 const DeleteUserUseCase = require("../../application/use_cases/admin/DeleteUserUseCase");
 
+// [MỚI] Import Statistics Use Case 👇
+const GetDashboardStatsUseCase = require("../../application/use_cases/admin/GetDashboardStatsUseCase");
+
 const createDoctorUseCase = new CreateDoctorUseCase({
     userRepository,
     authenticationService,
@@ -123,6 +132,11 @@ const deleteUserUseCase = new DeleteUserUseCase({
     userRepository,
     userSessionRepository,
     authorizationService
+});
+
+// [MỚI] Khởi tạo Statistics Use Case 👇
+const getDashboardStatsUseCase = new GetDashboardStatsUseCase({
+    statisticsRepository
 });
 
 // 3. Specialization Module
@@ -217,15 +231,13 @@ const suggestSpecialtyUseCase = new SuggestSpecialtyUseCase({
 // 8. Notification Module
 const GetNotificationsUseCase = require('../../application/use_cases/notification/GetNotificationsUseCase');
 const MarkNotificationAsReadUseCase = require('../../application/use_cases/notification/MarkNotificationAsReadUseCase');
-// [MỚI] Import DeleteNotificationUseCase
 const DeleteNotificationUseCase = require('../../application/use_cases/notification/DeleteNotificationUseCase');
 
 const getNotificationsUseCase = new GetNotificationsUseCase({ notificationRepository });
 const markNotificationAsReadUseCase = new MarkNotificationAsReadUseCase({ notificationRepository });
-// [MỚI] Khởi tạo DeleteNotificationUseCase
 const deleteNotificationUseCase = new DeleteNotificationUseCase({ notificationRepository });
 
-// 9. [MỚI] PAYMENT MODULE
+// 9. Payment Module
 const CreatePaymentUrlUseCase = require('../../application/use_cases/payment/CreatePaymentUrlUseCase');
 const HandleMomoCallbackUseCase = require('../../application/use_cases/payment/HandleMomoCallbackUseCase');
 
@@ -260,6 +272,9 @@ const NotificationController = require('../../presentation/controllers/Notificat
 
 // [MỚI] Payment Controller
 const PaymentController = require('../../presentation/controllers/PaymentController');
+
+// [MỚI] Import Statistics Controller 👇
+const StatisticsController = require("../../presentation/controllers/StatisticsController");
 
 const authController = new AuthController({
     registerPatientUseCase,
@@ -321,17 +336,19 @@ const uploadController = new UploadController({
     storageService
 });
 
-// [MỚI] Inject thêm deleteNotificationUseCase vào controller
 const notificationController = new NotificationController({
     getNotificationsUseCase,
     markNotificationAsReadUseCase,
     deleteNotificationUseCase 
 });
 
-// [MỚI] Khởi tạo Payment Controller
 const paymentController = new PaymentController({
     createPaymentUrlUseCase,
     handleMomoCallbackUseCase
+});
+
+const statisticsController = new StatisticsController({
+    getDashboardStatsUseCase
 });
 
 module.exports = {
@@ -347,6 +364,7 @@ module.exports = {
     chatController,
     notificationController,
     paymentController,
+    statisticsController,
     socketService,
     tokenService,
     sendMessageUseCase,
