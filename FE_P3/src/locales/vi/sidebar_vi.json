@@ -1,0 +1,16 @@
+{
+  "dashboardMenu": "Thống kê", // dòng 18 (menu item)
+  "patientsMenu": "Bệnh nhân", // dòng 23 (menu item)
+  "messagesMenu": "Tin nhắn", // dòng 28 (menu item)
+  "doctorsMenu": "Bác sĩ", // dòng 33 (menu item)
+  "scheduleMenu": "Lịch làm việc", // dòng 38 (menu item)
+  "specialtiesMenu": "Chuyên khoa", // dòng 43 (menu item)
+  "settingsMenu": "Cài đặt", // dòng 48 (menu item)
+  "logoTitle": "HealthCare", // dòng 78 (logo text)
+  "logoSubtitle": "Management System", // dòng 80 (logo subtitle)
+  "adminRole": "Quản trị viên", // dòng 98 (user type display)
+  "doctorRole": "Bác sĩ", // dòng 98 (user type display)
+  "logoutButton": "Đăng xuất", // dòng 127 (footer logout button)
+  "toggleExpandAria": "Expand sidebar", // dòng 85 (aria-label khi collapsed)
+  "toggleCollapseAria": "Collapse sidebar" // dòng 85 (aria-label khi expanded)
+}

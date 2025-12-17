@@ -4,7 +4,7 @@ import { AuthProvider } from "./providers/AuthProvider";
 import { ToastProvider } from "./providers/ToastProvider";
 import { UserProvider } from "./providers/UserProvider";
 import { NotificationProvider } from "./providers/NotificationProvider"; 
-
+import "./locales/i18n"
 function App() {
   return (
     <ToastProvider>

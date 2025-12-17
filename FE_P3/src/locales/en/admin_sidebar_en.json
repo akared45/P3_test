@@ -1,0 +1,15 @@
+{
+  "dashboardMenu": "Dashboard", // dòng 18 (menu item)
+  "patientsMenu": "Patients", // dòng 23 (menu item)
+  "messagesMenu": "Messages", // dòng 28 (menu item)
+  "doctorsMenu": "Doctors", // dòng 33 (menu item)
+  "scheduleMenu": "Work Schedule", // dòng 38 (menu item)
+  "specialtiesMenu": "Specialties", // dòng 43 (menu item)
+  "settingsMenu": "Settings", // dòng 48 (menu item)
+  "logoSubtitle": "Management System", // dòng 80 (logo subtitle)
+  "adminRole": "Administrator", // dòng 98 (user type display)
+  "doctorRole": "Doctor", // dòng 98 (user type display)
+  "logoutButton": "Logout", // dòng 127 (footer logout button)
+  "toggleExpandAria": "Expand sidebar", // dòng 85 (aria-label khi collapsed)
+  "toggleCollapseAria": "Collapse sidebar" // dòng 85 (aria-label khi expanded)
+}

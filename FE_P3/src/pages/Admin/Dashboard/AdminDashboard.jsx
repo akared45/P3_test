@@ -70,7 +70,6 @@ const AdminDashboard = () => {
     );
   }
 
-  // Prepare status data
   const statusData = [
     {
       name: 'Chờ xác nhận',

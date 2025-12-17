@@ -1,0 +1,7 @@
+{
+  "searchPlaceholder": "Search...", 
+  "profileMenuItem": "Profile",
+  "logoutMenuItem": "Logout",
+  "logoutModalTitle": "Logout",
+  "logoutModalMessage": "Are you sure you want to log out?" 
+}

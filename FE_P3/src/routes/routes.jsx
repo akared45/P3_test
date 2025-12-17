@@ -3,8 +3,6 @@ import AdminLayout from "@components/Layouts/AdminLayout/AdminLayout";
 import HomePage from "@pages/Client/HomePage/HomePage";
 import Patients from "@pages/Admin/Patients/Patients";
 import Doctors from "@pages/Admin/Doctors/Doctors";
-import Reports from "@pages/Admin/Reports/Reports";
-import Settings from "@pages/Admin/Settings/Settings";
 import DoctorPage from "@pages/Client/DoctorPage/DoctorPage";
 import AboutUsPage from "@pages/Client/AboutUsPage/AboutUsPage";
 import Login from "../pages/Auth/Login/Login";
@@ -22,6 +20,7 @@ import ResetPassword from "../pages/Auth/ResetPassword";
 import DoctorChat from "../pages/Admin/Message/DoctorChat";
 import NotificationPage from "../pages/Client/Notification/NotificationPage";
 import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
+
 const routes = [
   {
     path: "/",
@@ -55,9 +54,7 @@ const routes = [
       { path: "chuyen-khoa", element: <Specialty /> },
       { path: "message", element: <DoctorChat /> },
       { path: "bac-si", element: <Doctors /> },
-      { path: "lich-lam-viec", element: <AdminSchedule /> },
-      { path: "bao-cao", element: <Reports /> },
-      { path: "cai-dat", element: <Settings /> },
+      { path: "lich-lam-viec", element: <AdminSchedule /> }
     ],
   },
 ];
