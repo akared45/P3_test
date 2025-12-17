@@ -13,7 +13,6 @@ const ChatWidget = () => {
     setMessages([...messages, { from: "user", text }]);
     setText("");
 
-    // mô phỏng bác sĩ trả lời
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
@@ -24,19 +23,17 @@ const ChatWidget = () => {
 
   return (
     <>
-      {/* NÚT MỞ CHAT */}
+
       {!open && (
         <button className={styles.floatingBtn} onClick={() => setOpen(true)}>
           <MessageCircle size={26} className={styles.floatingIcon} />
         </button>
       )}
 
-      {/* POPUP CHAT */}
       {open && (
         <div className={styles.chatPopup}>
           <div className={styles.chatBox}>
-            
-            {/* HEADER */}
+
             <div className={styles.header}>
               <span className={styles.headerTitle}>Chat với bác sĩ</span>
               <button className={styles.headerClose} onClick={() => setOpen(false)}>
@@ -44,21 +41,18 @@ const ChatWidget = () => {
               </button>
             </div>
 
-            {/* BODY */}
             <div className={styles.messages}>
               {messages.map((msg, index) => (
                 <div
                   key={index}
-                  className={`${styles.msg} ${
-                    msg.from === "user" ? styles.msgUser : styles.msgDoctor
-                  }`}
+                  className={`${styles.msg} ${msg.from === "user" ? styles.msgUser : styles.msgDoctor
+                    }`}
                 >
                   {msg.text}
                 </div>
               ))}
             </div>
 
-            {/* FOOTER */}
             <div className={styles.footer}>
               <input
                 className={styles.input}

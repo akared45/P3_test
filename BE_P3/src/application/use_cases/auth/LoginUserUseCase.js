@@ -26,7 +26,7 @@ class LoginUserUseCase {
             user.passwordHash
         );
         if (!isPasswordValid) {
-            throw new AuthorizationException("Invalid credentials");
+            throw new AuthorizationException("Sai mật khẩu");
         }
 
         if (!user.isEmailVerified) {

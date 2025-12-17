@@ -3,14 +3,12 @@ import routes from "./routes/routes";
 import { AuthProvider } from "./providers/AuthProvider";
 import { ToastProvider } from "./providers/ToastProvider";
 import { UserProvider } from "./providers/UserProvider";
-// [1] Import NotificationProvider
 import { NotificationProvider } from "./providers/NotificationProvider"; 
 
 function App() {
   return (
     <ToastProvider>
       <AuthProvider>
-        {/* [2] Bọc NotificationProvider Ở ĐÂY (Sau AuthProvider) */}
         <NotificationProvider>
             <UserProvider>
               <BrowserRouter>

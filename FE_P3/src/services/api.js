@@ -112,6 +112,8 @@ export const notificationApi = {
   getAll: (params) => axiosClient.get("/notifications", { params }),
 
   markAsRead: (id) => axiosClient.patch(`/notifications/${id}/read`),
+
+  delete: (id) => axiosClient.delete(`/notifications/${id}`)
 };
 
 

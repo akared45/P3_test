@@ -217,9 +217,13 @@ const suggestSpecialtyUseCase = new SuggestSpecialtyUseCase({
 // 8. Notification Module
 const GetNotificationsUseCase = require('../../application/use_cases/notification/GetNotificationsUseCase');
 const MarkNotificationAsReadUseCase = require('../../application/use_cases/notification/MarkNotificationAsReadUseCase');
+// [MỚI] Import DeleteNotificationUseCase
+const DeleteNotificationUseCase = require('../../application/use_cases/notification/DeleteNotificationUseCase');
 
 const getNotificationsUseCase = new GetNotificationsUseCase({ notificationRepository });
 const markNotificationAsReadUseCase = new MarkNotificationAsReadUseCase({ notificationRepository });
+// [MỚI] Khởi tạo DeleteNotificationUseCase
+const deleteNotificationUseCase = new DeleteNotificationUseCase({ notificationRepository });
 
 // 9. [MỚI] PAYMENT MODULE
 const CreatePaymentUrlUseCase = require('../../application/use_cases/payment/CreatePaymentUrlUseCase');
@@ -317,9 +321,11 @@ const uploadController = new UploadController({
     storageService
 });
 
+// [MỚI] Inject thêm deleteNotificationUseCase vào controller
 const notificationController = new NotificationController({
     getNotificationsUseCase,
-    markNotificationAsReadUseCase
+    markNotificationAsReadUseCase,
+    deleteNotificationUseCase 
 });
 
 // [MỚI] Khởi tạo Payment Controller

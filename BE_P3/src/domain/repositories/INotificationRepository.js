@@ -20,6 +20,14 @@ class INotificationRepository {
     async markAsRead(notificationId) {
         throw new NotImplementedException('INotificationRepository.markAsRead');
     }
+
+    async findById(id) {
+        throw new NotImplementedException('INotificationRepository.findById');
+    }
+
+    async deleteById(id) {
+        throw new NotImplementedException('INotificationRepository.deleteById');
+    }
 }
 
 module.exports = INotificationRepository;

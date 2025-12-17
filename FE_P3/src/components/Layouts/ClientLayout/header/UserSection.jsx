@@ -13,15 +13,15 @@ const UserSection = ({ user, isLoggedIn, onLogoutRequest }) => {
   const getAvatarUrl = (url) => {
     if (!url) return "";
     if (url.startsWith("http")) return url;
-    return import.meta.env.VITE_API_URL + url; // Nên dùng biến môi trường
+    return "http://localhost:3000" + url;
   };
 
   if (isLoggedIn && !user) {
-      return (
-        <Box sx={{ display: 'flex', gap: 2 }}>
-            <Skeleton variant="circular" width={40} height={40} />
-        </Box>
-      );
+    return (
+      <Box sx={{ display: 'flex', gap: 2 }}>
+        <Skeleton variant="circular" width={40} height={40} />
+      </Box>
+    );
   }
   const userInitials = user?.fullName ? user.fullName.charAt(0).toUpperCase() : "U";
 
@@ -40,14 +40,14 @@ const UserSection = ({ user, isLoggedIn, onLogoutRequest }) => {
         <>
           {/* [THAY THẾ] Thay đoạn IconButton cũ bằng NotificationBell */}
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-             <NotificationBell />
+            <NotificationBell />
           </Box>
 
           <Tooltip title="Tài khoản">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <Avatar
-                alt={user?.fullName || "User"} 
-                src={getAvatarUrl(user?.avatarUrl)} 
+                alt={user?.fullName || "User"}
+                src={getAvatarUrl(user?.avatarUrl)}
                 sx={{ bgcolor: 'primary.main', border: '2px solid white', boxShadow: '0 0 0 2px #e3f2fd' }}
               >
                 {userInitials}

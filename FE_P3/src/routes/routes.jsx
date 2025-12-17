@@ -21,6 +21,7 @@ import VerifyEmail from "../pages/Auth/Register/VerifyEmail";
 import ForgotPassword from "../pages/Auth/ForgotPassword";
 import ResetPassword from "../pages/Auth/ResetPassword";
 import DoctorChat from "../pages/Admin/Message/DoctorChat";
+import NotificationPage from "../pages/Client/Notification/NotificationPage";
 const routes = [
   {
     path: "/",
@@ -37,6 +38,7 @@ const routes = [
       { path: "verify-email", element: <VerifyEmail /> },
       { path: "quen-mat-khau", element: <ForgotPassword /> },
       { path: "reset-password", element: <ResetPassword /> },
+      { path: "notifications", element: <NotificationPage /> },
     ],
   },
   {

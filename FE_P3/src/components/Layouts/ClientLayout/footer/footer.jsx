@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-// MUI Components
 import {
   Box,
   Container,
@@ -10,10 +9,9 @@ import {
   Stack,
   Divider,
   IconButton,
-  Link as MuiLink // Đổi tên để tránh trùng với Link của router
+  Link as MuiLink
 } from "@mui/material";
 
-// Icons
 import {
   Email as EmailIcon,
   Phone as PhoneIcon,
