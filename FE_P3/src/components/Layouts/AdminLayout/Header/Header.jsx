@@ -58,7 +58,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* CLICK VÀO AVATAR MỞ DROPDOWN */}
       <div className={styles.right}>
         <div className={styles.headerIcon}>
           <FaBell />
@@ -74,26 +73,25 @@ const Header = () => {
         </div>
       </div>
 
-      {/* --- MENU DROPDOWN --- */}
       <Menu
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         PaperProps={{
           style: {
-            minWidth: 220, // rộng hơn
+            minWidth: 220,
           },
         }}
         MenuListProps={{
           sx: {
             "& .MuiMenuItem-root": {
               fontSize: "1rem",
-              padding: "12px 20px", // item cao và dễ bấm hơn
-              gap: "12px", // icon - text cách nhau
+              padding: "12px 20px",
+              gap: "12px",
             },
 
             "& .MuiSvgIcon-root": {
-              fontSize: "1.5rem", // icon to hơn
+              fontSize: "1.5rem",
             },
           },
         }}
@@ -109,7 +107,6 @@ const Header = () => {
         </MenuItem>
       </Menu>
 
-      {/* MODAL XÁC NHẬN */}
       {openModal && (
         <Modal
           open={openModal}

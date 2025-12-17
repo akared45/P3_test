@@ -17,6 +17,8 @@ export default function PatientChat() {
   const messagesEndRef = useRef(null);
 
   const { messages, sendMessage, loading } = useChat(activeId);
+
+  // 1. Theo dõi trạng thái Socket
   useEffect(() => {
     const updateStatus = () => setIsConnected(socket.connected);
     socket.on("connect", updateStatus);
@@ -28,22 +30,33 @@ export default function PatientChat() {
     };
   }, []);
 
+  // 2. [SỬA QUAN TRỌNG] Tải danh sách NGAY LẬP TỨC khi vào trang
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     setMyId(user.id || user._id);
-    if (isOpen) {
-      appointmentApi.getMyAppointments().then((res) => {
-        console.log(res.data.data);
+
+    // Gọi API luôn, KHÔNG chờ isOpen nữa
+    const fetchAppointments = async () => {
+      try {
+        const res = await appointmentApi.getMyAppointments();
+        console.log("Danh sách chat:", res.data.data); // Log để check
         const validApps = res.data.data.filter(a =>
           ['confirmed', 'in_progress', 'pending'].includes(a.status)
         );
         setAppointments(validApps);
-      });
-    }
-  }, [isOpen]);
+      } catch (error) {
+        console.error("Lỗi tải danh sách chat:", error);
+      }
+    };
 
+    fetchAppointments();
+  }, []); // [] rỗng nghĩa là chạy 1 lần duy nhất khi F5 hoặc load trang
+
+  // 3. Tự động cuộn xuống khi có tin nhắn hoặc mở chat
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (isOpen) {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages, isOpen]);
 
   const handleSend = () => {
@@ -56,18 +69,21 @@ export default function PatientChat() {
 
   return (
     <>
+      {/* Nút FAB hiển thị Badge */}
       {!isOpen && (
         <Fab
           color="primary"
           onClick={() => setIsOpen(true)}
           sx={{ position: 'fixed', bottom: 30, right: 30, zIndex: 1300 }}
         >
+          {/* Badge hiển thị số lượng cuộc hẹn lấy được từ API ngay lúc đầu */}
           <Badge badgeContent={appointments.length} color="error">
             <ChatIcon />
           </Badge>
         </Fab>
       )}
 
+      {/* Cửa sổ Chat */}
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
@@ -83,7 +99,6 @@ export default function PatientChat() {
         }}
       >
         <Grid container sx={{ height: '100%', flexWrap: 'nowrap' }}>
-
           <DoctorListSidebar
             appointments={appointments}
             activeId={activeId}
@@ -103,7 +118,6 @@ export default function PatientChat() {
             messagesEndRef={messagesEndRef}
             onClose={() => setIsOpen(false)}
           />
-
         </Grid>
       </Dialog>
     </>

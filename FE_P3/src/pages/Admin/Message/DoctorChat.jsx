@@ -16,7 +16,7 @@ export default function DoctorChat() {
   const [myId, setMyId] = useState(null);
   const [isConnected, setIsConnected] = useState(socket.connected);
   const messagesEndRef = useRef(null);
-  
+
 
   const { messages, sendMessage, loading, suggestions } = useChat(activeId);
 
@@ -39,7 +39,7 @@ export default function DoctorChat() {
       appointmentApi.getMyAppointments().then((res) => {
         console.log(res);
         const validApps = res.data.data.filter(a =>
-          ['confirmed', 'in_progress', 'completed'].includes(a.status)
+          ['confirmed', 'in_progress'].includes(a.status)
         );
         setAppointments(validApps);
       });
@@ -111,7 +111,7 @@ export default function DoctorChat() {
               onClose={() => setIsOpen(false)}
               suggestions={suggestions}
               onSelectSuggestion={(suggestionText) => {
-                  sendMessage(suggestionText); 
+                sendMessage(suggestionText);
               }}
             />
           </Grid>

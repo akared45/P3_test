@@ -2,9 +2,10 @@ const GetNotificationsRequest = require('../../application/dtos/notification/Get
 const MarkNotificationReadRequest = require('../../application/dtos/notification/MarkNotificationReadRequest');
 
 class NotificationController {
-    constructor({ getNotificationsUseCase, markNotificationAsReadUseCase }) {
+    constructor({ getNotificationsUseCase, markNotificationAsReadUseCase, deleteNotificationUseCase }) {
         this.getNotificationsUseCase = getNotificationsUseCase;
         this.markNotificationAsReadUseCase = markNotificationAsReadUseCase;
+         this.deleteNotificationUseCase = deleteNotificationUseCase;
     }
 
     async getNotifications(req, res, next) {
@@ -41,6 +42,22 @@ class NotificationController {
             next(error);
         }
     }
+
+    delete = async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            const userId = req.user.id || req.user._id;
+
+            await this.deleteNotificationUseCase.execute({
+                notificationId: id,
+                userId: userId
+            });
+
+            return res.status(200).json({ message: "Xóa thành công" });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 module.exports = NotificationController;

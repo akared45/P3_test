@@ -15,6 +15,12 @@ class MongoNotificationRepository extends INotificationRepository {
         }
     }
 
+    async findById(id) {
+        const doc = await NotificationModel.findById(id).lean();
+        if (!doc) return null;
+        return NotificationMapper.toDomain(doc);
+    }
+
     async findByUserId(userId, limit = 20, offset = 0) {
         const docs = await NotificationModel.find({ userId })
             .sort({ createdAt: -1 })
@@ -40,6 +46,10 @@ class MongoNotificationRepository extends INotificationRepository {
             { userId, isRead: false },
             { $set: { isRead: true } }
         );
+    }
+
+    async deleteById(id) {
+        return await NotificationModel.findByIdAndDelete(id);
     }
 }
 

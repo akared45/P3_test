@@ -12,7 +12,13 @@ class CreatePaymentUrlUseCase {
         if (!appointment) {
             throw new Error("Lịch hẹn không tồn tại");
         }
+        const now = new Date();
+        const appointmentTime = new Date(appointment.appointmentDate);
 
+        if (now > appointmentTime) {
+            throw new Error("Lịch hẹn đã quá hạn, không thể thanh toán.");
+        }
+        
         if (appointment.patientId.toString() !== userId.toString()) {
             throw new Error("Bạn không có quyền thanh toán cho lịch hẹn này");
         }

@@ -7,22 +7,58 @@ import {
   Typography,
   Alert,
   Snackbar,
+  Tabs,
+  Tab,
+  useTheme,
+  useMediaQuery
 } from "@mui/material";
+import { Person, History, AccountBalanceWallet } from '@mui/icons-material';
 import { patientApi, uploadApi } from "../../../services/api";
 import ProfileForm from "./ProfileForm";
+import ConsultationHistory from "./ConsultationHistory"; // Import mới
+import PaymentHistory from "./PaymentHistory"; // Import mới
 import dayjs from "dayjs";
 import { AuthContext } from "../../../providers/AuthProvider";
 
-const Profile = () => {
+// Helper component cho TabPanel
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`profile-tabpanel-${index}`}
+      aria-labelledby={`profile-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ py: 3 }}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+const ProfilePatient = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [tabValue, setTabValue] = useState(0); // State quản lý tab
   const { user } = useContext(AuthContext);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const [notification, setNotification] = useState({
     open: false,
     message: "",
     severity: "success",
   });
 
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
+
+  // --- LOGIC LOAD PROFILE CŨ GIỮ NGUYÊN ---
   useEffect(() => {
     if (!user?.id) return;
     const fetchProfile = async () => {
@@ -51,6 +87,7 @@ const Profile = () => {
     fetchProfile();
   }, [user?.id]);
 
+  // --- LOGIC UPDATE PROFILE CŨ GIỮ NGUYÊN ---
   const handleUpdateProfile = async (values, { setSubmitting }) => {
     try {
       let updatedContacts = [];
@@ -83,10 +120,8 @@ const Profile = () => {
       });
     } catch (error) {
       console.error("Error updating profile", error);
-      const errorMsg =
-        error.response?.data?.message || "Có lỗi xảy ra khi cập nhật";
+      const errorMsg = error.response?.data?.message || "Có lỗi xảy ra khi cập nhật";
       const detailError = error.response?.data?.errors?.[0];
-
       setNotification({
         open: true,
         message: detailError || errorMsg,
@@ -121,25 +156,55 @@ const Profile = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography
-        variant="h4"
-        gutterBottom
-        fontWeight="bold"
-        sx={{ color: "#1976d2" }}
-      >
-        Hồ sơ bệnh nhân
-      </Typography>
+      <Box mb={3}>
+        <Typography variant="h4" fontWeight="bold" sx={{ color: "#1976d2" }}>
+          Hồ sơ cá nhân
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+            Quản lý thông tin, lịch sử khám và thanh toán
+        </Typography>
+      </Box>
 
-      <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-        {profile ? (
-          <ProfileForm
-            initialValues={profile}
-            onSubmit={handleUpdateProfile}
-            onUploadAvatar={handleUploadAvatar}
-          />
-        ) : (
-          <Typography color="error">Không thể tải thông tin hồ sơ.</Typography>
-        )}
+      <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#f8faff' }}>
+          <Tabs 
+            value={tabValue} 
+            onChange={handleTabChange} 
+            variant={isMobile ? "scrollable" : "fullWidth"}
+            scrollButtons="auto"
+            aria-label="profile tabs"
+            sx={{
+                '& .MuiTab-root': { py: 2, fontWeight: 600 },
+                '& .Mui-selected': { color: '#1976d2' }
+            }}
+          >
+            <Tab icon={<Person />} iconPosition="start" label="Thông tin cá nhân" />
+            <Tab icon={<History />} iconPosition="start" label="Lịch sử khám" />
+            <Tab icon={<AccountBalanceWallet />} iconPosition="start" label="Thanh toán" />
+          </Tabs>
+        </Box>
+
+        <Box sx={{ p: isMobile ? 2 : 4 }}>
+            <TabPanel value={tabValue} index={0}>
+                {profile ? (
+                    <ProfileForm
+                        initialValues={profile}
+                        onSubmit={handleUpdateProfile}
+                        onUploadAvatar={handleUploadAvatar}
+                    />
+                ) : (
+                    <Typography color="error">Không thể tải thông tin hồ sơ.</Typography>
+                )}
+            </TabPanel>
+
+            <TabPanel value={tabValue} index={1}>
+                <ConsultationHistory />
+            </TabPanel>
+
+            <TabPanel value={tabValue} index={2}>
+                <PaymentHistory />
+            </TabPanel>
+        </Box>
       </Paper>
 
       <Snackbar
@@ -161,4 +226,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfilePatient;

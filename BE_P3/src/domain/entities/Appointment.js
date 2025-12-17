@@ -18,7 +18,7 @@ class Appointment {
     createdAt = new Date(),
     symptomDetails = [],
     prescriptions = [],
-    amount = 0,
+    amount = 50000,
     paymentStatus = PaymentStatus.UNPAID,
     paymentMethod = PaymentMethod.CASH,
     transactionId = null,
@@ -50,7 +50,7 @@ class Appointment {
     this.paymentMethod = paymentMethod;
     this.transactionId = transactionId;
     this.paymentUrl = paymentUrl;
-    this.startTime = startTime; 
+    this.startTime = startTime;
     this.endTime = endTime;
     Object.freeze(this);
   }
@@ -123,42 +123,28 @@ class Appointment {
   }
 
   isSessionActive() {
-        const now = new Date().getTime();
-        const start = this.startTime.getTime();
-        const end = this.endTime.getTime();
-        
-        // Cho phép vào sớm 15 phút
-        const BUFFER_MS = 15 * 60 * 1000; 
-        const allowedStart = start - BUFFER_MS;
-        
-        // Cho phép xem lại 30 phút sau khi kết thúc
-        const GRACE_MS = 30 * 60 * 1000;
-        const allowedEnd = end + GRACE_MS;
-
-        // --- [DEBUG LOG: XEM SERVER TÍNH TOÁN GÌ] ---
-        console.log("=== CHECK TIME DEBUG ===");
-        console.log(`🕒 Hiện tại (Now)     : ${new Date(now).toLocaleString("vi-VN")}`);
-        console.log(`🏁 Giờ Hẹn (Start)    : ${new Date(start).toLocaleString("vi-VN")}`);
-        console.log(`✅ Được vào từ        : ${new Date(allowedStart).toLocaleString("vi-VN")} (Đã trừ 15p)`);
-        console.log(`❌ Kết quả so sánh    : ${now} >= ${allowedStart} ? -> ${now >= allowedStart}`);
-        console.log("========================");
-
-        if (now < allowedStart) {
-            // Tính xem còn bao nhiêu phút
-            const diffMinutes = Math.ceil((allowedStart - now) / 60000);
-            return { 
-                active: false, 
-                reason: 'too_early', 
-                message: `Chưa đến giờ hẹn. Vui lòng quay lại sau ${diffMinutes} phút nữa.` 
-            };
-        }
-
-        if (now > allowedEnd) {
-            return { active: false, reason: 'ended', message: "Phiên tư vấn đã kết thúc." };
-        }
-
-        return { active: true };
+    const now = new Date().getTime();
+    const start = this.startTime.getTime();
+    const end = this.endTime.getTime();
+    const BUFFER_MS = 15 * 60 * 1000;
+    const allowedStart = start - BUFFER_MS;
+    const GRACE_MS = 30 * 60 * 1000;
+    const allowedEnd = end + GRACE_MS;
+    if (now < allowedStart) {
+      const diffMinutes = Math.ceil((allowedStart - now) / 60000);
+      return {
+        active: false,
+        reason: 'too_early',
+        message: `Chưa đến giờ hẹn. Vui lòng quay lại sau ${diffMinutes} phút nữa.`
+      };
     }
+
+    if (now > allowedEnd) {
+      return { active: false, reason: 'ended', message: "Phiên tư vấn đã kết thúc." };
+    }
+
+    return { active: true };
+  }
 }
 
 module.exports = Appointment;

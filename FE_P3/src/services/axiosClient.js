@@ -35,7 +35,8 @@ axiosClient.interceptors.response.use(
     if (
       (error.response?.status === 401 || error.response?.status === 403) && 
       !originalRequest._retry &&
-      !originalRequest.url.includes("/auth/refresh")
+      !originalRequest.url.includes("/auth/refresh") &&
+      !originalRequest.url.includes("/auth/login")
     ) {
       originalRequest._retry = true;
 

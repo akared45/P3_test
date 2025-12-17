@@ -112,9 +112,15 @@ export const notificationApi = {
   getAll: (params) => axiosClient.get("/notifications", { params }),
 
   markAsRead: (id) => axiosClient.patch(`/notifications/${id}/read`),
+
+  delete: (id) => axiosClient.delete(`/notifications/${id}`)
 };
 
 
 export const paymentApi = {
   createMomoUrl: (appointmentId) => axiosClient.post("/payment/momo/create-url", { appointmentId })
 }
+
+export const statisticsApi = {
+  getDashboardStats: (params) => axiosClient.get('/admin/stats', { params }),
+};
