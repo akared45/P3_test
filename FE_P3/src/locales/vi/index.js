@@ -12,6 +12,8 @@ import navigation_vi from "./desktopmenu_vi.json";
 import usersection_vi from "./usersection_vi.json";
 import footer_vi from "./footer_vi.json";
 import chatwidget_vi from "./chatwidget_vi.json";
+import doctorcard_vi from "./doctorcard_vi.json";
+
 const vi = {
   common,
   admin_layout: admin_header_vi,
@@ -27,6 +29,7 @@ const vi = {
   usersection: usersection_vi,
   footer: footer_vi,
   chatwidget: chatwidget_vi,
+  doctorcard: doctorcard_vi,
 };
 
 export default vi;

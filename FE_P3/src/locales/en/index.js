@@ -12,6 +12,8 @@ import common from "./common_en.json";
 import usersection_en from "./usersection_eng.json";
 import footer_en from "./footer_eng.json";
 import chatwidget_en from "./chatwidget_eng.json";
+import doctorcard_en from "./doctorcard_eng.json";
+
 const en = {
   common,
   admin_layout: admin_header_en,
@@ -27,6 +29,7 @@ const en = {
   usersection: usersection_en,
   footer: footer_en,
   chatwidget: chatwidget_en,
+  doctorcard: doctorcard_en,
 };
 
 export default en;

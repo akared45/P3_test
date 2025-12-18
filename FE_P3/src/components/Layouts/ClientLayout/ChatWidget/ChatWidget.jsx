@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { MessageCircle, X } from "lucide-react";
 import styles from "./style.module.scss";
-import { useTranslation } from "react-i18next";
 
 const ChatWidget = () => {
-  const { t } = useTranslation("chatwidget"); // namespace chatwidget
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [messages, setMessages] = useState([]);
@@ -12,13 +10,14 @@ const ChatWidget = () => {
   const sendMessage = () => {
     if (!text.trim()) return;
 
-    // Message từ user
     setMessages([...messages, { from: "user", text }]);
     setText("");
 
-    // Phản hồi bot
     setTimeout(() => {
-      setMessages((prev) => [...prev, { from: "bot", text: t("botResponse") }]);
+      setMessages((prev) => [
+        ...prev,
+        { from: "bot", text: "Bác sĩ đã nhận được tin nhắn của bạn!" },
+      ]);
     }, 500);
   };
 
@@ -34,7 +33,7 @@ const ChatWidget = () => {
         <div className={styles.chatPopup}>
           <div className={styles.chatBox}>
             <div className={styles.header}>
-              <span className={styles.headerTitle}>{t("chatHeaderTitle")}</span>
+              <span className={styles.headerTitle}>Chat với bác sĩ</span>
               <button
                 className={styles.headerClose}
                 onClick={() => setOpen(false)}
@@ -60,13 +59,13 @@ const ChatWidget = () => {
               <input
                 className={styles.input}
                 type="text"
-                placeholder={t("inputPlaceholder")}
+                placeholder="Nhập tin nhắn..."
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               />
               <button className={styles.sendBtn} onClick={sendMessage}>
-                {t("sendButton")}
+                Gửi
               </button>
             </div>
           </div>

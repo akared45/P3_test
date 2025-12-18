@@ -1,0 +1,67 @@
+{
+  "departmentLabel": "Department:",
+  "registerButton": "Book Now",
+  "detailButton": "View Details",
+
+  "experience": "Experience",
+  "year": "year",
+  "ratingLabel": "Rating",
+  "consultingTurn": "consultation",
+
+  "step1": "1. Choose schedule",
+  "step2": "2. Choose time slot",
+  "step3": "3. Describe symptoms *",
+  "placeholderSymptoms": "E.g.: Headache, high fever...",
+
+  "cancelButton": "Cancel",
+  "confirmButton": "Confirm appointment",
+  "checking": "Processing...",
+  "slotInfo": "Times have been converted to your timezone",
+
+  "sunday": "Sunday",
+  "monday": "Monday",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday",
+  "thursday": "Thursday",
+  "friday": "Friday",
+  "saturday": "Saturday",
+
+  "bookingTitle": "Book Appointment",
+  "paymentTitle": "Consultation Payment",
+
+  "bookingSuccessNoId": "Appointment booked successfully but appointment ID is missing.",
+  "bookingFailed": "Booking failed",
+
+  "paymentLinkError": "Failed to retrieve MoMo payment link",
+  "paymentCreateError": "Failed to create payment",
+  "unknownError": "Unknown error",
+
+ 
+
+  "home": "Home",
+  "doctor": "Doctor",
+  "doctorNotFound": "Doctor not found",
+
+  "consultationPrice": "Consultation fee",
+
+  "tabInfo": "Information",
+  "tabExperience": "Experience & Education",
+  "tabReview": "Reviews",
+
+  "workHistory": "Work history",
+  "introduction": "Introduction",
+  "quickInfo": "Quick information",
+  "experienceYears": "{{count}}+ years of experience",
+  "licenseNumber": "Practice license number",
+  "workingAt": "Currently working at",
+  "defaultClinic": "Telemedicine Clinic",
+  "bioNotUpdated": "(Biography not updated)",
+
+  "workProcess": "Work experience",
+  "educationProcess": "Education",
+  "notUpdated": "Information not updated.",
+  "present": "Present",
+  "bookNow": "Book now",
+  "patientReviews": "Patient feedback",
+  "reviewCount": "{{count}} reviews"
+}
