@@ -9,8 +9,11 @@ import styles from "./style.module.scss";
 import SpecialtyStatistic from "./SpecialtyStatistic";
 import SpecialtyFormAdd from "./SpecialtyFormAdd";
 import SpecialtyFormUpdate from "./SpecialtyFormUpdate";
+import { useTranslation } from "react-i18next";
 
 const Specialty = () => {
+  const { t } = useTranslation("specialty");
+
   const [specialty, setSpecialty] = useState([]);
   const [openCreate, setOpenCreate] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -53,12 +56,12 @@ const Specialty = () => {
   };
 
   const specialtyColumns = [
-    { field: "code", headerName: "Mã chuyên khoa", width: 150 },
-    { field: "name", headerName: "Tên chuyên khoa", width: 220 },
-    { field: "category", headerName: "Danh mục", width: 180 },
+    { field: "code", headerName: t("table.code"), width: 150 },
+    { field: "name", headerName: t("table.name"), width: 220 },
+    { field: "category", headerName: t("table.category"), width: 180 },
     {
       field: "actions",
-      headerName: "Thao tác",
+      headerName: t("table.actions"),
       width: 120,
       sortable: false,
       renderCell: (params) => (
@@ -101,17 +104,19 @@ const Specialty = () => {
         <Modal
           open={openDelete}
           onClose={() => setOpenDelete(false)}
-          title="Xóa chuyên khoa"
-          message={`Bạn có chắc chắn muốn xoá chuyên khoa "${selectedItem?.name}" không?`}
+          title={t("modal.deleteTitle")}
+          message={t("modal.deleteMessage", {
+            name: selectedItem?.name,
+          })}
           onConfirm={handleConfirmDelete}
         />
       )}
 
       <div className={styles.spec__head}>
-        <h4>Chuyên khoa</h4>
+        <h4>{t("title")}</h4>
         <div style={{ width: "250px" }}>
           <Button
-            content={"Thêm chuyên khoa"}
+            content={t("addButton")}
             onClick={() => setOpenCreate(true)}
           />
         </div>

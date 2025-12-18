@@ -8,8 +8,10 @@ import Button from "@components/ui/Button";
 import TextFields from "@components/ui/TextFields";
 import styles from "./style.module.scss";
 import Illustration from "@images/draw.png";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+  const { t } = useTranslation("auth_login");
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const { toast } = useContext(ToastContext);
@@ -22,17 +24,17 @@ const Login = () => {
     },
     validationSchema: Yup.object({
       email: Yup.string()
-        .email("Email không hợp lệ")
-        .required("Email không được để trống"),
+        .email(t("validationEmailInvalid"))
+        .required(t("validationEmailRequired")),
       password: Yup.string()
-        .min(6, "Mật khẩu phải có ít nhất 6 kí tự")
-        .required("Mật khẩu không được để trống"),
+        .min(6, t("validationPasswordMin"))
+        .required(t("validationPasswordRequired")),
     }),
     onSubmit: async (values) => {
       setLoading(true);
       try {
         const user = await login(values);
-        toast.success("Đăng nhập thành công");
+        toast.success(t("toastSuccess"));
         console.log(user.userType);
         if (user?.userType === "admin") {
           navigate("/admin/bang-dieu-khien");
@@ -50,9 +52,7 @@ const Login = () => {
           errorMessage.includes("verify") ||
           errorMessage.includes("kích hoạt")
         ) {
-          toast.error(
-            "Tài khoản chưa được kích hoạt. Vui lòng kiểm tra email."
-          );
+          toast.error(t("toastUnverified"));
         } else {
           toast.error(errorMessage);
         }
@@ -71,14 +71,14 @@ const Login = () => {
       <div className={styles.auth__content}>
         <form className={styles.auth__form} onSubmit={formik.handleSubmit}>
           <div className={styles.auth__social}>
-            <h3 className="m-0">Đăng nhập với</h3>
+            <h3 className="m-0">{t("socialTitle")}</h3>
             {/* Social icons logic here */}
           </div>
 
-          <div className={styles.auth__divider}>Hoặc</div>
+          <div className={styles.auth__divider}>{t("divider")}</div>
 
           <TextFields
-            label={"Email"}
+            label={t("emailLabel")}
             type="text"
             id="email"
             name="email"
@@ -86,7 +86,7 @@ const Login = () => {
           />
 
           <TextFields
-            label={"Mật khẩu"}
+            label={t("passwordLabel")}
             type={"password"}
             id="password"
             name="password"
@@ -96,23 +96,23 @@ const Login = () => {
           <div className={styles.auth__actions}>
             <input type="checkbox" id="remember" />
             <label htmlFor="remember" className="m-0 ml-2 cursor-pointer">
-              Remember me
+              {t("rememberMe")}
             </label>
             <Link to="/quen-mat-khau" className={styles.auth__forgot}>
-              Quên mật khẩu?
+              {t("forgotPasswordLink")}
             </Link>
           </div>
 
           <Button
-            content={loading ? "Đang xử lý..." : "Đăng nhập"}
+            content={loading ? t("buttonLoading") : t("button")}
             type="submit"
             disabled={loading}
           />
 
           <div className={styles.auth__register}>
-            <span>Không có tài khoản?</span>
+            <span>{t("noAccountText")}</span>
             <Link to="/dang-ky" className={styles.auth__register_link}>
-              Đăng ký
+              {t("registerLink")}
             </Link>
           </div>
         </form>

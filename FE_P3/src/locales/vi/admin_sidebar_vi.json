@@ -1,0 +1,16 @@
+{
+  "dashboardMenu": "Thống kê", 
+  "patientsMenu": "Bệnh nhân", 
+  "messagesMenu": "Tin nhắn", 
+  "doctorsMenu": "Bác sĩ", 
+  "scheduleMenu": "Lịch làm việc", 
+  "specialtiesMenu": "Chuyên khoa", 
+  "settingsMenu": "Cài đặt", 
+  "logoTitle": "HealthCare", 
+  "logoSubtitle": "Management System", 
+  "adminRole": "Quản trị viên", 
+  "doctorRole": "Bác sĩ",
+  "logoutButton": "Đăng xuất", 
+  "toggleExpandAria": "Expand sidebar",
+  "toggleCollapseAria": "Collapse sidebar" 
+}

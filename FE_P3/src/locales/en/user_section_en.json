@@ -1,0 +1,9 @@
+{
+  "loginButton": "Login",
+  "registerButton": "Register", 
+  "userMenuProfile": "Profile", 
+  "userMenuInbox": "Inbox",
+  "userMenuSettings": "Account Settings",
+  "userMenuLogout": "Logout", 
+  "tooltipAccount": "Account" 
+}

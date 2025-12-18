@@ -1,0 +1,44 @@
+{
+  "title": "Specialty",
+  "addButton": "Add Specialty",
+
+  "table": {
+    "code": "Specialty Code",
+    "name": "Specialty Name",
+    "category": "Category",
+    "actions": "Actions"
+  },
+
+  "modal": {
+    "deleteTitle": "Delete Specialty",
+    "deleteMessage": "Are you sure you want to delete specialty \"{{name}}\"?"
+  },
+
+  "form": {
+    "addTitle": "Add Specialty",
+    "updateTitle": "Update Specialty",
+
+    "fields": {
+      "code": "Code",
+      "name": "Name",
+      "category": "Category"
+    },
+
+    "buttons": {
+      "cancel": "Cancel",
+      "save": "Save",
+      "update": "Update"
+    },
+
+    "validation": {
+      "codeRequired": "Code is required",
+      "nameRequired": "Name is required",
+      "categoryRequired": "Category is required"
+    }
+  },
+
+  "statistic": {
+    "title": "Doctor Statistics",
+    "total": "Total specialty"
+  }
+}

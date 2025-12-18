@@ -4,9 +4,12 @@ import { CalendarMonth, Payment } from "@mui/icons-material";
 import BookingForm from "./BookingForm";
 import PaymentPrompt from "./PaymentPrompt";
 import { appointmentApi } from "../../../services/api";
-import {paymentApi} from "../../../services/api";
+import { paymentApi } from "../../../services/api";
+import { useTranslation } from "react-i18next";
 
 const BookingDialog = ({ open, onClose, doctor }) => {
+  const { t } = useTranslation("doctorcard");
+
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [newAppointmentId, setNewAppointmentId] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -26,21 +29,25 @@ const BookingDialog = ({ open, onClose, doctor }) => {
         doctorId: doctor.id || doctor._id,
         appointmentDate: formData.appointmentDate,
         symptoms: formData.symptoms,
-        type: 'CHAT'
+        type: "CHAT",
       });
 
       const createdId = res.data?.data?.id || res.data?.id || res.data?._id;
 
       if (createdId) {
         setNewAppointmentId(createdId);
-        setBookingSuccess(true); 
+        setBookingSuccess(true);
       } else {
-        alert("Đặt lịch thành công nhưng lỗi ID.");
+        alert(t("bookingSuccessNoId"));
         onClose();
       }
     } catch (error) {
       console.error(error);
-      alert("Lỗi: " + (error.response?.data?.message || "Đặt lịch thất bại"));
+      alert(
+        t("bookingFailed") +
+          ": " +
+          (error.response?.data?.message || t("unknownError"))
+      );
     } finally {
       setLoading(false);
     }
@@ -51,14 +58,18 @@ const BookingDialog = ({ open, onClose, doctor }) => {
     setPaymentLoading(true);
     try {
       const res = await paymentApi.createMomoUrl(newAppointmentId);
-      if (res && res.data && res.data.payUrl) {
+      if (res?.data?.payUrl) {
         window.location.href = res.data.payUrl;
       } else {
-        alert("Không lấy được link thanh toán MoMo");
+        alert(t("paymentLinkError"));
       }
     } catch (error) {
       console.error(error);
-      alert("Lỗi tạo thanh toán: " + (error.response?.data?.message || "Unknown error"));
+      alert(
+        t("paymentCreateError") +
+          ": " +
+          (error.response?.data?.message || t("unknownError"))
+      );
     } finally {
       setPaymentLoading(false);
     }
@@ -66,23 +77,27 @@ const BookingDialog = ({ open, onClose, doctor }) => {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ bgcolor: '#f8f9fa', borderBottom: '1px solid #eee' }}>
+      <DialogTitle sx={{ bgcolor: "#f8f9fa", borderBottom: "1px solid #eee" }}>
         <Box display="flex" alignItems="center" gap={1}>
-          {bookingSuccess ? <Payment color="success" /> : <CalendarMonth color="primary" />}
-          {bookingSuccess ? "Thanh toán phí khám" : "Đặt lịch khám"}
+          {bookingSuccess ? (
+            <Payment color="success" />
+          ) : (
+            <CalendarMonth color="primary" />
+          )}
+          {bookingSuccess ? t("paymentTitle") : t("bookingTitle")}
         </Box>
       </DialogTitle>
 
       <DialogContent sx={{ pt: 3 }}>
         {bookingSuccess ? (
-          <PaymentPrompt 
+          <PaymentPrompt
             doctor={doctor}
             loading={paymentLoading}
             onPayment={handleMomoPayment}
             onClose={onClose}
           />
         ) : (
-          <BookingForm 
+          <BookingForm
             doctor={doctor}
             loading={loading}
             onSubmit={handleBook}

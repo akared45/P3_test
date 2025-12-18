@@ -1,0 +1,6 @@
+{
+  "chatHeaderTitle": "Chat with Doctor",
+  "inputPlaceholder": "Type a message...",
+  "sendButton": "Send",
+  "botResponse": "The doctor has received your message!" 
+}

@@ -6,18 +6,21 @@ import {
   TextField,
   InputAdornment,
   Tooltip,
-  IconButton
+  IconButton,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
 import { UserContext } from "@providers/UserProvider";
+import { useTranslation } from "react-i18next";
 
 const Patients = () => {
-  const { patients, loadingPatients, refreshPatients, deletePatient } = useContext(UserContext);
+  const { t } = useTranslation("admin_patients");
+  const { patients, loadingPatients, refreshPatients, deletePatient } =
+    useContext(UserContext);
   const [searchText, setSearchText] = useState("");
   const [rows, setRows] = useState([]);
-console.log(UserContext);
+
   useEffect(() => {
     refreshPatients();
   }, []);
@@ -26,55 +29,71 @@ console.log(UserContext);
     if (!patients) return;
     const mapped = patients.map((p) => ({
       id: p.id,
-      fullName: p.fullName || "Chưa cập nhật",
+      fullName: p.fullName || t("fullName.not_available"),
       email: p.email || "",
-      gender: p.gender === "Male" ? "Nam" : p.gender === "Female" ? "Nữ" : "Khác",
-      dateOfBirth: p.dateOfBirth ? new Date(p.dateOfBirth).toLocaleDateString("vi-VN") : "Chưa có",
+      gender:
+        p.gender === "Male"
+          ? t("gender.male")
+          : p.gender === "Female"
+          ? t("gender.female")
+          : t("gender.other"),
+      dateOfBirth: p.dateOfBirth
+        ? new Date(p.dateOfBirth).toLocaleDateString("vi-VN")
+        : t("dob.not_available"),
     }));
     setRows(mapped);
-  }, [patients]);
+  }, [patients, t]);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa bệnh nhân này không?")) return;
+    if (!window.confirm(t("actions.confirm_delete"))) return;
 
     try {
       await deletePatient(id);
     } catch (error) {
       console.error(error);
-      alert("Xóa thất bại!");
+      alert(t("actions.delete_failed"));
     }
   };
 
-  const filteredRows = rows.filter((row) =>
-    row.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
-    row.email.toLowerCase().includes(searchText.toLowerCase())
+  const filteredRows = rows.filter(
+    (row) =>
+      row.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
+      row.email.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
-    { field: "fullName", headerName: "Họ và tên", flex: 1, minWidth: 180 },
-    { field: "email", headerName: "Email", flex: 1, minWidth: 220 },
+    { field: "id", headerName: t("columns.id"), width: 90 },
+    {
+      field: "fullName",
+      headerName: t("columns.fullName"),
+      flex: 1,
+      minWidth: 180,
+    },
+    { field: "email", headerName: t("columns.email"), flex: 1, minWidth: 220 },
     {
       field: "gender",
-      headerName: "Giới tính",
+      headerName: t("columns.gender"),
       width: 100,
       align: "center",
       headerAlign: "center",
     },
-    { field: "dateOfBirth", headerName: "Ngày sinh", width: 120, align: 'right', headerAlign: 'right' },
+    {
+      field: "dateOfBirth",
+      headerName: t("columns.dateOfBirth"),
+      width: 120,
+      align: "right",
+      headerAlign: "right",
+    },
     {
       field: "actions",
-      headerName: "Thao tác",
+      headerName: t("columns.actions"),
       width: 100,
       sortable: false,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
-        <Tooltip title="Xóa bệnh nhân">
-          <IconButton
-            color="error"
-            onClick={() => handleDelete(params.row.id)}
-          >
+        <Tooltip title={t("actions.delete")}>
+          <IconButton color="error" onClick={() => handleDelete(params.row.id)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -83,13 +102,17 @@ console.log(UserContext);
   ];
 
   const CustomToolbar = () => (
-    <GridToolbarContainer sx={{ p: 2, display: 'flex', justifyContent: 'space-between' }}>
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}>
-      </Typography>
-
+    <GridToolbarContainer
+      sx={{ p: 2, display: "flex", justifyContent: "space-between" }}
+    >
+      <Typography
+        variant="h6"
+        component="div"
+        sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+      />
       <TextField
         size="small"
-        placeholder="Tìm kiếm..."
+        placeholder={t("search.placeholder")}
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
         InputProps={{
@@ -99,21 +122,37 @@ console.log(UserContext);
             </InputAdornment>
           ),
         }}
-        sx={{ width: 300, bgcolor: 'white' }}
+        sx={{ width: 300, bgcolor: "white" }}
       />
     </GridToolbarContainer>
   );
 
   return (
-    <Box sx={{ p: 3, height: "100vh", display: "flex", flexDirection: "column" }}>
-
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3, alignItems: "center" }}>
+    <Box
+      sx={{ p: 3, height: "100vh", display: "flex", flexDirection: "column" }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          mb: 3,
+          alignItems: "center",
+        }}
+      >
         <Typography variant="h4" fontWeight="bold" color="primary">
-          Quản lý Bệnh nhân
+          {t("header.title")}
         </Typography>
       </Box>
 
-      <Paper sx={{ flexGrow: 1, width: "100%", overflow: "hidden", borderRadius: 3, boxShadow: 3 }}>
+      <Paper
+        sx={{
+          flexGrow: 1,
+          width: "100%",
+          overflow: "hidden",
+          borderRadius: 3,
+          boxShadow: 3,
+        }}
+      >
         <DataGrid
           rows={filteredRows}
           columns={columns}
@@ -121,21 +160,19 @@ console.log(UserContext);
           getRowId={(row) => row.id}
           slots={{ toolbar: CustomToolbar }}
           disableRowSelectionOnClick
-          pageSizeOptions={[10, 25, 50]}
-          initialState={{
-            pagination: { paginationModel: { pageSize: 10 } },
-          }}
+          pageSizeOptions={t("pagination.pageSizeOptions", {
+            returnObjects: true,
+          })}
+          initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
           sx={{
             border: "none",
             "& .MuiDataGrid-columnHeaders": {
               backgroundColor: "#f0f2f5",
               fontSize: "0.95rem",
               fontWeight: 700,
-              color: "#444"
+              color: "#444",
             },
-            "& .MuiDataGrid-row:hover": {
-              backgroundColor: "#f8f9fa"
-            }
+            "& .MuiDataGrid-row:hover": { backgroundColor: "#f8f9fa" },
           }}
         />
       </Paper>

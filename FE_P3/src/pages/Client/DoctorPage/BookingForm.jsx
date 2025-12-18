@@ -1,24 +1,34 @@
 import React, { useState } from "react";
 import {
-  Box, Typography, Grid, Button, Divider, CircularProgress, TextField,
-  DialogActions, Alert
+  Box,
+  Typography,
+  Grid,
+  Button,
+  Divider,
+  CircularProgress,
+  TextField,
+  DialogActions,
+  Alert,
 } from "@mui/material";
 import { AccessTime, EventNote } from "@mui/icons-material";
-import { format } from 'date-fns';
-import { fromZonedTime } from 'date-fns-tz';
+import { format } from "date-fns";
+import { fromZonedTime } from "date-fns-tz";
 import { appointmentApi } from "../../../services/api";
+import { useTranslation } from "react-i18next";
 
 const DAYS_CONFIG = {
-  "Sunday": { label: "Chủ Nhật", index: 0 },
-  "Monday": { label: "Thứ 2", index: 1 },
-  "Tuesday": { label: "Thứ 3", index: 2 },
-  "Wednesday": { label: "Thứ 4", index: 3 },
-  "Thursday": { label: "Thứ 5", index: 4 },
-  "Friday": { label: "Thứ 6", index: 5 },
-  "Saturday": { label: "Thứ 7", index: 6 },
+  Sunday: { index: 0, key: "sunday" },
+  Monday: { index: 1, key: "monday" },
+  Tuesday: { index: 2, key: "tuesday" },
+  Wednesday: { index: 3, key: "wednesday" },
+  Thursday: { index: 4, key: "thursday" },
+  Friday: { index: 5, key: "friday" },
+  Saturday: { index: 6, key: "saturday" },
 };
 
 const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
+  const { t } = useTranslation("doctorcard");
+
   const [selectedScheduleIndex, setSelectedScheduleIndex] = useState(null);
   const [generatedSlots, setGeneratedSlots] = useState([]);
   const [busySlots, setBusySlots] = useState([]);
@@ -34,16 +44,15 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
     let daysToAdd = targetIndex - currentDayIndex;
     if (daysToAdd <= 0) daysToAdd += 7;
     date.setDate(date.getDate() + daysToAdd);
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
+    return date.toISOString().split("T")[0];
   };
 
   const isSlotBusy = (slotIsoTime) => {
-    if (!busySlots || busySlots.length === 0) return false;
+    if (!busySlots?.length) return false;
     const slotTime = new Date(slotIsoTime).getTime();
-    return busySlots.some(busy => new Date(busy.startTime).getTime() === slotTime);
+    return busySlots.some(
+      (busy) => new Date(busy.startTime).getTime() === slotTime
+    );
   };
 
   const handleSelectSchedule = async (index, schedule) => {
@@ -54,70 +63,80 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
     setCheckingSlots(true);
 
     try {
-      const res = await appointmentApi.getBusySlots(doctor.id || doctor._id, nextDateStr);
+      const res = await appointmentApi.getBusySlots(
+        doctor.id || doctor._id,
+        nextDateStr
+      );
       setBusySlots(res.data?.data || res.data || []);
-    } catch (error) {
-      console.error("Failed to fetch busy slots", error);
+    } catch (e) {
+      console.error(e);
     } finally {
       setCheckingSlots(false);
     }
 
-    const doctorTimeZone = doctor.timeZone || 'Asia/Ho_Chi_Minh';
+    const doctorTimeZone = doctor.timeZone || "Asia/Ho_Chi_Minh";
     const slots = [];
-    const [startH, startM] = schedule.start.split(":").map(Number);
-    const [endH, endM] = schedule.end.split(":").map(Number);
-    let currentTotalMins = startH * 60 + startM;
-    const endTotalMins = endH * 60 + endM;
+    let current = schedule.start.split(":").map(Number);
+    let end = schedule.end.split(":").map(Number);
 
-    while (currentTotalMins < endTotalMins) {
-      const h = Math.floor(currentTotalMins / 60);
-      const m = currentTotalMins % 60;
-      const timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-      const dateTimeString = `${nextDateStr} ${timeStr}`;
-      const dateObj = fromZonedTime(dateTimeString, doctorTimeZone);
-      
+    let curMins = current[0] * 60 + current[1];
+    const endMins = end[0] * 60 + end[1];
+
+    while (curMins < endMins) {
+      const h = Math.floor(curMins / 60);
+      const m = curMins % 60;
+      const timeStr = `${String(h).padStart(2, "0")}:${String(m).padStart(
+        2,
+        "0"
+      )}`;
+      const dateObj = fromZonedTime(
+        `${nextDateStr} ${timeStr}`,
+        doctorTimeZone
+      );
+
       slots.push({
-        display: format(dateObj, 'HH:mm'),
-        iso: dateObj.toISOString()
+        display: format(dateObj, "HH:mm"),
+        iso: dateObj.toISOString(),
       });
-      currentTotalMins += 30;
+
+      curMins += 30;
     }
+
     setGeneratedSlots(slots);
   };
 
   const handleSubmit = () => {
     if (!selectedSlot || !symptoms) return;
-    onSubmit({ 
-        appointmentDate: selectedSlot.iso, 
-        symptoms 
+    onSubmit({
+      appointmentDate: selectedSlot.iso,
+      symptoms,
     });
   };
 
   return (
     <>
-      <Box mb={3} mt={1}>
-        <Typography variant="subtitle2" gutterBottom fontWeight={600} sx={{ display: 'flex', gap: 1 }}>
-          <EventNote fontSize="small" color="action" /> 1. Chọn buổi khám
+      <Box mb={3}>
+        <Typography variant="subtitle2" fontWeight={600}>
+          <EventNote fontSize="small" /> {t("step1")}
         </Typography>
+
         <Grid container spacing={1.5}>
           {doctor?.schedules?.map((schedule, index) => {
             const isSelected = selectedScheduleIndex === index;
-            const label = DAYS_CONFIG[schedule.day]?.label || schedule.day;
+            const dayKey = DAYS_CONFIG[schedule.day]?.key;
+
             return (
               <Grid item xs={6} sm={4} key={index}>
                 <Button
-                  variant={isSelected ? "contained" : "outlined"}
                   fullWidth
+                  variant={isSelected ? "contained" : "outlined"}
                   onClick={() => handleSelectSchedule(index, schedule)}
-                  sx={{
-                    borderRadius: 2, py: 1.5, flexDirection: 'column',
-                    borderColor: isSelected ? '' : '#e0e0e0',
-                    color: isSelected ? '#fff' : '#333',
-                    bgcolor: isSelected ? '' : '#fff'
-                  }}
+                  sx={{ flexDirection: "column", py: 1.5 }}
                 >
-                  <Typography variant="body2" fontWeight={700}>{label}</Typography>
-                  <Typography variant="caption" color={isSelected ? 'inherit' : 'text.secondary'}>
+                  <Typography fontWeight={700}>
+                    {dayKey ? t(dayKey) : schedule.day}
+                  </Typography>
+                  <Typography variant="caption">
                     {schedule.start} - {schedule.end}
                   </Typography>
                 </Button>
@@ -127,70 +146,61 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
         </Grid>
       </Box>
 
-      <Divider sx={{ my: 2 }} />
+      <Divider />
 
       {selectedScheduleIndex !== null && (
-        <Box mb={3} className="fade-in">
-          <Typography variant="subtitle2" gutterBottom fontWeight={600} sx={{ display: 'flex', gap: 1 }}>
-            <AccessTime fontSize="small" color="action" /> 2. Chọn giờ khám
+        <Box mt={2}>
+          <Typography variant="subtitle2" fontWeight={600}>
+            <AccessTime fontSize="small" /> {t("step2")}
           </Typography>
-          
-          <Alert severity="info" sx={{ mb: 2, py: 0 }}>Giờ đã được chuyển sang múi giờ của bạn.</Alert>
+
+          <Alert severity="info">{t("slotInfo")}</Alert>
 
           {checkingSlots ? (
-            <Box display="flex" justifyContent="center" p={2}>
-              <CircularProgress size={24} /> <Typography ml={1}>Đang kiểm tra...</Typography>
+            <Box display="flex" justifyContent="center">
+              <CircularProgress size={24} />
+              <Typography ml={1}>{t("checking")}</Typography>
             </Box>
           ) : (
             <Grid container spacing={1.5}>
-              {generatedSlots.map((slot, idx) => {
-                const isSelected = selectedSlot?.iso === slot.iso;
-                const isBusy = isSlotBusy(slot.iso);
-                return (
-                  <Grid item xs={3} key={idx}>
-                    <Button
-                      variant={isSelected ? "contained" : "outlined"}
-                      disabled={isBusy}
-                      color={isBusy ? "inherit" : "success"}
-                      fullWidth
-                      onClick={() => setSelectedSlot(slot)}
-                      sx={{
-                        borderRadius: 2,
-                        color: isSelected ? '#fff' : (isBusy ? '#9e9e9e' : '#2e7d32'),
-                        borderColor: isSelected ? '' : (isBusy ? '#e0e0e0' : '#a5d6a7'),
-                        bgcolor: isBusy ? '#f5f5f5' : ''
-                      }}
-                    >
-                      {slot.display}
-                    </Button>
-                  </Grid>
-                );
-              })}
+              {generatedSlots.map((slot, idx) => (
+                <Grid item xs={3} key={idx}>
+                  <Button
+                    fullWidth
+                    disabled={isSlotBusy(slot.iso)}
+                    onClick={() => setSelectedSlot(slot)}
+                  >
+                    {slot.display}
+                  </Button>
+                </Grid>
+              ))}
             </Grid>
           )}
         </Box>
       )}
 
       {selectedSlot && (
-        <Box className="fade-in">
-          <Typography variant="subtitle2" gutterBottom fontWeight={600}>3. Mô tả triệu chứng *</Typography>
+        <Box mt={2}>
+          <Typography fontWeight={600}>{t("step3")}</Typography>
           <TextField
-            multiline rows={2} fullWidth
-            placeholder="Ví dụ: Đau đầu, sốt cao..."
+            fullWidth
+            multiline
+            rows={2}
+            placeholder={t("placeholderSymptoms")}
             value={symptoms}
             onChange={(e) => setSymptoms(e.target.value)}
           />
         </Box>
       )}
 
-      <DialogActions sx={{ p: 2, borderTop: '1px solid #eee', mx: -3, mb: -3, mt: 3 }}>
-        <Button onClick={onCancel} color="inherit">Hủy bỏ</Button>
+      <DialogActions>
+        <Button onClick={onCancel}>{t("cancelButton")}</Button>
         <Button
-          onClick={handleSubmit}
           variant="contained"
+          onClick={handleSubmit}
           disabled={loading || !selectedSlot || !symptoms}
         >
-          {loading ? "Đang xử lý..." : "Xác nhận đặt lịch"}
+          {loading ? t("checking") : t("confirmButton")}
         </Button>
       </DialogActions>
     </>

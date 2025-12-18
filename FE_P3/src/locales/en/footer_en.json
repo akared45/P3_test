@@ -1,0 +1,21 @@
+{
+  "companyName": "MEDICARE",
+  "companyFullName": "DOCTOR4U TECHNOLOGY JOINT STOCK COMPANY", 
+  "clinicAddress1": "Doctor4U Family Clinic", 
+  "clinicAddress2": "Imperial Suites Building, 71 Van Phuc, Ngoc Ha Ward, Hanoi City",
+  "email": "care@doctor4u.vn", 
+  "hotlineLabel": "Hotline: 024 32 212 212", 
+  "hotlineNumbers": "Support: 0934 38 12 12 - 0936 56 12 12", 
+  "servicesTitle": "Services", 
+  "serviceItem1": "Book Appointment", 
+  "serviceItem2": "Ask Doctor", 
+  "serviceItem3": "Lab Testing", 
+  "serviceItem4": "Health Check-up Packages", 
+  "socialTitle": "Connect with us", 
+  "socialDescription": "Follow Medicare for the latest useful health information.", 
+  "downloadAppTitle": "Download App", 
+  "copyright": "© 2024 Doctor4U Technology Joint Stock Company. All rights reserved.",
+  "terms": "Terms of Service",
+  "privacy": "Privacy Policy",
+  "support": "Customer Support" 
+}

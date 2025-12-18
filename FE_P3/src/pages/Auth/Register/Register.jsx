@@ -9,8 +9,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { ToastContext } from "../../../providers/ToastProvider";
 import { AuthContext } from "../../../providers/AuthProvider";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
+  const { t } = useTranslation("auth_register");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { toast } = useContext(ToastContext);
@@ -24,25 +26,25 @@ const Register = () => {
       confirmPassword: "",
     },
     validationSchema: Yup.object({
-      fullName: Yup.string().required("Họ và tên không được để trống"),
-      username: Yup.string().required("Tên đăng nhập không được để trống"),
+      fullName: Yup.string().required(t("validationFullNameRequired")),
+      username: Yup.string().required(t("validationUsernameRequired")),
       email: Yup.string()
-        .email("Email không hợp lệ")
-        .required("Email không được để trống"),
+        .email(t("validationEmailInvalid"))
+        .required(t("validationEmailRequired")),
       password: Yup.string()
-        .min(6, "Mật khẩu phải có ít nhất 6 ký tự")
-        .required("Mật khẩu không được để trống"),
+        .min(6, t("validationPasswordMin"))
+        .required(t("validationPasswordRequired")),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password"), null], "Mật khẩu không khớp")
-        .required("Bạn cần nhập lại mật khẩu"),
+        .oneOf([Yup.ref("password"), null], t("validationConfirmMismatch"))
+        .required(t("validationConfirmRequired")),
     }),
     onSubmit: async (values) => {
       setLoading(true);
       try {
         await register(values);
-        toast.success("Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.", {
-            autoClose: 5000
-        })
+        toast.success(t("toastSuccess"), {
+          autoClose: 5000,
+        });
         navigate("/dang-nhap");
       } catch (err) {
         console.log(err);
@@ -63,7 +65,7 @@ const Register = () => {
       <div className={styles.auth__content}>
         <form className={styles.auth__form} onSubmit={formik.handleSubmit}>
           <div className={styles.auth__social}>
-            <h3 className="m-0">Đăng ký với</h3>
+            <h3 className="m-0">{t("socialTitle")}</h3>
             <div className={styles.auth__social_list}>
               <div className={styles.auth__social_item}>
                 <FaFacebookF />
@@ -77,11 +79,11 @@ const Register = () => {
             </div>
           </div>
 
-          <div className={styles.auth__divider}>hoặc</div>
+          <div className={styles.auth__divider}>{t("divider")}</div>
 
           {/* Họ và tên */}
           <TextFields
-            label="Họ và tên"
+            label={t("fullNameLabel")}
             name="fullName"
             type="text"
             formik={formik}
@@ -89,18 +91,23 @@ const Register = () => {
 
           {/* Tên đăng nhập */}
           <TextFields
-            label="Tên đăng nhập"
+            label={t("usernameLabel")}
             name="username"
             type="text"
             formik={formik}
           />
 
           {/* Email */}
-          <TextFields label="Email" name="email" type="text" formik={formik} />
+          <TextFields
+            label={t("emailLabel")}
+            name="email"
+            type="text"
+            formik={formik}
+          />
 
           {/* Mật khẩu */}
           <TextFields
-            label="Mật khẩu"
+            label={t("passwordLabel")}
             name="password"
             type="password"
             value={formik.values.password}
@@ -111,7 +118,7 @@ const Register = () => {
 
           {/* Nhập lại mật khẩu */}
           <TextFields
-            label="Nhập lại mật khẩu"
+            label={t("confirmPasswordLabel")}
             name="confirmPassword"
             type="password"
             value={formik.values.confirmPassword}
@@ -124,15 +131,15 @@ const Register = () => {
 
           <div className={styles.auth__actions_regis}>
             <input type="checkbox" required />
-            <p className="m-0">Tôi đã đọc và đồng ý các điều khoản</p>
+            <p className="m-0">{t("termsCheckbox")}</p>
           </div>
 
-          <Button content={"Đăng ký"} disabled={loading} type="submit" />
+          <Button content={t("button")} disabled={loading} type="submit" />
 
           <div className={styles.auth__register}>
-            <span>Đã có tài khoản?</span>
+            <span>{t("haveAccountText")}</span>
             <Link to="/dang-nhap" className={styles.auth__register_link}>
-              Đăng nhập
+              {t("loginLink")}
             </Link>
           </div>
         </form>

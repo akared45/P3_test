@@ -1,0 +1,59 @@
+{
+  "header": {
+    "title": "Tổng quan hệ thống",
+    "subtitle": "Thống kê tổng quan và hiệu suất hoạt động",
+    "select_range": "Chọn khoảng thời gian",
+    "ranges": {
+      "7": "7 ngày qua",
+      "30": "30 ngày qua",
+      "90": "3 tháng qua",
+      "365": "1 năm qua"
+    },
+    "no_data": "Không có dữ liệu để hiển thị"
+  },
+
+  "stat_cards": {
+    "total_revenue": "Tổng doanh thu",
+    "total_appointments": "Tổng lượt đặt lịch",
+    "new_patients": "Bệnh nhân mới",
+    "active_doctors": "Bác sĩ đang hoạt động",
+    "compare_previous": "so với kỳ trước"
+  },
+
+  "revenue_chart": {
+    "title": "Xu hướng Doanh thu & Lượt đặt lịch",
+    "subtitle": "Doanh thu và số lượt đặt lịch theo thời gian",
+    "revenue": "Doanh thu",
+    "appointments": "Lượt đặt lịch"
+  },
+
+  "status_chart": {
+    "title": "Tình trạng lượt đặt lịch",
+    "total": "Tổng lượt đặt",
+    "quantity": "Số lượng",
+    "statuses": {
+      "pending": "Chờ xác nhận",
+      "confirmed": "Đã xác nhận",
+      "done": "Đã hoàn thành",
+      "cancelled": "Đã hủy"
+    }
+  },
+
+  "doctors_chart": {
+    "title": "Top bác sĩ xuất sắc",
+    "subtitle": "Xếp hạng dựa trên doanh thu và số lượt tư vấn",
+    "high_performance": "Hiệu suất cao",
+    "booking_count": "Số lượt tư vấn",
+    "revenue": "Doanh thu",
+    "total_revenue": "Tổng doanh thu",
+    "total_bookings": "Tổng lượt tư vấn",
+    "top_doctor": "Bác sĩ hàng đầu",
+    "no_data": "Không có dữ liệu"
+  },
+
+  "tooltip": {
+    "revenue": "Doanh thu",
+    "appointments": "Lượt đặt",
+    "booking_count": "Lượt tư vấn"
+  }
+}

@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import MuiModal from "@mui/material/Modal";
-
+import { useTranslation } from "react-i18next";
 const style = {
   position: "absolute",
   top: "50%",
@@ -16,6 +16,7 @@ const style = {
 };
 
 const Modal = ({ open, onClose, title, message, onConfirm }) => {
+  const { t } = useTranslation("common");
   return (
     <MuiModal open={open} onClose={onClose}>
       <Box sx={style}>
@@ -27,11 +28,11 @@ const Modal = ({ open, onClose, title, message, onConfirm }) => {
 
         <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
           <Button variant="outlined" onClick={onClose}>
-            Hủy
+            {t("cancel")}
           </Button>
 
           <Button variant="contained" color="error" onClick={onConfirm}>
-            Đồng ý
+            {t("confirm")}
           </Button>
         </div>
       </Box>

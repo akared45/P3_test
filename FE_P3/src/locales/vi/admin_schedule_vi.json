@@ -1,0 +1,60 @@
+{
+  "title": "Quản lý Lịch Bác sĩ",
+  "tabs": {
+    "hospital_schedule": "Lịch trực toàn viện",
+    "individual_schedule": "Xếp lịch cá nhân"
+  },
+  "actions": {
+    "save_config": "Lưu Cấu Hình",
+    "saving": "Đang lưu...",
+    "add_slot": "Thêm ca",
+    "add_new": "Thêm Mới",
+    "cancel": "Hủy",
+    "export_report": "Xuất báo cáo tháng",
+    "today": "Hôm nay"
+  },
+  "form": {
+    "select_doctor": "Chọn Bác sĩ để xếp lịch",
+    "search_doctor": "Tìm tên bác sĩ...",
+    "no_doctor_found": "Không tìm thấy bác sĩ",
+    "scheduling_for": "Đang xếp lịch cho:",
+    "start_time": "Giờ bắt đầu",
+    "end_time": "Giờ kết thúc",
+    "max_patients": "Số khách tối đa",
+    "add_work_shift": "Thêm ca làm việc"
+  },
+  "visual": {
+    "shifts_count": "{{count}} ca trực",
+    "no_shifts": "Không có ca trực",
+    "shift_detail": "Ca trực"
+  },
+  "calendar": {
+    "appointment_schedule": "Lịch Đặt Hẹn",
+    "month": "Tháng",
+    "off_duty": "Nghỉ",
+    "legend": "Chú giải",
+    "total_appt": "Tổng cuộc hẹn (TA)",
+    "slot_empty": "Số chỗ trống (SE)",
+    "not_available": "Không làm việc (NA)",
+    "status": {
+      "full": "Hết chỗ",
+      "few_slots": "Sắp hết",
+      "available": "Còn chỗ"
+    }
+  },
+  "days": {
+    "Monday": "Thứ Hai",
+    "Tuesday": "Thứ Ba",
+    "Wednesday": "Thứ Tư",
+    "Thursday": "Thứ Năm",
+    "Friday": "Thứ Sáu",
+    "Saturday": "Thứ Bảy",
+    "Sunday": "Chủ Nhật"
+  },
+  "messages": {
+    "select_doctor_prompt": "Vui lòng chọn bác sĩ ở trên để bắt đầu xếp lịch.",
+    "error_time_range": "Giờ kết thúc phải lớn hơn giờ bắt đầu",
+    "save_success": "Đã cập nhật lịch làm việc thành công!",
+    "save_error": "Lỗi khi lưu lịch!"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "breadcrumbHome": "Trang chủ",
+  "breadcrumbDoctors": "Bác sĩ",
+  "doctorNotFound": "Không tìm thấy bác sĩ",
+  "bookingButton": "Đặt lịch ngay",
+  "tabInfo": "Thông tin",
+  "tabExperienceEducation": "Kinh nghiệm & Học vấn",
+  "tabReviews": "Đánh giá",
+  "doctorBioPlaceholder": "Bác sĩ {{name}} là chuyên gia đầu ngành... (Chưa cập nhật tiểu sử)",
+  "sectionIntro": "Giới thiệu",
+  "sectionQuickInfo": "Thông tin nhanh",
+  "yearsExperienceLabel": "Năm kinh nghiệm",
+  "licenseNumberLabel": "Số chứng chỉ hành nghề",
+  "workPlaceLabel": "Công tác tại",
+  "consultationPriceLabel": "Giá tư vấn",
+  "workHistoryTitle": "Quá trình công tác",
+  "educationHistoryTitle": "Quá trình đào tạo",
+  "patientFeedbackTitle": "Phản hồi từ bệnh nhân",
+  "reviewsCount": "{{count}} đánh giá",
+  "notUpdated": "Chưa cập nhật thông tin",
+  "presentLabel": "Nay",
+  "defaultClinic": "Phòng khám Telemedicine"
+}

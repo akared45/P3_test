@@ -1,0 +1,44 @@
+{
+  "title": "Chuyên khoa",
+  "addButton": "Thêm chuyên khoa",
+
+  "table": {
+    "code": "Mã chuyên khoa",
+    "name": "Tên chuyên khoa",
+    "category": "Danh mục",
+    "actions": "Thao tác"
+  },
+
+  "modal": {
+    "deleteTitle": "Xóa chuyên khoa",
+    "deleteMessage": "Bạn có chắc chắn muốn xóa chuyên khoa \"{{name}}\" không?"
+  },
+
+  "form": {
+    "addTitle": "Thêm chuyên khoa",
+    "updateTitle": "Cập nhật chuyên khoa",
+
+    "fields": {
+      "code": "Mã",
+      "name": "Tên",
+      "category": "Danh mục"
+    },
+
+    "buttons": {
+      "cancel": "Hủy",
+      "save": "Lưu",
+      "update": "Cập nhật"
+    },
+
+    "validation": {
+      "codeRequired": "Mã không được để trống",
+      "nameRequired": "Tên không được để trống",
+      "categoryRequired": "Danh mục không được để trống"
+    }
+  },
+
+  "statistic": {
+    "title": "Thống kê bác sĩ",
+    "total": "Tổng số chuyên khoa"
+  }
+}

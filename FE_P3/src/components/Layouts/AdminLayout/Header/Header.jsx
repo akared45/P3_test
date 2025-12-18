@@ -9,8 +9,13 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import SearchIcon from "@mui/icons-material/Search";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { Box } from "@mui/material"; 
+import { useTranslation } from "react-i18next"; 
+import LanguageSwitcher from "../../../ui/LanguageSwitcher";
 
 const Header = () => {
+  const { t } = useTranslation('admin_layout');
+  
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
 
@@ -53,12 +58,16 @@ const Header = () => {
           <input
             className={styles.search__input}
             type="text"
-            placeholder="Search..."
+            placeholder={t('searchPlaceholder')} 
           />
         </div>
       </div>
 
       <div className={styles.right}>
+        <Box mr={2}>
+           <LanguageSwitcher />
+        </Box>
+
         <div className={styles.headerIcon}>
           <FaBell />
         </div>
@@ -98,12 +107,12 @@ const Header = () => {
       >
         <MenuItem onClick={handleProfileClick}>
           <AccountCircleOutlinedIcon />
-          Profile
+          {t('profileMenuItem')}
         </MenuItem>
 
         <MenuItem onClick={handleLogout}>
           <LogoutIcon />
-          Đăng xuất
+          {t('logoutMenuItem')}
         </MenuItem>
       </Menu>
 
@@ -111,8 +120,8 @@ const Header = () => {
         <Modal
           open={openModal}
           onClose={() => setOpenModal(false)}
-          title="Đăng xuất"
-          message="Bạn có chắc chắn muốn đăng xuất không?"
+          title={t('logoutModalTitle')}
+          message={t('logoutModalMessage')}
           onConfirm={confirmLogout}
         />
       )}

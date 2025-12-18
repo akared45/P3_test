@@ -1,29 +1,31 @@
 import React, { useContext } from "react";
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import { UserContext } from "../../../providers/UserProvider";
+import { useTranslation } from "react-i18next";
 
 const DoctorStatistic = () => {
   const { totalDoctors, activeDoctors } = useContext(UserContext);
   const onLeave = totalDoctors - activeDoctors;
+  const { t } = useTranslation("admin_doctors");
 
   const statsData = [
-    { 
-      label: "Tổng", 
-      value: totalDoctors, 
+    {
+      label: t("total"),
+      value: totalDoctors,
       color: "#1976d2",
-      bgColor: "rgba(25, 118, 210, 0.08)"
+      bgColor: "rgba(25, 118, 210, 0.08)",
     },
-    { 
-      label: "Đang làm việc", 
-      value: activeDoctors, 
+    {
+      label: t("active"),
+      value: activeDoctors,
       color: "#2e7d32",
-      bgColor: "rgba(46, 125, 50, 0.08)"
+      bgColor: "rgba(46, 125, 50, 0.08)",
     },
-    { 
-      label: "Nghỉ phép", 
-      value: onLeave, 
+    {
+      label: t("onLeave"),
+      value: onLeave,
       color: "#ed6c02",
-      bgColor: "rgba(237, 108, 2, 0.08)"
+      bgColor: "rgba(237, 108, 2, 0.08)",
     },
   ];
 
@@ -47,7 +49,8 @@ const DoctorStatistic = () => {
               "&:hover": {
                 transform: "translateY(-2px)",
                 boxShadow: `0 4px 12px ${stat.color}20`,
-              }
+              },
+              width: "250px",
             }}
           >
             <Typography
@@ -57,19 +60,19 @@ const DoctorStatistic = () => {
                 fontSize: "0.875rem",
                 fontWeight: 500,
                 mb: 1,
-                textAlign: "center"
+                textAlign: "center",
               }}
             >
               {stat.label}
             </Typography>
-            
+
             <Typography
               variant="h4"
               sx={{
                 color: stat.color,
                 fontWeight: 700,
                 fontSize: "1.75rem",
-                lineHeight: 1
+                lineHeight: 1,
               }}
             >
               {stat.value}
