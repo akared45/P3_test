@@ -28,26 +28,20 @@ import { uploadApi, specApi } from "@services/api";
 import { UserContext } from "../../../providers/UserProvider";
 import { useTranslation } from "react-i18next";
 
-const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
-  const { t } = useTranslation("admin_doctors");
+const CreateDoctorDialog = ({ open, onClose, onSuccess }) => {
+  const { t } = useTranslation("admin_doctors"); // namespace mới
   const { addDoctor } = useContext(UserContext);
   const fileInputRef = useRef(null);
 
-  // Chuyển DAYS_OF_WEEK vào trong component hoặc dùng hàm t để lấy từ i18n
   const DAYS_OF_WEEK = [
-    { value: "Monday", label: t("daysOfWeek.Monday") },
-    { value: "Tuesday", label: t("daysOfWeek.Tuesday") },
-    { value: "Wednesday", label: t("daysOfWeek.Wednesday") },
-    { value: "Thursday", label: t("daysOfWeek.Thursday") },
-    { value: "Friday", label: t("daysOfWeek.Friday") },
-    { value: "Saturday", label: t("daysOfWeek.Saturday") },
-    { value: "Sunday", label: t("daysOfWeek.Sunday") },
+    { value: "Monday", label: t("form.daysOfWeek.Monday") },
+    { value: "Tuesday", label: t("form.daysOfWeek.Tuesday") },
+    { value: "Wednesday", label: t("form.daysOfWeek.Wednesday") },
+    { value: "Thursday", label: t("form.daysOfWeek.Thursday") },
+    { value: "Friday", label: t("form.daysOfWeek.Friday") },
+    { value: "Saturday", label: t("form.daysOfWeek.Saturday") },
+    { value: "Sunday", label: t("form.daysOfWeek.Sunday") },
   ];
-
-  const [loading, setLoading] = useState(false);
-  const [specializations, setSpecializations] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState("");
 
   const initialForm = {
     username: "",
@@ -63,6 +57,10 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
   };
 
   const [formData, setFormData] = useState(initialForm);
+  const [loading, setLoading] = useState(false);
+  const [specializations, setSpecializations] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
   const [notification, setNotification] = useState({
     open: false,
     message: "",
@@ -91,7 +89,6 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
       .catch(console.error);
   }, [open]);
 
-  // --- LOGIC VALIDATION ---
   const validateForm = () => {
     const {
       username,
@@ -105,27 +102,27 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
     } = formData;
 
     if (!username || !email || !password || !fullName || !specCode) {
-      showNotification(t("notifications.validationError"), "warning");
+      showNotification(t("form.notifications.validationError"), "warning");
       return false;
     }
 
     for (const q of qualifications) {
       if (!q.degree || !q.institution || !q.year) {
-        showNotification(t("notifications.validationError"), "warning");
+        showNotification(t("form.notifications.validationError"), "warning");
         return false;
       }
     }
 
     for (const w of workHistory) {
       if (!w.position || !w.place || !w.from) {
-        showNotification(t("notifications.validationError"), "warning");
+        showNotification(t("form.notifications.validationError"), "warning");
         return false;
       }
     }
 
     for (const s of schedules) {
       if (!s.start || !s.end) {
-        showNotification(t("notifications.validationError"), "warning");
+        showNotification(t("form.notifications.validationError"), "warning");
         return false;
       }
     }
@@ -135,7 +132,6 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
 
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -149,14 +145,12 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
       ...prev,
       [field]: [...prev[field], defaultItem],
     }));
-
   const removeItem = (field, idx) =>
     setFormData((prev) => {
       const arr = [...prev[field]];
       arr.splice(idx, 1);
       return { ...prev, [field]: arr };
     });
-
   const changeItem = (field, idx, key, value) =>
     setFormData((prev) => {
       const arr = [...prev[field]];
@@ -175,12 +169,12 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
         avatarUrl = res.data?.url || res.url;
       }
       await addDoctor({ ...formData, avatarUrl });
-      showNotification(t("notifications.updateSuccess"), "success");
+      showNotification(t("form.notifications.addSuccess"), "success");
       onSuccess();
       onClose();
     } catch (err) {
       showNotification(
-        err.response?.data?.message || t("notifications.updateError"),
+        err.response?.data?.message || t("form.notifications.addError"),
         "error"
       );
     } finally {
@@ -198,11 +192,11 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
             textTransform: "uppercase",
           }}
         >
-          {t("form.title")}
+          {t("createDialogTitle")}
         </DialogTitle>
         <DialogContent dividers>
           <Box sx={{ mt: 1 }}>
-            {/* Avatar Section */}
+            {/* Avatar */}
             <Stack
               direction="row"
               spacing={3}
@@ -255,7 +249,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
               </Box>
             </Stack>
 
-            {/* 1. Thông tin cơ bản */}
+            {/* Thông tin cơ bản */}
             <Typography variant="h6" gutterBottom color="primary">
               {t("form.section.general")}
             </Typography>
@@ -331,7 +325,6 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
 
             <Divider sx={{ my: 3 }} />
 
-            {/* 2. Bằng cấp */}
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
             >
@@ -423,7 +416,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
 
             <Divider sx={{ my: 3 }} />
 
-            {/* 3. Quá trình công tác */}
+            {/* Quá trình công tác */}
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
             >
@@ -520,7 +513,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
 
             <Divider sx={{ my: 3 }} />
 
-            {/* 4. Lịch làm việc */}
+            {/* Lịch làm việc */}
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
             >
@@ -656,4 +649,4 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
   );
 };
 
-export default AddDoctorDialog;
+export default CreateDoctorDialog;

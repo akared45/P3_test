@@ -10,8 +10,10 @@ import { formatDoctorRows } from "./formatDoctorRows";
 import { getDoctorColumns } from "./doctorsColumns";
 import { doctorApi } from "@services/api";
 import Modal from "../../../components/ui/modal";
+import { useTranslation } from "react-i18next";
 
 const Doctors = () => {
+  const { t } = useTranslation("admin_doctors"); // dùng namespace
   const { doctors, loading, refreshDoctors } = useContext(UserContext);
 
   const [openEdit, setOpenEdit] = useState(false);
@@ -24,6 +26,7 @@ const Doctors = () => {
     message: "",
     severity: "success",
   });
+
   const showNotification = (message, severity = "success") => {
     setNotification({
       open: true,
@@ -31,6 +34,7 @@ const Doctors = () => {
       severity,
     });
   };
+
   const handleOpenEdit = (doctor) => {
     setSelectedDoctor(doctor);
     setOpenEdit(true);
@@ -50,10 +54,10 @@ const Doctors = () => {
     if (!deleteId) return;
     try {
       await doctorApi.delete(deleteId);
-      showNotification("Xóa bác sĩ thành công", "success");
+      showNotification(t("form.notifications.addSuccess"), "success");
       refreshDoctors();
     } catch (error) {
-      showNotification("Xóa bác sĩ thất bại", "error");
+      showNotification(t("form.notifications.addError"), "error");
     } finally {
       setOpenDeleteModal(false);
       setDeleteId(null);
@@ -72,7 +76,7 @@ const Doctors = () => {
         sx={{ p: 3, height: "100vh", display: "flex", flexDirection: "column" }}
       >
         <Box>
-          <Typography variant="h4">Danh sách Bác sĩ</Typography>
+          <Typography variant="h4">{t("listTitle")}</Typography>
         </Box>
         <Box
           my={3}
@@ -83,17 +87,15 @@ const Doctors = () => {
           }}
         >
           <DoctorStatistic />
-
           <div style={{ width: "250px" }}>
             <Button
-              content="+ Thêm bác sĩ"
+              content={t("addButton")}
               variant="contained"
               onClick={() => setOpenCreate(true)}
             />
           </div>
         </Box>
         <Box>
-          {/* Bảng danh sách */}
           <Box sx={{ flexGrow: 1, backgroundColor: "white", borderRadius: 3 }}>
             <TableBase
               rows={rows}
@@ -105,33 +107,29 @@ const Doctors = () => {
             />
           </Box>
 
-          {/* Dialog tạo bác sĩ */}
           <CreateDoctorDialog
             open={openCreate}
             onClose={() => setOpenCreate(false)}
             onSuccess={refreshDoctors}
           />
 
-          {/* Dialog sửa bác sĩ */}
           <EditDoctorDialog
             open={openEdit}
             onClose={handleCloseEdit}
-            doctorData={selectedDoctor} // truyền object đầy đủ
+            doctorData={selectedDoctor}
             onSuccess={refreshDoctors}
           />
-
-          {/* Thống kê */}
         </Box>
 
-        {/* Modal xác nhận xóa */}
         <Modal
           open={openDeleteModal}
           onClose={() => setOpenDeleteModal(false)}
-          title="Xác nhận xóa"
-          message="Bạn có chắc chắn muốn xóa bác sĩ này không?"
+          title={t("form.notifications.checkInfo")}
+          message={t("form.notifications.checkInfo")}
           onConfirm={handleConfirmDelete}
         />
       </Box>
+
       <Snackbar
         open={notification.open}
         autoHideDuration={4000}

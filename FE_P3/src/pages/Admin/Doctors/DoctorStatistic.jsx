@@ -1,26 +1,28 @@
 import React, { useContext } from "react";
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import { UserContext } from "../../../providers/UserProvider";
+import { useTranslation } from "react-i18next";
 
 const DoctorStatistic = () => {
   const { totalDoctors, activeDoctors } = useContext(UserContext);
   const onLeave = totalDoctors - activeDoctors;
+  const { t } = useTranslation("admin_doctors");
 
   const statsData = [
     {
-      label: "Tổng",
+      label: t("total"),
       value: totalDoctors,
       color: "#1976d2",
       bgColor: "rgba(25, 118, 210, 0.08)",
     },
     {
-      label: "Đang làm việc",
+      label: t("active"),
       value: activeDoctors,
       color: "#2e7d32",
       bgColor: "rgba(46, 125, 50, 0.08)",
     },
     {
-      label: "Nghỉ phép",
+      label: t("onLeave"),
       value: onLeave,
       color: "#ed6c02",
       bgColor: "rgba(237, 108, 2, 0.08)",

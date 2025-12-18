@@ -1,32 +1,46 @@
 {
-  "columns": {
-    "doctorInfo": "Bác sĩ",
-    "specialization": "Chuyên khoa",
-    "experience": "Kinh nghiệm",
-    "isActive": "Trạng thái",
-    "actions": "Thao tác"
-  },
-  "status": {
-    "active": "Hoạt động",
-    "inactive": "Đã khóa"
-  },
-  "actions": {
-    "edit": "Chỉnh sửa",
-    "delete": "Xóa"
-  },
+  "listTitle": "Danh sách Bác sĩ",
+  "addButton": "+ Thêm bác sĩ",
+  "editDialogTitle": "Chỉnh sửa thông tin Bác sĩ",
+  "createDialogTitle": "Thêm Bác sĩ mới",
+  "generalInfo": "Thông tin chung",
+  "avatar": "Ảnh đại diện",
+  "fullName": "Họ tên",
+  "specialization": "Chuyên khoa",
+  "specCode": "Chuyên khoa",
+  "licenseNumber": "Số chứng chỉ",
+  "qualifications": "Bằng cấp / Học vấn",
+  "workHistory": "Quá trình Công tác",
+  "schedules": "Lịch làm việc",
+  "day": "Thứ",
+  "startTime": "Bắt đầu",
+  "endTime": "Kết thúc",
+  "maxPatients": "BN tối đa",
+  "total": "Tổng",
+  "active": "Đang làm việc",
+  "onLeave": "Nghỉ phép",
+  "statusActive": "Hoạt động",
+  "statusInactive": "Đã khóa",
+  "actions": "Thao tác",
+  "edit": "Chỉnh sửa",
+  "delete": "Xóa",
+  "add": "Thêm",
+  "close": "Đóng",
+  "updateChanges": "Cập nhật thay đổi",
+  "submit": "Cập nhật thay đổi",
+  "processing": "Đang xử lý...",
   "form": {
-    "title": "Chỉnh sửa thông tin Bác sĩ",
     "section": {
-      "general": "1. Thông tin chung",
-      "qualifications": "2. Bằng cấp / Học vấn",
-      "workHistory": "3. Quá trình Công tác",
-      "schedules": "4. Lịch làm việc"
+      "general": "Thông tin cơ bản",
+      "qualifications": "Bằng cấp / Học vấn",
+      "workHistory": "Quá trình công tác",
+      "schedules": "Lịch làm việc"
     },
     "fields": {
-      "fullName": "Họ tên",
-      "licenseNumber": "Số chứng chỉ",
-      "specCode": "Chuyên khoa",
       "avatar": "Ảnh đại diện",
+      "fullName": "Họ tên",
+      "specCode": "Chuyên khoa",
+      "licenseNumber": "Số chứng chỉ",
       "degree": "Tên bằng cấp",
       "institution": "Nơi cấp",
       "year": "Năm",
@@ -34,7 +48,6 @@
       "place": "Nơi làm việc",
       "from": "Từ ngày",
       "to": "Đến ngày",
-      "day": "Thứ",
       "start": "Bắt đầu",
       "end": "Kết thúc",
       "maxPatients": "BN tối đa"
@@ -42,23 +55,48 @@
     "buttons": {
       "add": "Thêm",
       "close": "Đóng",
-      "submit": "Cập nhật thay đổi",
-      "upload": "Tải ảnh lên"
+      "submit": "Cập nhật thay đổi"
+    },
+    "daysOfWeek": {
+      "Monday": "Thứ 2",
+      "Tuesday": "Thứ 3",
+      "Wednesday": "Thứ 4",
+      "Thursday": "Thứ 5",
+      "Friday": "Thứ 6",
+      "Saturday": "Thứ 7",
+      "Sunday": "Chủ nhật"
+    },
+    "notifications": {
+      "validationError": "Vui lòng kiểm tra lại thông tin",
+      "updateSuccess": "Cập nhật thành công!",
+      "updateError": "Lỗi cập nhật dữ liệu",
+      "addSuccess": "Thêm bác sĩ thành công",
+      "addError": "Lỗi thêm bác sĩ",
+      "loadError": "Lỗi tải dữ liệu",
+      "checkInfo": "Vui lòng kiểm tra lại thông tin"
     }
   },
-  "notifications": {
-    "fetchError": "Lỗi tải dữ liệu",
-    "updateSuccess": "Cập nhật thành công!",
-    "updateError": "Lỗi cập nhật dữ liệu",
-    "validationError": "Vui lòng kiểm tra lại thông tin"
-  },
-  "daysOfWeek": {
-    "Monday": "Thứ 2",
-    "Tuesday": "Thứ 3",
-    "Wednesday": "Thứ 4",
-    "Thursday": "Thứ 5",
-    "Friday": "Thứ 6",
-    "Saturday": "Thứ 7",
-    "Sunday": "Chủ nhật"
+  "errors": {
+    "fullNameRequired": "Họ tên không được để trống",
+    "specializationRequired": "Vui lòng chọn chuyên khoa",
+    "licenseRequired": "Số chứng chỉ không được để trống",
+    "qualification": {
+      "degreeRequired": "Tên bằng cấp không được để trống",
+      "institutionRequired": "Nơi cấp không được để trống",
+      "yearRequired": "Năm không được để trống"
+    },
+    "workHistory": {
+      "positionRequired": "Chức vụ không được để trống",
+      "placeRequired": "Nơi làm việc không được để trống",
+      "fromRequired": "Ngày bắt đầu không được để trống",
+      "toFuture": "Ngày kết thúc không được ở tương lai",
+      "toBeforeFrom": "Ngày kết thúc phải sau ngày bắt đầu"
+    },
+    "schedule": {
+      "dayRequired": "Vui lòng chọn thứ",
+      "startRequired": "Giờ bắt đầu không được để trống",
+      "endRequired": "Giờ kết thúc không được để trống",
+      "maxPatientsInvalid": "Số BN phải lớn hơn 0"
+    }
   }
 }

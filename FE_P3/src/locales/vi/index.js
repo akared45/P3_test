@@ -5,6 +5,7 @@ import admin_sidebar_vi from "./admin_sidebar_vi.json";
 import admin_dashboard_vi from "./admin_dashboard_vi.json";
 import admin_patients_vi from "./admin_patients_vi.json";
 import admin_doctors_vi from "./admin_doctors_vi.json";
+import admin_schedule_vi from "./admin_schedule_vi.json";
 const vi = {
   common,
   admin_layout: admin_header_vi,
@@ -13,6 +14,7 @@ const vi = {
   specialty: admin_specialty_vi,
   admin_patients: admin_patients_vi,
   admin_doctors: admin_doctors_vi,
+  admin_schedule: admin_schedule_vi,
 };
 
 export default vi;
