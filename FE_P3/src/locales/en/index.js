@@ -5,7 +5,13 @@ import admin_dashboard_en from "./admin_dashboard_en.json";
 import admin_patients_en from "./admin_patients_en.json";
 import admin_doctors_en from "./admin_doctors_en.json";
 import admin_schedule_en from "./admin_schedule_en.json";
+import auth_login_en from "./auth_login_en.json";
+import auth_register_en from "./auth_register_en.json";
+import navigation_en from "./desktopmenu_eng.json";
 import common from "./common_en.json";
+import usersection_en from "./usersection_eng.json";
+import footer_en from "./footer_eng.json";
+import chatwidget_en from "./chatwidget_eng.json";
 const en = {
   common,
   admin_layout: admin_header_en,
@@ -15,6 +21,12 @@ const en = {
   admin_doctors: admin_doctors_en,
   admin_schedule: admin_schedule_en,
   specialty: admin_specialty_en,
+  auth_login: auth_login_en,
+  auth_register: auth_register_en,
+  navigation: navigation_en,
+  usersection: usersection_en,
+  footer: footer_en,
+  chatwidget: chatwidget_en,
 };
 
 export default en;

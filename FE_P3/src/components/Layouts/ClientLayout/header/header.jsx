@@ -8,6 +8,7 @@ import UserSection from "./UserSection";
 import Modal from "../../../ui/modal";
 import { patientApi } from "../../../../services/api";
 import { useNavigate } from "react-router-dom";
+import LanguageSwitcher from "../../../ui/LanguageSwitcher";
 const Header = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
@@ -55,6 +56,7 @@ const Header = () => {
               isLoggedIn={!!user}
               onLogoutRequest={() => setOpenLogoutModal(true)}
             />
+            <LanguageSwitcher />
           </Toolbar>
         </Container>
       </AppBar>

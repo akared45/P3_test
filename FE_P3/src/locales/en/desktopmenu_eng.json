@@ -1,0 +1,10 @@
+{
+  "menuHome": "Home", 
+  "menuDoctors": "Our Doctors", 
+  "menuServices": "Services",
+  "menuServiceGeneral": "General Check-up",
+  "menuServiceSpecialized": "Specialized Examination", 
+  "menuServiceTesting": "Medical Testing",
+  "menuAbout": "About Us",
+  "menuContact": "Contact"
+}

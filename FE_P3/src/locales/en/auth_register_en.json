@@ -1,0 +1,22 @@
+{
+  "socialTitle": "Sign up with", 
+  "divider": "or",
+  "fullNameLabel": "Full Name", 
+  "usernameLabel": "Username", 
+  "emailLabel": "Email", 
+  "passwordLabel": "Password", 
+  "confirmPasswordLabel": "Confirm Password", 
+  "termsCheckbox": "I have read and agree to the terms", 
+  "button": "Register", 
+  "haveAccountText": "Already have an account?", 
+  "loginLink": "Login", 
+  "validationFullNameRequired": "Full name is required", 
+  "validationUsernameRequired": "Username is required", 
+  "validationEmailInvalid": "Invalid email", 
+  "validationEmailRequired": "Email is required", 
+  "validationPasswordMin": "Password must be at least 6 characters", 
+  "validationPasswordRequired": "Password is required", 
+  "validationConfirmMismatch": "Passwords do not match", 
+  "validationConfirmRequired": "Please confirm your password", 
+  "toastSuccess": "Registration successful! Please check your email to activate your account."
+}

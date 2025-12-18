@@ -1,10 +1,23 @@
 import { useState } from "react";
-import { Box, Button, IconButton, Tooltip, Avatar, Menu, MenuItem, Divider, Typography, Skeleton } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Tooltip,
+  Avatar,
+  Menu,
+  MenuItem,
+  Divider,
+  Typography,
+  Skeleton,
+} from "@mui/material";
 import { Link } from "react-router-dom";
-import { settings } from "./menuData";
+import { settings as rawSettings } from "./menuData";
 import NotificationBell from "../../../ui/NotificationBell";
+import { useTranslation } from "react-i18next";
 
 const UserSection = ({ user, isLoggedIn, onLogoutRequest }) => {
+  const { t } = useTranslation("usersection"); // dùng namespace usersection
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
@@ -16,39 +29,61 @@ const UserSection = ({ user, isLoggedIn, onLogoutRequest }) => {
     return "http://localhost:3000" + url;
   };
 
+  // Map settings để dịch
+  const settings = rawSettings.map((s) => ({
+    ...s,
+    label: s.key ? t(s.key) : s.label,
+  }));
+
   if (isLoggedIn && !user) {
     return (
-      <Box sx={{ display: 'flex', gap: 2 }}>
+      <Box sx={{ display: "flex", gap: 2 }}>
         <Skeleton variant="circular" width={40} height={40} />
       </Box>
     );
   }
-  const userInitials = user?.fullName ? user.fullName.charAt(0).toUpperCase() : "U";
+
+  const userInitials = user?.fullName
+    ? user.fullName.charAt(0).toUpperCase()
+    : "U";
 
   return (
-    <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', gap: 2 }}>
+    <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center", gap: 2 }}>
       {!isLoggedIn ? (
         <>
-          <Button variant="outlined" component={Link} to="/dang-nhap" sx={{ borderRadius: 5, textTransform: 'none' }}>
-            Đăng nhập
+          <Button
+            variant="outlined"
+            component={Link}
+            to="/dang-nhap"
+            sx={{ borderRadius: 5, textTransform: "none" }}
+          >
+            {t("loginButton")}
           </Button>
-          <Button variant="contained" component={Link} to="/dang-ky" sx={{ borderRadius: 5, textTransform: 'none', boxShadow: 'none' }}>
-            Đăng ký
+          <Button
+            variant="contained"
+            component={Link}
+            to="/dang-ky"
+            sx={{ borderRadius: 5, textTransform: "none", boxShadow: "none" }}
+          >
+            {t("registerButton")}
           </Button>
         </>
       ) : (
         <>
-          {/* [THAY THẾ] Thay đoạn IconButton cũ bằng NotificationBell */}
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+          <Box sx={{ display: { xs: "none", sm: "block" } }}>
             <NotificationBell />
           </Box>
 
-          <Tooltip title="Tài khoản">
+          <Tooltip title={t("tooltipAccount")}>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <Avatar
                 alt={user?.fullName || "User"}
                 src={getAvatarUrl(user?.avatarUrl)}
-                sx={{ bgcolor: 'primary.main', border: '2px solid white', boxShadow: '0 0 0 2px #e3f2fd' }}
+                sx={{
+                  bgcolor: "primary.main",
+                  border: "2px solid white",
+                  boxShadow: "0 0 0 2px #e3f2fd",
+                }}
               >
                 {userInitials}
               </Avatar>
@@ -56,26 +91,44 @@ const UserSection = ({ user, isLoggedIn, onLogoutRequest }) => {
           </Tooltip>
 
           <Menu
-            sx={{ mt: '45px' }}
+            sx={{ mt: "45px" }}
             anchorEl={anchorElUser}
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            transformOrigin={{ vertical: "top", horizontal: "right" }}
             PaperProps={{
               elevation: 3,
               sx: {
-                minWidth: 200, borderRadius: 3, overflow: 'visible', mt: 1.5,
-                '&:before': { content: '""', display: 'block', position: 'absolute', top: 0, right: 14, width: 10, height: 10, bgcolor: 'background.paper', transform: 'translateY(-50%) rotate(45deg)', zIndex: 0 },
-              }
+                minWidth: 200,
+                borderRadius: 3,
+                overflow: "visible",
+                mt: 1.5,
+                "&:before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "background.paper",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
+              },
             }}
           >
-            {/* ... (Phần Menu User giữ nguyên như cũ) */}
             <Box sx={{ px: 2, py: 1.5 }}>
               <Typography variant="subtitle2" noWrap sx={{ fontWeight: 700 }}>
                 {user?.fullName || "Người dùng"}
               </Typography>
-              <Typography variant="body2" color="text.secondary" noWrap sx={{ fontSize: '0.8rem' }}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                noWrap
+                sx={{ fontSize: "0.8rem" }}
+              >
                 {user?.email || ""}
               </Typography>
             </Box>
@@ -94,11 +147,22 @@ const UserSection = ({ user, isLoggedIn, onLogoutRequest }) => {
                   }
                 }}
                 sx={{
-                  py: 1, color: item.danger ? 'error.main' : 'text.primary',
-                  '&:hover': { bgcolor: item.danger ? 'error.lighter' : 'grey.100' }
+                  py: 1,
+                  color: item.danger ? "error.main" : "text.primary",
+                  "&:hover": {
+                    bgcolor: item.danger ? "error.lighter" : "grey.100",
+                  },
                 }}
               >
-                <Box sx={{ mr: 2, display: 'flex', color: item.danger ? 'error.main' : 'text.secondary' }}>{item.icon}</Box>
+                <Box
+                  sx={{
+                    mr: 2,
+                    display: "flex",
+                    color: item.danger ? "error.main" : "text.secondary",
+                  }}
+                >
+                  {item.icon}
+                </Box>
                 {item.label}
               </MenuItem>
             ))}

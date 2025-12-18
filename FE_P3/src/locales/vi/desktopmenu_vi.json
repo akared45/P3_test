@@ -1,0 +1,10 @@
+{
+  "menuHome": "Trang chủ", 
+  "menuDoctors": "Đội ngũ bác sĩ",
+  "menuServices": "Dịch vụ",
+  "menuServiceGeneral": "Khám tổng quát", 
+  "menuServiceSpecialized": "Khám chuyên sâu", 
+  "menuServiceTesting": "Xét nghiệm y khoa", 
+  "menuAbout": "Về chúng tôi", 
+  "menuContact": "Liên hệ" 
+}
