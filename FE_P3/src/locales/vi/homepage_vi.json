@@ -1,0 +1,41 @@
+{
+  "hero": {
+    "subtitle": "Chào mừng bạn đến với Medicare",
+    "title": {
+      "health": "Sức khỏe",
+      "your": "của bạn",
+      "our": "của chúng tôi",
+      "responsibility": "Trách nhiệm"
+    },
+    "description": "Tại Medicare, chúng tôi kết hợp đội ngũ bác sĩ hàng đầu cùng công nghệ y khoa tiên tiến nhất để mang lại lộ trình điều trị tối ưu. Sức khỏe của bạn là sứ mệnh cao cả nhất của chúng tôi",
+    "buttons": {
+      "register": "Đăng ký ngay",
+      "learnMore": "Xem thêm"
+    }
+  },
+
+  "intro": [
+    {
+      "title": "Đội ngũ bác sĩ",
+      "description": "Đội ngũ bác sĩ tâm huyết, có trình độ chuyên môn cao và nhiều năm kinh nghiệm đang công tác tại các bệnh viện lớn Trung ương & Hà Nội.",
+      "buttons": [{ "content": "Bác sĩ Medicare" }]
+    },
+    {
+      "title": "Tư vấn trực tuyến",
+      "description": "Bạn bận rộn và không sắp xếp được thời gian tới khám trong khi cần tư vấn với bác sỹ chuyên khoa? Doctor4U giúp bạn kết nối với bác sỹ dù bạn đang ở đâu với khung giờ linh hoạt.",
+      "buttons": [{ "content": "Các chuyên khoa" }]
+    },
+    {
+      "title": "Khám bệnh tại nhà",
+      "description": "Khám bệnh tại nhà hay còn gọi là bác sĩ gia đình là dịch vụ thăm khám, chăm sóc và quản lý sức khỏe của từng thành viên trong gia đình. Với đội ngũ bác sĩ được đào tạo bài bản, có nhiều năm kinh nghiệm, sự tận tâm, trách nhiệm và luôn hết lòng vì người bệnh, Doctor4U giúp mỗi gia đình an tâm theo dõi và chăm sóc sức khỏe cho từng cá nhân.",
+      "buttons": []
+    },
+    {
+      "title": "Chăm sóc bệnh mãn tính",
+      "description": "Bạn cần bác sỹ chuyên khoa tư vấn khi gặp các vấn đề sức khỏe? Doctor4U là bác sỹ gia đình của bạn, cùng bạn theo dõi, chăm sóc bệnh mãn tính với đội ngũ bác sỹ chuyên khoa giàu kinh nghiệm.",
+      "buttons": []
+    }
+  ]
+
+
+}

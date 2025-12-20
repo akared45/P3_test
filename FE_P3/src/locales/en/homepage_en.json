@@ -1,0 +1,40 @@
+{
+  "hero": {
+    "subtitle": "Welcome to Medicare",
+    "title": {
+      "health": "Health",
+      "your": "Your",
+      "our": "Our",
+      "responsibility": "Responsibility"
+    },
+    "description": "At Medicare, we combine top doctors with the most advanced medical technology to provide the optimal treatment plan. Your health is our highest mission.",
+    "buttons": {
+      "register": "Register Now",
+      "learnMore": "Learn More"
+    }
+  },
+
+  "intro": [
+    {
+      "title": "Medical Team",
+      "description": "A dedicated team of doctors with high expertise and many years of experience working at major central and Hanoi hospitals.",
+      "buttons": [{ "content": "Medicare Doctors" }]
+    },
+    {
+      "title": "Online Consultation",
+      "description": "Busy and unable to schedule a visit but need specialist advice? Doctor4U connects you with doctors wherever you are, with flexible hours.",
+      "buttons": [{ "content": "Specialties" }]
+    },
+    {
+      "title": "Home Medical Checkup",
+      "description": "Home visits, also known as family doctor service, include examining, caring for, and managing each family member's health. With a well-trained, experienced, and dedicated team, Doctor4U helps families confidently monitor and take care of individual health.",
+      "buttons": []
+    },
+    {
+      "title": "Chronic Disease Care",
+      "description": "Need specialist advice for health issues? Doctor4U acts as your family doctor, monitoring and managing chronic diseases with experienced specialists.",
+      "buttons": []
+    }
+  ]
+
+}

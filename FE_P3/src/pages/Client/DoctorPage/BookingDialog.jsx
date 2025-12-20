@@ -6,10 +6,11 @@ import PaymentPrompt from "./PaymentPrompt";
 import { appointmentApi } from "../../../services/api";
 import { paymentApi } from "../../../services/api";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const BookingDialog = ({ open, onClose, doctor }) => {
   const { t } = useTranslation("doctorcard");
-
+  const navigate = useNavigate();
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [newAppointmentId, setNewAppointmentId] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -43,11 +44,10 @@ const BookingDialog = ({ open, onClose, doctor }) => {
       }
     } catch (error) {
       console.error(error);
-      alert(
-        t("bookingFailed") +
-          ": " +
-          (error.response?.data?.message || t("unknownError"))
-      );
+      if (error.response?.status === 401) {
+        navigate("/dang-nhap");
+        return;
+      }
     } finally {
       setLoading(false);
     }
@@ -65,11 +65,6 @@ const BookingDialog = ({ open, onClose, doctor }) => {
       }
     } catch (error) {
       console.error(error);
-      alert(
-        t("paymentCreateError") +
-          ": " +
-          (error.response?.data?.message || t("unknownError"))
-      );
     } finally {
       setPaymentLoading(false);
     }
