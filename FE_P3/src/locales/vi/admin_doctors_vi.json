@@ -98,5 +98,50 @@
       "endRequired": "Giờ kết thúc không được để trống",
       "maxPatientsInvalid": "Số BN phải lớn hơn 0"
     }
+  },
+   "filter": {
+    "title": "Bộ lọc tìm kiếm",
+    "doctorName": "Tên bác sĩ",
+    "searchPlaceholder": "Nhập tên...",
+    "specialization": "Chuyên khoa",
+    "allSpecializations": "Tất cả chuyên khoa",
+    "experience": "Kinh nghiệm",
+    "year": "năm",
+    "experienceRange": "Kinh nghiệm: {{min}} - {{max}} năm",
+    "experienceUnit": "năm",
+    "workingDays": "Ngày làm việc",
+    "clearAll": "Xóa tất cả bộ lọc",
+    "apply": "Áp dụng",
+    "days": {
+      "monday": "Thứ 2",
+      "tuesday": "Thứ 3",
+      "wednesday": "Thứ 4",
+      "thursday": "Thứ 5",
+      "friday": "Thứ 6",
+      "saturday": "Thứ 7",
+      "sunday": "Chủ nhật"
+    }
+  },
+  "pageHeader": {
+    "breadcrumb": {
+      "home": "Trang chủ",
+      "booking": "Đặt lịch khám"
+    },
+    "title": "Tìm kiếm Bác sĩ"
+  },
+  "doctorList": {
+    "found": "Tìm thấy <b>{{count}}</b> bác sĩ phù hợp",
+    "showing": "Hiển thị {{start}}-{{end}} trên {{total}} kết quả",
+    "clearFilter": "Xóa bộ lọc",
+    "clearAll": "Xóa tất cả bộ lọc",
+    "noResult": "Không tìm thấy bác sĩ nào khớp với bộ lọc.",
+    "noResultAlt": "Không có kết quả"
+  },
+   "payment": {
+    "successTitle": "Đặt lịch thành công!",
+    "confirmPayment": "Vui lòng thanh toán để xác nhận lịch hẹn với Bác sĩ <strong>{{name}}</strong>.",
+    "redirecting": "Đang chuyển hướng...",
+    "payNow": "Thanh toán ngay qua MoMo",
+    "payLater": "Tôi sẽ thanh toán sau (Vào chi tiết lịch hẹn)"
   }
 }

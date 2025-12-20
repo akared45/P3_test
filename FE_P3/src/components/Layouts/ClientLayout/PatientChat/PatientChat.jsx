@@ -37,9 +37,11 @@ export default function PatientChat() {
     const fetchAppointments = async () => {
       try {
         const res = await appointmentApi.getMyAppointments();
-        // Lọc các lịch hẹn hợp lệ để hiển thị trong danh sách chat
-        const validApps = res.data.data.filter(a =>
-          ['confirmed', 'in_progress', 'active', 'pending'].includes(a.status?.toLowerCase())
+
+        const validApps = res.data.data.filter((a) =>
+          ["confirmed", "in_progress", "active", "pending"].includes(
+            a.status?.toLowerCase()
+          )
         );
         setAppointments(validApps);
       } catch (error) {
@@ -62,7 +64,7 @@ export default function PatientChat() {
     setText("");
   };
 
-  const activeApp = appointments.find(a => a.id === activeId);
+  const activeApp = appointments.find((a) => a.id === activeId);
 
   return (
     <>
@@ -70,9 +72,14 @@ export default function PatientChat() {
         <Fab
           color="primary"
           onClick={() => setIsOpen(true)}
-          sx={{ position: 'fixed', bottom: 30, right: 30, zIndex: 1300 }}
+          sx={{ position: "fixed", bottom: 30, right: 30, zIndex: 1300 }}
         >
-          <Badge badgeContent={appointments.filter(a => a.status === 'confirmed').length} color="error">
+          <Badge
+            badgeContent={
+              appointments.filter((a) => a.status === "confirmed").length
+            }
+            color="error"
+          >
             <ChatIcon />
           </Badge>
         </Fab>
@@ -84,21 +91,21 @@ export default function PatientChat() {
         maxWidth={false}
         PaperProps={{
           sx: {
-            width: '90vw',
-            height: '85vh',
-            maxWidth: '1200px',
+            width: "90vw",
+            height: "85vh",
+            maxWidth: "1200px",
             borderRadius: 3,
-            overflow: 'hidden'
-          }
+            overflow: "hidden",
+          },
         }}
       >
-        <Grid container sx={{ height: '100%', flexWrap: 'nowrap' }}>
+        <Grid container sx={{ height: "100%", flexWrap: "nowrap" }}>
           <DoctorListSidebar
             appointments={appointments}
             activeId={activeId}
             setActiveId={setActiveId}
             isConnected={isConnected}
-            onlineUsers={onlineUsers} 
+            onlineUsers={onlineUsers}
           />
 
           <PatientChatWindow
@@ -112,7 +119,7 @@ export default function PatientChat() {
             isConnected={isConnected}
             messagesEndRef={messagesEndRef}
             onClose={() => setIsOpen(false)}
-            onlineUsers={onlineUsers} 
+            onlineUsers={onlineUsers}
           />
         </Grid>
       </Dialog>

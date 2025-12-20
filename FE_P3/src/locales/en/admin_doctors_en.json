@@ -98,5 +98,54 @@
       "endRequired": "End time is required",
       "maxPatientsInvalid": "Max patients must be greater than 0"
     }
+  },
+  
+  "filter": {
+    "title": "Search Filters",
+    "doctorName": "Doctor name",
+    "searchPlaceholder": "Enter name...",
+    "specialization": "Specialization",
+    "allSpecializations": "All specializations",
+    "experience": "Experience",
+    "experienceRange": "Experience: {{min}} - {{max}} years",
+    "year": "year",
+    "experienceUnit": "years",
+    "workingDays": "Working days",
+    "clearAll": "Clear all filters",
+    "apply": "Apply",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
+  },
+
+  "pageHeader": {
+    "breadcrumb": {
+      "home": "Home",
+      "booking": "Book an appointment"
+    },
+    "title": "Find a Doctor"
+  },
+  "doctorList": {
+    "found": "Found <b>{{count}}</b> matching doctors",
+    "showing": "Showing {{start}}–{{end}} of {{total}} results",
+    "clearFilter": "Clear filters",
+    "clearAll": "Clear all filters",
+    "noResult": "No doctors match your filters.",
+    "noResultAlt": "No results"
+  },
+  
+  "payment": {
+    "successTitle": "Appointment booked successfully!",
+    "confirmPayment": "Please complete the payment to confirm your appointment with Dr. <strong>{{name}}</strong>.",
+    "redirecting": "Redirecting...",
+    "payNow": "Pay now via MoMo",
+    "payLater": "I'll pay later (Go to appointment details)"
   }
+
 }

@@ -7,7 +7,6 @@ import Subimg from "@images/partern.png";
 import Subimg2 from "@images/Vector123.png";
 
 export const doctors = [
-  // 1. NHI KHOA
   {
     name: "TS. BS Lê Ngọc Mai",
     specialty: "Nhi khoa",
@@ -276,11 +275,7 @@ export const introData = [
       "Đội ngũ bác sĩ tâm huyết, có trình độ chuyên môn cao và nhiều năm kinh nghiệm đang công tác tại các bệnh viện lớn Trung ương & Hà Nội.",
     img: Bs5,
     flexDirection: true,
-    buttons: [
-      { content: "Bác sĩ Doctor4U", variant: "contained" },
-      { content: "Bác sĩ Hà Nội" },
-      { content: "Chuyên khoa", variant: "outlined" },
-    ],
+    buttons: [{ content: "Bác sĩ Medicare", variant: "contained" }],
   },
   {
     title: "Tư vấn trực tuyến",
@@ -297,7 +292,6 @@ export const introData = [
       "Khám bệnh tại nhà hay còn gọi là bác sĩ gia đình là dịch vụ thăm khám, chăm sóc và quản lý sức khỏe của từng thành viên trong gia đình. Với đội ngũ bác sĩ được đào tạo bài bản, có nhiều năm kinh nghiệm, sự tận tâm, trách nhiệm và luôn hết lòng vì người bệnh, Doctor4U giúp mỗi gia đình an tâm theo dõi và chăm sóc sức khỏe cho từng cá nhân.",
     img: Bs3,
     flexDirection: true,
-    buttons: [{ content: "Chi tiết" }],
   },
   {
     title: "Chăm sóc bệnh mãn tính",
@@ -306,6 +300,5 @@ export const introData = [
     img: Bs4,
     flexDirection: false,
     subimg: Subimg2,
-    buttons: [{ content: "Liên hệ ngay" }, { content: "Xem thêm" }],
   },
 ];

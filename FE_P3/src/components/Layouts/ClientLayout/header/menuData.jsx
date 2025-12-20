@@ -8,14 +8,7 @@ import {
 export const pages = [
   { key: "menuHome", to: "/" },
   { key: "menuDoctors", to: "/doi-ngu-bac-si" },
-  {
-    key: "menuServices",
-    children: [
-      { key: "menuServiceGeneral", to: "/dich-vu/tong-quat" },
-      { key: "menuServiceSpecialized", to: "/dich-vu/chuyen-sau" },
-      { key: "menuServiceTesting", to: "/dich-vu/xet-nghiem" },
-    ],
-  },
+
   { key: "menuAbout", to: "/ve-chung-toi" },
   { key: "menuContact", to: "/lien-he" },
 ];

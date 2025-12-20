@@ -4,11 +4,19 @@ import Hero from "../../../components/sections/hero/hero";
 import styles from "./style.module.scss";
 import { introData } from "../../../data/constant";
 import ChatWidget from "../ChatWidget/ChatWidget";
-
+import { AppBar, Toolbar, Container } from "@mui/material";
 const HomePage = () => {
   return (
     <>
-      <div className={styles.home__container}>
+      <Container
+        maxWidth="xl"
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
         <ChatWidget></ChatWidget>
         <Hero />
         {introData.map((item, index) => (
@@ -22,7 +30,7 @@ const HomePage = () => {
             buttons={item.buttons}
           />
         ))}
-      </div>
+      </Container>
     </>
   );
 };

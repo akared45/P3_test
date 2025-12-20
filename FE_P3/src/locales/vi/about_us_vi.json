@@ -1,0 +1,41 @@
+{
+  "heroSection": {
+    "overline": "VỀ MEDICARE",
+    "title": "Chăm sóc sức khỏe Toàn diện & Tận tâm",
+    "subtitle": "Chúng tôi cam kết mang đến dịch vụ y tế chất lượng cao...",
+    "primaryButton": "Đặt lịch khám ngay",
+    "secondaryButton": "Tìm hiểu thêm"
+  },
+  "ctaSection": {
+    "title": "Sẵn sàng để chăm sóc sức khỏe?",
+    "subtitle": "Đặt lịch trực tuyến ngay để được tư vấn tốt nhất.",
+    "button": "Đặt lịch ngay"
+  },
+  "doctorsSection": {
+    "title": "Đội ngũ chuyên gia",
+    "subtitle": "Gặp gỡ bác sĩ hàng đầu",
+    "viewAll": "Xem tất cả",
+    "list": [
+      { "name": "TS. BS. Nguyễn Văn A", "specialty": "Tim mạch" },
+      { "name": "ThS. BS. Trần Thị B", "specialty": "Nhi khoa" },
+      { "name": "BS. CKII. Lê Văn C", "specialty": "Thần kinh" }
+    ]
+  },
+  "featuresSection": {
+    "title": "Tại sao chọn Medicare?",
+    "subtitle": "Chúng tôi không chỉ chữa bệnh, chúng tôi chăm sóc bạn như người thân.",
+    "features": [
+      { "title": "Công nghệ tiên tiến", "desc": "Sử dụng thiết bị y tế hiện đại..." },
+      { "title": "Đội ngũ tận tâm", "desc": "Luôn đặt sức khỏe bệnh nhân lên trên hết." },
+      { "title": "Quy trình nhanh chóng", "desc": "Đặt lịch online – không cần chờ." }
+    ]
+  },
+  "statsSection": {
+    "stats": [
+      { "number": "15+", "label": "Năm Kinh Nghiệm" },
+      { "number": "50k+", "label": "Bệnh Nhân Hài Lòng" },
+      { "number": "100+", "label": "Bác Sĩ Chuyên Khoa" },
+      { "number": "24/7", "label": "Hỗ Trợ Y Tế" }
+    ]
+  }
+}

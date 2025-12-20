@@ -37,21 +37,21 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
   const [symptoms, setSymptoms] = useState("");
 
   const getNextDate = (dayName) => {
-  const targetIndex = DAYS_CONFIG[dayName]?.index;
-  if (targetIndex === undefined) return null;
-  
-  const date = new Date();
-  const currentDayIndex = date.getDay();
+    const targetIndex = DAYS_CONFIG[dayName]?.index;
+    if (targetIndex === undefined) return null;
 
-  let daysToAdd = targetIndex - currentDayIndex;
+    const date = new Date();
+    const currentDayIndex = date.getDay();
 
-  if (daysToAdd < 0) {
-    daysToAdd += 7;
-  }
-  
-  date.setDate(date.getDate() + daysToAdd);
-  return date.toISOString().split("T")[0];
-};
+    let daysToAdd = targetIndex - currentDayIndex;
+
+    if (daysToAdd < 0) {
+      daysToAdd += 7;
+    }
+
+    date.setDate(date.getDate() + daysToAdd);
+    return date.toISOString().split("T")[0];
+  };
   const isSlotBusy = (slotIsoTime) => {
     if (!busySlots?.length) return false;
     const slotTime = new Date(slotIsoTime).getTime();
@@ -73,30 +73,33 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
     if (daysToAdd < 0) daysToAdd += 7;
 
     if (daysToAdd === 0) {
-        const [endH, endM] = schedule.end.split(":").map(Number);
-        const nowH = date.getHours();
-        const nowM = date.getMinutes();
+      const [endH, endM] = schedule.end.split(":").map(Number);
+      const nowH = date.getHours();
+      const nowM = date.getMinutes();
 
-        if (nowH > endH || (nowH === endH && nowM >= endM)) {
-            daysToAdd = 7;
-        }
+      if (nowH > endH || (nowH === endH && nowM >= endM)) {
+        daysToAdd = 7;
+      }
     }
 
     const nextDateStr = new Date(date.setDate(date.getDate() + daysToAdd))
-        .toISOString()
-        .split("T")[0];
+      .toISOString()
+      .split("T")[0];
 
     setCheckingSlots(true);
     try {
-        const res = await appointmentApi.getBusySlots(doctor.id || doctor._id, nextDateStr);
-        setBusySlots(res.data?.data || res.data || []);
+      const res = await appointmentApi.getBusySlots(
+        doctor.id || doctor._id,
+        nextDateStr
+      );
+      setBusySlots(res.data?.data || res.data || []);
     } catch (e) {
-        console.error(e);
+      console.error(e);
     } finally {
-        setCheckingSlots(false);
+      setCheckingSlots(false);
     }
 
-    const doctorTimeZone = doctor.timeZone || 'Asia/Ho_Chi_Minh';
+    const doctorTimeZone = doctor.timeZone || "Asia/Ho_Chi_Minh";
     const slots = [];
     const [startH, startM] = schedule.start.split(":").map(Number);
     const [endH, endM] = schedule.end.split(":").map(Number);
@@ -104,22 +107,24 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
     const endTotalMins = endH * 60 + endM;
 
     while (currentTotalMins < endTotalMins) {
-        const h = Math.floor(currentTotalMins / 60);
-        const m = currentTotalMins % 60;
-        const timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-        const dateTimeString = `${nextDateStr} ${timeStr}`;
-        const dateObj = fromZonedTime(dateTimeString, doctorTimeZone);
+      const h = Math.floor(currentTotalMins / 60);
+      const m = currentTotalMins % 60;
+      const timeStr = `${h.toString().padStart(2, "0")}:${m
+        .toString()
+        .padStart(2, "0")}`;
+      const dateTimeString = `${nextDateStr} ${timeStr}`;
+      const dateObj = fromZonedTime(dateTimeString, doctorTimeZone);
 
-        if (dateObj.getTime() > new Date().getTime()) {
-            slots.push({
-                display: format(dateObj, 'HH:mm'),
-                iso: dateObj.toISOString()
-            });
-        }
-        currentTotalMins += 30;
+      if (dateObj.getTime() > new Date().getTime()) {
+        slots.push({
+          display: format(dateObj, "HH:mm"),
+          iso: dateObj.toISOString(),
+        });
+      }
+      currentTotalMins += 30;
     }
     setGeneratedSlots(slots);
-};
+  };
 
   const handleSubmit = () => {
     if (!selectedSlot || !symptoms) return;

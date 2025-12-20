@@ -1,21 +1,32 @@
-import React from 'react';
+import React from "react";
 import {
-  Box, Typography, TextField, MenuItem, InputAdornment, Paper,
-  Divider, FormControlLabel, Checkbox, FormGroup,
-  Slider, IconButton, Drawer
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import CloseIcon from '@mui/icons-material/Close';
+  Box,
+  Typography,
+  TextField,
+  MenuItem,
+  InputAdornment,
+  Paper,
+  Divider,
+  FormControlLabel,
+  Checkbox,
+  FormGroup,
+  Slider,
+  IconButton,
+  Drawer,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import CloseIcon from "@mui/icons-material/Close";
+import { useTranslation } from "react-i18next";
 
 const DAYS_OF_WEEK = [
-  { label: "Thứ 2", value: "Monday" },
-  { label: "Thứ 3", value: "Tuesday" },
-  { label: "Thứ 4", value: "Wednesday" },
-  { label: "Thứ 5", value: "Thursday" },
-  { label: "Thứ 6", value: "Friday" },
-  { label: "Thứ 7", value: "Saturday" },
-  { label: "Chủ nhật", value: "Sunday" },
+  { key: "monday", value: "Monday" },
+  { key: "tuesday", value: "Tuesday" },
+  { key: "wednesday", value: "Wednesday" },
+  { key: "thursday", value: "Thursday" },
+  { key: "friday", value: "Friday" },
+  { key: "saturday", value: "Saturday" },
+  { key: "sunday", value: "Sunday" },
 ];
 
 const FilterSidebar = ({
@@ -32,30 +43,43 @@ const FilterSidebar = ({
   isMobile,
   drawerOpen,
   setDrawerOpen,
-  isDrawerOnly = false 
+  isDrawerOnly = false,
 }) => {
+  const { t } = useTranslation("admin_doctors");
   const FilterContent = ({ isDrawer = false }) => (
-    <Paper elevation={0} sx={{ 
-      p: 3, 
-      borderRadius: isDrawer ? 0 : 4, 
-      border: "1px solid #ececec",
-      height: 'fit-content',
-      position: isDrawer ? 'relative' : 'sticky',
-      top: isDrawer ? 0 : 20,
-      maxHeight: isDrawer ? '100vh' : 'calc(100vh - 100px)',
-      overflowY: 'auto',
-      '&::-webkit-scrollbar': {
-        width: '6px',
-      },
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#c1c1c1',
-        borderRadius: '3px',
-      }
-    }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+    <Paper
+      elevation={0}
+      sx={{
+        p: 3,
+        borderRadius: isDrawer ? 0 : 4,
+        border: "1px solid #ececec",
+        height: "fit-content",
+        position: isDrawer ? "relative" : "sticky",
+        top: isDrawer ? 0 : 20,
+        maxHeight: isDrawer ? "100vh" : "calc(100vh - 100px)",
+        overflowY: "auto",
+        "&::-webkit-scrollbar": {
+          width: "6px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          backgroundColor: "#c1c1c1",
+          borderRadius: "3px",
+        },
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 3,
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <FilterListIcon color="primary" />
-          <Typography variant="h6" fontWeight={700}>Bộ lọc tìm kiếm</Typography>
+          <Typography variant="h6" fontWeight={700}>
+            {t("filter.title")}
+          </Typography>
         </Box>
         {isDrawer && (
           <IconButton onClick={() => setDrawerOpen(false)} size="small">
@@ -63,22 +87,30 @@ const FilterSidebar = ({
           </IconButton>
         )}
       </Box>
-      
-      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1 }}>Tên bác sĩ</Typography>
+
+      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1 }}>
+        {t("filter.doctorName")}
+      </Typography>
       <TextField
         fullWidth
-        placeholder="Nhập tên..."
+        placeholder={t("filter.searchPlaceholder")}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         InputProps={{
-          startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment>,
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon fontSize="small" />
+            </InputAdornment>
+          ),
         }}
         sx={{ mb: 4 }}
         size="small"
       />
 
       <Divider sx={{ mb: 3 }} />
-      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1.5 }}>Chuyên khoa</Typography>
+      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1.5 }}>
+        {t("filter.specialization")}
+      </Typography>
       <TextField
         select
         fullWidth
@@ -87,15 +119,18 @@ const FilterSidebar = ({
         sx={{ mb: 4 }}
         size="small"
       >
-        <MenuItem value="all">Tất cả chuyên khoa</MenuItem>
+        <MenuItem value="all">{t("filter.allSpecializations")}</MenuItem>
         {specializations.map((spec) => (
-          <MenuItem key={spec.code} value={spec.code}>{spec.name}</MenuItem>
+          <MenuItem key={spec.code} value={spec.code}>
+            {spec.name}
+          </MenuItem>
         ))}
       </TextField>
 
       <Divider sx={{ mb: 3 }} />
       <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 4 }}>
-        Kinh nghiệm: {experienceRange[0]} - {experienceRange[1]} năm
+        {t("filter.experience")}: {experienceRange[0]} - {experienceRange[1]}{" "}
+        {t("filter.year")}
       </Typography>
       <Slider
         value={experienceRange}
@@ -103,11 +138,13 @@ const FilterSidebar = ({
         valueLabelDisplay="auto"
         min={0}
         max={40}
-        sx={{ mb: 4, mx: 1, width: '90%' }}
+        sx={{ mb: 4, mx: 1, width: "90%" }}
       />
 
       <Divider sx={{ mb: 3 }} />
-      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1.5 }}>Ngày làm việc</Typography>
+      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1.5 }}>
+        {t("filter.workingDays")}
+      </Typography>
       <FormGroup>
         {DAYS_OF_WEEK.map((day) => (
           <FormControlLabel
@@ -119,28 +156,32 @@ const FilterSidebar = ({
                 onChange={() => handleDayChange(day.value)}
               />
             }
-            label={<Typography variant="body2">{day.label}</Typography>}
+            label={
+              <Typography variant="body2">
+                {t(`filter.days.${day.key}`)}
+              </Typography>
+            }
             sx={{ mb: 0.5 }}
           />
         ))}
       </FormGroup>
 
-      <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
+      <Box sx={{ mt: 3, display: "flex", gap: 2 }}>
         <Typography
           variant="body2"
           color="primary"
-          sx={{ cursor: 'pointer', fontWeight: 600 }}
+          sx={{ cursor: "pointer", fontWeight: 600 }}
           onClick={handleClearFilters}
         >
-          Xóa tất cả bộ lọc
+          {t("filter.clearAll")}
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ cursor: 'pointer', fontWeight: 600 }}
+          sx={{ cursor: "pointer", fontWeight: 600 }}
           onClick={() => isDrawer && setDrawerOpen(false)}
         >
-          Áp dụng
+          {t("filter.apply")}
         </Typography>
       </Box>
     </Paper>
@@ -153,11 +194,11 @@ const FilterSidebar = ({
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         PaperProps={{
-          sx: { 
-            width: '100%',
+          sx: {
+            width: "100%",
             maxWidth: 400,
-            borderRadius: '0'
-          }
+            borderRadius: "0",
+          },
         }}
       >
         <FilterContent isDrawer={true} />

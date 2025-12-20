@@ -13,8 +13,10 @@ import usersection_en from "./user_section_en.json";
 import footer_en from "./footer_en.json";
 import chatwidget_en from "./chat_widget_en.json";
 import doctorcard_en from "./doctor_card_en.json";
-import doctor_detail_en from "./doctor_detail_en.json"
-
+import doctor_detail_en from "./doctor_detail_en.json";
+import about_us_en from "./aubout_us_en.json";
+import contact_en from "./contact_en.json";
+import patient_chat_en from "./patient_chat_en.json";
 const en = {
   common,
   admin_layout: admin_header_en,
@@ -31,7 +33,10 @@ const en = {
   footer: footer_en,
   chatwidget: chatwidget_en,
   doctorcard: doctorcard_en,
-  doctordetail: doctor_detail_en
+  doctordetail: doctor_detail_en,
+  aboutus: about_us_en,
+  contact: contact_en,
+  patient_chat: patient_chat_en,
 };
 
 export default en;

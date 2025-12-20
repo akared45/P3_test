@@ -14,6 +14,9 @@ import footer_vi from "./footer_vi.json";
 import chatwidget_vi from "./chat_widget_vi.json";
 import doctorcard_vi from "./doctor_card_vi.json";
 import doctor_detail_vi from "./doctor_detail_vi.json";
+import about_us_vi from "./about_us_vi.json";
+import contact_vi from "./contact_vi.json";
+import patient_chat_vi from "./patient_chat_vi.json";
 
 const vi = {
   common,
@@ -31,7 +34,10 @@ const vi = {
   footer: footer_vi,
   chatwidget: chatwidget_vi,
   doctorcard: doctorcard_vi,
-  doctordetail: doctor_detail_vi
+  doctordetail: doctor_detail_vi,
+  aboutus: about_us_vi,
+  contact: contact_vi,
+  patient_chat: patient_chat_vi,
 };
 
 export default vi;
