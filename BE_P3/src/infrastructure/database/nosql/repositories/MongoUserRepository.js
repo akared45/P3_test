@@ -21,17 +21,20 @@ class MongoUserRepository extends IUserRepository {
     }
 
     async findAllByUserType(userType, options = {}) {
-        const { limit = 10, skip = 0 } = options;
+        const { limit, skip } = options;
 
-        const docs = await UserModel.find({
+        const query = UserModel.find({
             userType: userType,
             isDeleted: false
         })
-            .skip(skip)
-            .limit(limit)
             .sort({ createdAt: -1 })
             .populate('specCode', 'name')
             .lean();
+
+        if (limit) query.limit(Number(limit));
+        if (skip) query.skip(Number(skip));
+
+        const docs = await query;
         return docs.map(doc => UserMapper.toDomain(doc));
     }
 

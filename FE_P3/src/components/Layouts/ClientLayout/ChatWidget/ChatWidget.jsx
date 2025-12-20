@@ -23,6 +23,7 @@ const ChatWidget = () => {
 
   return (
     <>
+
       {!open && (
         <button className={styles.floatingBtn} onClick={() => setOpen(true)}>
           <MessageCircle size={26} className={styles.floatingIcon} />
@@ -32,12 +33,10 @@ const ChatWidget = () => {
       {open && (
         <div className={styles.chatPopup}>
           <div className={styles.chatBox}>
+
             <div className={styles.header}>
               <span className={styles.headerTitle}>Chat với bác sĩ</span>
-              <button
-                className={styles.headerClose}
-                onClick={() => setOpen(false)}
-              >
+              <button className={styles.headerClose} onClick={() => setOpen(false)}>
                 <X />
               </button>
             </div>
@@ -46,9 +45,8 @@ const ChatWidget = () => {
               {messages.map((msg, index) => (
                 <div
                   key={index}
-                  className={`${styles.msg} ${
-                    msg.from === "user" ? styles.msgUser : styles.msgDoctor
-                  }`}
+                  className={`${styles.msg} ${msg.from === "user" ? styles.msgUser : styles.msgDoctor
+                    }`}
                 >
                   {msg.text}
                 </div>
@@ -68,6 +66,7 @@ const ChatWidget = () => {
                 Gửi
               </button>
             </div>
+
           </div>
         </div>
       )}

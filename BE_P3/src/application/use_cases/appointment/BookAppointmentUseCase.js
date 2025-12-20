@@ -56,6 +56,7 @@ class BookAppointmentUseCase {
             patientId,
             doctorId,
             appointmentDate: startTime,
+            endTime: endTime,
             durationMinutes: durationMinutes,
             symptoms,
             type,

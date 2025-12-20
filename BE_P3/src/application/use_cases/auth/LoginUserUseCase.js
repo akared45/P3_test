@@ -25,8 +25,9 @@ class LoginUserUseCase {
             request.password,
             user.passwordHash
         );
+
         if (!isPasswordValid) {
-            throw new AuthorizationException("Sai mật khẩu");
+            throw new AuthorizationException("Incorrect password");
         }
 
         if (!user.isEmailVerified) {
@@ -37,6 +38,8 @@ class LoginUserUseCase {
             throw new AuthorizationException("Account has been deactivated");
         }
 
+        await this.userSessionRepository.deleteByUserId(user.id.toString());
+
         const tokenPayload = {
             sub: user.id.toString(),
             role: user.userType,
@@ -44,10 +47,8 @@ class LoginUserUseCase {
         };
 
         const accessToken = this.tokenService.generateToken(tokenPayload, '1h');
-
         const refreshPayload = { ...tokenPayload, type: TokenType.REFRESH };
         const refreshToken = this.tokenService.generateRefreshToken(refreshPayload);
-
         const sessionExpiry = this.tokenService.getRefreshTokenExpiry();
 
         const userSession = new UserSession({

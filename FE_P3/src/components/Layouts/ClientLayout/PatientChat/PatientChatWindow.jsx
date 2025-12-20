@@ -10,7 +10,7 @@ import {
 } from "@mui/icons-material";
 import React, { useState, useEffect } from 'react';
 import ChatAccessControl from './ChatAccessControl';
-
+import SessionTimer from "../../../ui/SessionTimer";
 export default function PatientChatWindow({
     activeApp,
     messages,
@@ -30,20 +30,24 @@ export default function PatientChatWindow({
     };
 
     const [isSessionActive, setIsSessionActive] = useState(false);
+    console.log(activeApp);
     useEffect(() => {
+
         if (!activeApp) return;
 
         const checkTime = () => {
             const now = new Date().getTime();
+
             const start = activeApp.startTime ? new Date(activeApp.startTime).getTime() : new Date(activeApp.appointmentDate).getTime();
             const end = activeApp.endTime ? new Date(activeApp.endTime).getTime() : (start + (activeApp.durationMinutes || 30) * 60000);
-            
-            const BUFFER_TIME = 15 * 60 * 1000; 
+
+            const BUFFER_TIME = 15 * 60 * 1000;
             const GRACE_PERIOD = 30 * 60 * 1000;
             const openTime = start - BUFFER_TIME;
             const closeTime = end + GRACE_PERIOD;
 
             const isActive = now >= openTime && now <= closeTime;
+
             setIsSessionActive(isActive);
         };
 
@@ -55,7 +59,7 @@ export default function PatientChatWindow({
 
     return (
         <Grid item sx={{ flex: 1, display: 'flex', flexDirection: 'column', bgcolor: '#f0f2f5', height: '100%', overflow: 'hidden' }}>
-            
+
             <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider', bgcolor: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '70px', flexShrink: 0 }}>
                 {activeApp ? (
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -68,7 +72,16 @@ export default function PatientChatWindow({
                                 {isSessionActive ? "🟢 Đang trong phiên tư vấn" : "⚪ Chưa bắt đầu / Đã kết thúc"}
                             </Typography>
                         </Box>
+                        {activeApp && (
+                            <SessionTimer
+                                appointment={activeApp}
+                                onTimeUp={() => {
+                                    console.log("Phòng chat đóng hoàn toàn");
+                                }}
+                            />
+                        )}
                     </Box>
+
                 ) : (
                     <Typography variant="subtitle1" fontWeight="medium" color="text.secondary">
                         Chào mừng đến với phòng tư vấn
@@ -86,7 +99,7 @@ export default function PatientChatWindow({
                 </Box>
             ) : (
                 <>
-                 
+
                     {!isSessionActive ? (
                         <ChatAccessControl appointment={activeApp} />
                     ) : (
@@ -131,7 +144,6 @@ export default function PatientChatWindow({
                                 <div ref={messagesEndRef} />
                             </Box>
 
-                            {/* KHUNG NHẬP TIN NHẮN */}
                             <Box sx={{ p: 2, bgcolor: 'white', borderTop: 1, borderColor: 'divider', flexShrink: 0 }}>
                                 <TextField
                                     fullWidth

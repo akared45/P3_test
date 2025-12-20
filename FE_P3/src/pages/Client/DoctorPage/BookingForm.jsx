@@ -37,16 +37,21 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
   const [symptoms, setSymptoms] = useState("");
 
   const getNextDate = (dayName) => {
-    const targetIndex = DAYS_CONFIG[dayName]?.index;
-    if (targetIndex === undefined) return null;
-    const date = new Date();
-    const currentDayIndex = date.getDay();
-    let daysToAdd = targetIndex - currentDayIndex;
-    if (daysToAdd <= 0) daysToAdd += 7;
-    date.setDate(date.getDate() + daysToAdd);
-    return date.toISOString().split("T")[0];
-  };
+  const targetIndex = DAYS_CONFIG[dayName]?.index;
+  if (targetIndex === undefined) return null;
+  
+  const date = new Date();
+  const currentDayIndex = date.getDay();
 
+  let daysToAdd = targetIndex - currentDayIndex;
+
+  if (daysToAdd < 0) {
+    daysToAdd += 7;
+  }
+  
+  date.setDate(date.getDate() + daysToAdd);
+  return date.toISOString().split("T")[0];
+};
   const isSlotBusy = (slotIsoTime) => {
     if (!busySlots?.length) return false;
     const slotTime = new Date(slotIsoTime).getTime();
@@ -59,51 +64,62 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
     setSelectedScheduleIndex(index);
     setSelectedSlot(null);
     setBusySlots([]);
-    const nextDateStr = getNextDate(schedule.day);
+
+    const date = new Date();
+    const currentDayIndex = date.getDay();
+    const targetDayIndex = DAYS_CONFIG[schedule.day]?.index;
+    let daysToAdd = targetDayIndex - currentDayIndex;
+
+    if (daysToAdd < 0) daysToAdd += 7;
+
+    if (daysToAdd === 0) {
+        const [endH, endM] = schedule.end.split(":").map(Number);
+        const nowH = date.getHours();
+        const nowM = date.getMinutes();
+
+        if (nowH > endH || (nowH === endH && nowM >= endM)) {
+            daysToAdd = 7;
+        }
+    }
+
+    const nextDateStr = new Date(date.setDate(date.getDate() + daysToAdd))
+        .toISOString()
+        .split("T")[0];
+
     setCheckingSlots(true);
-
     try {
-      const res = await appointmentApi.getBusySlots(
-        doctor.id || doctor._id,
-        nextDateStr
-      );
-      setBusySlots(res.data?.data || res.data || []);
+        const res = await appointmentApi.getBusySlots(doctor.id || doctor._id, nextDateStr);
+        setBusySlots(res.data?.data || res.data || []);
     } catch (e) {
-      console.error(e);
+        console.error(e);
     } finally {
-      setCheckingSlots(false);
+        setCheckingSlots(false);
     }
 
-    const doctorTimeZone = doctor.timeZone || "Asia/Ho_Chi_Minh";
+    const doctorTimeZone = doctor.timeZone || 'Asia/Ho_Chi_Minh';
     const slots = [];
-    let current = schedule.start.split(":").map(Number);
-    let end = schedule.end.split(":").map(Number);
+    const [startH, startM] = schedule.start.split(":").map(Number);
+    const [endH, endM] = schedule.end.split(":").map(Number);
+    let currentTotalMins = startH * 60 + startM;
+    const endTotalMins = endH * 60 + endM;
 
-    let curMins = current[0] * 60 + current[1];
-    const endMins = end[0] * 60 + end[1];
+    while (currentTotalMins < endTotalMins) {
+        const h = Math.floor(currentTotalMins / 60);
+        const m = currentTotalMins % 60;
+        const timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+        const dateTimeString = `${nextDateStr} ${timeStr}`;
+        const dateObj = fromZonedTime(dateTimeString, doctorTimeZone);
 
-    while (curMins < endMins) {
-      const h = Math.floor(curMins / 60);
-      const m = curMins % 60;
-      const timeStr = `${String(h).padStart(2, "0")}:${String(m).padStart(
-        2,
-        "0"
-      )}`;
-      const dateObj = fromZonedTime(
-        `${nextDateStr} ${timeStr}`,
-        doctorTimeZone
-      );
-
-      slots.push({
-        display: format(dateObj, "HH:mm"),
-        iso: dateObj.toISOString(),
-      });
-
-      curMins += 30;
+        if (dateObj.getTime() > new Date().getTime()) {
+            slots.push({
+                display: format(dateObj, 'HH:mm'),
+                iso: dateObj.toISOString()
+            });
+        }
+        currentTotalMins += 30;
     }
-
     setGeneratedSlots(slots);
-  };
+};
 
   const handleSubmit = () => {
     if (!selectedSlot || !symptoms) return;

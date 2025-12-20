@@ -1,6 +1,5 @@
 const { repositories } = require("../database/database");
 
-//--SERVICES (INFRASTRUCTURE)--//
 const BcryptAuthenticationService = require("../services/BcryptAuthenticationService");
 const JwtTokenService = require("../services/JwtTokenService");
 const AuthorizationService = require("../../domain/policies/AuthorizationService");
@@ -9,21 +8,13 @@ const LocalDiskStorageService = require('../storage/LocalDiskStorageService');
 const SocketService = require('../services/SocketService');
 const NodemailerEmailService = require("../services/NodemailerEmailService"); 
 const SecurityService = require('../services/SecurityService'); 
-
-// [MỚI] Payment Service
 const MomoPaymentService = require('../services/MomoPaymentService');
 
-//--REPOSITORIES (INFRASTRUCTURE)--//
 const MongoNotificationRepository = require('../../infrastructure/database/nosql/repositories/MongoNotificationRepository');
 const MongoMessageRepository = require('../../infrastructure/database/nosql/repositories/MongoMessageRepository');
-
-// [MỚI] Payment Repository
 const MongoPaymentRepository = require('../../infrastructure/database/nosql/repositories/MongoPaymentRepository');
-
-// [MỚI] Statistics Repository 👇
 const MongoStatisticsRepository = require('../../infrastructure/database/nosql/repositories/MongoStatisticsRepository');
 
-//--INSTANTIATE SERVICES--//
 const authenticationService = new BcryptAuthenticationService();
 const tokenService = new JwtTokenService();
 const authorizationService = new AuthorizationService();
@@ -32,11 +23,8 @@ const storageService = new LocalDiskStorageService();
 const socketService = new SocketService();
 const emailService = new NodemailerEmailService(); 
 const securityService = new SecurityService();
-
-// [MỚI] Khởi tạo Momo Service
 const momoPaymentService = new MomoPaymentService();
 
-//--INSTANTIATE REPOSITORIES--//
 const {
     userRepository,
     userSessionRepository,
@@ -47,15 +35,8 @@ const {
 
 const notificationRepository = new MongoNotificationRepository();
 const messageRepository = new MongoMessageRepository();
-
-// [MỚI] Khởi tạo Payment Repository
 const paymentRepository = new MongoPaymentRepository();
-
-// [MỚI] Khởi tạo Statistics Repository 👇
 const statisticsRepository = new MongoStatisticsRepository();
-
-
-//--USE_CASES--//
 
 // 1. Auth Module
 const RegisterPatientUseCase = require("../../application/use_cases/auth/RegisterPatientUseCase");
@@ -113,8 +94,6 @@ const resetPasswordUseCase = new ResetPasswordUseCase({
 const CreateDoctorUseCase = require("../../application/use_cases/admin/CreateDoctorUseCase");
 const UpdateDoctorUseCase = require("../../application/use_cases/admin/UpdateDoctorUseCase");
 const DeleteUserUseCase = require("../../application/use_cases/admin/DeleteUserUseCase");
-
-// [MỚI] Import Statistics Use Case 👇
 const GetDashboardStatsUseCase = require("../../application/use_cases/admin/GetDashboardStatsUseCase");
 
 const createDoctorUseCase = new CreateDoctorUseCase({
@@ -134,7 +113,6 @@ const deleteUserUseCase = new DeleteUserUseCase({
     authorizationService
 });
 
-// [MỚI] Khởi tạo Statistics Use Case 👇
 const getDashboardStatsUseCase = new GetDashboardStatsUseCase({
     statisticsRepository
 });
@@ -269,11 +247,7 @@ const AIController = require('../../presentation/controllers/AIController');
 const UploadController = require('../../presentation/controllers/UploadController');
 const ChatController = require("../../presentation/controllers/ChatController");
 const NotificationController = require('../../presentation/controllers/NotificationController');
-
-// [MỚI] Payment Controller
 const PaymentController = require('../../presentation/controllers/PaymentController');
-
-// [MỚI] Import Statistics Controller 👇
 const StatisticsController = require("../../presentation/controllers/StatisticsController");
 
 const authController = new AuthController({
