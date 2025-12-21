@@ -2,13 +2,15 @@ const { Resource } = require('../enums');
 const PatientPolicy = require('./PatientPolicy');
 const DoctorPolicy = require('./DoctorPolicy');
 const MedicalRecordPolicy = require('./MedicalRecordPolicy');
-
+const MedicationPolicy = require('./MedicationPolicy');
 class AuthorizationService {
     constructor() {
         this.policies = {
             [Resource.PATIENT]: PatientPolicy,
             [Resource.DOCTOR]: DoctorPolicy,
             [Resource.MEDICAL_RECORD]: MedicalRecordPolicy,
+            [Resource.MEDICATION]: MedicationPolicy,
+            
         };
     }
 

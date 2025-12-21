@@ -1,6 +1,18 @@
 const { repositories } = require("../database/database");
+const {
+    userRepository,
+    userSessionRepository,
+    appointmentRepository,
+    specializationRepository,
+    verificationTokenRepository
+} = repositories;
 
-// Services
+const MongoNotificationRepository = require('../../infrastructure/database/nosql/repositories/MongoNotificationRepository');
+const MongoMessageRepository = require('../../infrastructure/database/nosql/repositories/MongoMessageRepository');
+const MongoPaymentRepository = require('../../infrastructure/database/nosql/repositories/MongoPaymentRepository');
+const MongoStatisticsRepository = require('../../infrastructure/database/nosql/repositories/MongoStatisticsRepository');
+const MongoMedicationRepository = require('../../infrastructure/database/nosql/repositories/MongoMedicationRepository');
+
 const BcryptAuthenticationService = require("../services/BcryptAuthenticationService");
 const JwtTokenService = require("../services/JwtTokenService");
 const AuthorizationService = require("../../domain/policies/AuthorizationService");
@@ -10,14 +22,8 @@ const SocketService = require('../services/SocketService');
 const NodemailerEmailService = require("../services/NodemailerEmailService"); 
 const SecurityService = require('../services/SecurityService'); 
 const VnPayPaymentService = require('../services/VnPayPaymentService');
+const MedicalSafetyService = require('../../domain/services/MedicalSafetyService');
 
-// Repositories (NoSQL specific)
-const MongoNotificationRepository = require('../../infrastructure/database/nosql/repositories/MongoNotificationRepository');
-const MongoMessageRepository = require('../../infrastructure/database/nosql/repositories/MongoMessageRepository');
-const MongoPaymentRepository = require('../../infrastructure/database/nosql/repositories/MongoPaymentRepository');
-const MongoStatisticsRepository = require('../../infrastructure/database/nosql/repositories/MongoStatisticsRepository');
-
-// --- INSTANCE CREATION ---
 const authenticationService = new BcryptAuthenticationService();
 const tokenService = new JwtTokenService();
 const authorizationService = new AuthorizationService();
@@ -27,22 +33,15 @@ const socketService = new SocketService();
 const emailService = new NodemailerEmailService(); 
 const securityService = new SecurityService();
 const vnPayPaymentService = new VnPayPaymentService(); 
-const {
-    userRepository,
-    userSessionRepository,
-    appointmentRepository,
-    specializationRepository,
-    verificationTokenRepository
-} = repositories;
+const medicalSafetyService = new MedicalSafetyService();
 
 const notificationRepository = new MongoNotificationRepository();
 const messageRepository = new MongoMessageRepository();
 const paymentRepository = new MongoPaymentRepository();
 const statisticsRepository = new MongoStatisticsRepository();
+const medicationRepository = new MongoMedicationRepository();
 
-// ================= USE CASES =================
-
-// 1. Auth Module
+// --- Module: Auth ---
 const RegisterPatientUseCase = require("../../application/use_cases/auth/RegisterPatientUseCase");
 const LoginUserUseCase = require("../../application/use_cases/auth/LoginUserUseCase");
 const RefreshTokenUseCase = require("../../application/use_cases/auth/RefreshTokenUseCase");
@@ -51,77 +50,26 @@ const VerifyEmailUseCase = require("../../application/use_cases/auth/VerifyEmail
 const GeneratePasswordResetTokenUseCase = require("../../application/use_cases/auth/GeneratePasswordResetTokenUseCase");
 const ResetPasswordUseCase = require("../../application/use_cases/auth/ResetPasswordUseCase");
 
-const registerPatientUseCase = new RegisterPatientUseCase({
-    userRepository,
-    authenticationService,
-    tokenService, 
-    emailService,
-    verificationTokenRepository 
-});
+const registerPatientUseCase = new RegisterPatientUseCase({ userRepository, authenticationService, tokenService, emailService, verificationTokenRepository });
+const loginUserUseCase = new LoginUserUseCase({ userRepository, userSessionRepository, authenticationService, tokenService });
+const refreshTokenUseCase = new RefreshTokenUseCase({ userRepository, userSessionRepository, tokenService });
+const logoutUserUseCase = new LogoutUserUseCase({ userSessionRepository });
+const verifyEmailUseCase = new VerifyEmailUseCase({ userRepository, verificationTokenRepository });
+const generatePasswordResetTokenUseCase = new GeneratePasswordResetTokenUseCase({ userRepository, verificationTokenRepository, emailService, securityService });
+const resetPasswordUseCase = new ResetPasswordUseCase({ userRepository, verificationTokenRepository, authenticationService });
 
-const loginUserUseCase = new LoginUserUseCase({
-    userRepository,
-    userSessionRepository,
-    authenticationService,
-    tokenService
-});
-
-const refreshTokenUseCase = new RefreshTokenUseCase({
-    userRepository,
-    userSessionRepository,
-    tokenService
-});
-
-const logoutUserUseCase = new LogoutUserUseCase({
-    userSessionRepository
-});
-
-const verifyEmailUseCase = new VerifyEmailUseCase({
-    userRepository,
-    verificationTokenRepository 
-});
-
-const generatePasswordResetTokenUseCase = new GeneratePasswordResetTokenUseCase({
-    userRepository,
-    verificationTokenRepository,
-    emailService,
-    securityService
-});
-
-const resetPasswordUseCase = new ResetPasswordUseCase({
-    userRepository,
-    verificationTokenRepository,
-    authenticationService 
-});
-
-// 2. Admin Module
+// --- Module: Admin & Stats ---
 const CreateDoctorUseCase = require("../../application/use_cases/admin/CreateDoctorUseCase");
 const UpdateDoctorUseCase = require("../../application/use_cases/admin/UpdateDoctorUseCase");
 const DeleteUserUseCase = require("../../application/use_cases/admin/DeleteUserUseCase");
 const GetDashboardStatsUseCase = require("../../application/use_cases/admin/GetDashboardStatsUseCase");
 
-const createDoctorUseCase = new CreateDoctorUseCase({
-    userRepository,
-    authenticationService,
-    authorizationService
-});
+const createDoctorUseCase = new CreateDoctorUseCase({ userRepository, authenticationService, authorizationService });
+const updateDoctorUseCase = new UpdateDoctorUseCase({ userRepository, authorizationService });
+const deleteUserUseCase = new DeleteUserUseCase({ userRepository, userSessionRepository, authorizationService });
+const getDashboardStatsUseCase = new GetDashboardStatsUseCase({ statisticsRepository });
 
-const updateDoctorUseCase = new UpdateDoctorUseCase({
-    userRepository,
-    authorizationService
-});
-
-const deleteUserUseCase = new DeleteUserUseCase({
-    userRepository,
-    userSessionRepository,
-    authorizationService
-});
-
-const getDashboardStatsUseCase = new GetDashboardStatsUseCase({
-    statisticsRepository
-});
-
-// 3. Specialization Module
+// --- Module: Specialization ---
 const GetAllSpecializationsUseCase = require("../../application/use_cases/shared/GetAllSpecializationsUseCase");
 const CreateSpecializationUseCase = require("../../application/use_cases/admin/CreateSpecializationUseCase");
 const UpdateSpecializationUseCase = require("../../application/use_cases/admin/UpdateSpecializationUseCase");
@@ -134,7 +82,7 @@ const updateSpecializationUseCase = new UpdateSpecializationUseCase({ specializa
 const deleteSpecializationUseCase = new DeleteSpecializationUseCase({ specializationRepository });
 const getSpecializationDetailUseCase = new GetSpecializationDetailUseCase({ specializationRepository });
 
-// 4. Doctor & Patient Module
+// --- Module: Doctor & Patient ---
 const GetDoctorListUseCase = require("../../application/use_cases/shared/GetDoctorListUseCase");
 const GetDoctorDetailUseCase = require("../../application/use_cases/shared/GetDoctorDetailUseCase");
 const GetPatientListUseCase = require("../../application/use_cases/shared/GetPatientListUseCase");
@@ -149,68 +97,47 @@ const getPatientListUseCase = new GetPatientListUseCase({ userRepository, author
 const getPatientProfileUseCase = new GetPatientProfileUseCase({ userRepository, authorizationService });
 const updatePatientProfileUseCase = new UpdatePatientProfileUseCase({ userRepository, authorizationService });
 const getUserProfileUseCase = new GetUserProfileUseCase({ userRepository, authorizationService });
+const getAvailableSlotsUseCase = new GetDoctorAvailableSlots({ userRepository, appointmentRepository });
 
-const getAvailableSlotsUseCase = new GetDoctorAvailableSlots({
-    userRepository,
-    appointmentRepository
-});
-
-// 5. Chat Module
+// --- Module: Chat ---
 const SendMessageUseCase = require('../../application/use_cases/chat/SendMessageUseCase');
 const GetChatHistoryUseCase = require('../../application/use_cases/chat/GetChatHistoryUseCase');
 
-const sendMessageUseCase = new SendMessageUseCase({
-    messageRepository,
-    appointmentRepository,
-    socketService
-});
+const sendMessageUseCase = new SendMessageUseCase({ messageRepository, appointmentRepository, socketService });
+const getChatHistoryUseCase = new GetChatHistoryUseCase({ messageRepository, appointmentRepository });
 
-const getChatHistoryUseCase = new GetChatHistoryUseCase({
-    messageRepository,
-    appointmentRepository
-});
-
-// 6. Booking & Slots Module
+// --- Module: Appointment ---
 const BookAppointmentUseCase = require("../../application/use_cases/appointment/BookAppointmentUseCase");
 const UpdateAppointmentStatusUseCase = require("../../application/use_cases/appointment/UpdateAppointmentStatusUseCase");
 const GetMyAppointmentsUseCase = require("../../application/use_cases/appointment/GetMyAppointmentsUseCase"); 
 const GetBusySlotsUseCase = require("../../application/use_cases/appointment/GetBusySlotsUseCase");
 const CompleteAppointmentUseCase = require('../../application/use_cases/appointment/CompleteAppointmentUseCase');
 
-const bookAppointmentUseCase = new BookAppointmentUseCase({
-    appointmentRepository,
-    userRepository,
-    emailService,
-    socketService,
-    notificationRepository
-});
+const bookAppointmentUseCase = new BookAppointmentUseCase({ appointmentRepository, userRepository, emailService, socketService, notificationRepository });
+const updateAppointmentStatusUseCase = new UpdateAppointmentStatusUseCase({ appointmentRepository });
+const getMyAppointmentsUseCase = new GetMyAppointmentsUseCase({ appointmentRepository });
+const getBusySlotsUseCase = new GetBusySlotsUseCase({ appointmentRepository });
+const completeAppointmentUseCase = new CompleteAppointmentUseCase({ appointmentRepository, userRepository, emailService });
 
-const updateAppointmentStatusUseCase = new UpdateAppointmentStatusUseCase({
-    appointmentRepository
-});
-
-const getMyAppointmentsUseCase = new GetMyAppointmentsUseCase({
-    appointmentRepository
-});
-
-const getBusySlotsUseCase = new GetBusySlotsUseCase({
-    appointmentRepository
-});
-
-const completeAppointmentUseCase = new CompleteAppointmentUseCase({
-    appointmentRepository,
-    userRepository,
-    emailService
-});
-
-// 7. AI Module
+// --- Module: AI ---
 const SuggestSpecialtyUseCase = require('../../application/use_cases/ai/SuggestSpecialtyUseCase');
-const suggestSpecialtyUseCase = new SuggestSpecialtyUseCase({ 
-    aiService,
-    specializationRepository 
+const suggestSpecialtyUseCase = new SuggestSpecialtyUseCase({ aiService, specializationRepository });
+
+// --- Module: Medication ---
+const AddPrescriptionUseCase = require('../../application/use_cases/medication/AddPrescriptionUseCase');
+const GetMedicationCatalogUseCase = require('../../application/use_cases/medication/GetMedicationCatalogUseCase');
+const CreateMedicationUseCase = require('../../application/use_cases/medication/CreateMedicationUseCase');
+const UpdateMedicationUseCase = require('../../application/use_cases/medication/UpdateMedicationUseCase');
+const DeleteMedicationUseCase = require('../../application/use_cases/medication/DeleteMedicationUseCase');
+
+const getMedicationCatalogUseCase = new GetMedicationCatalogUseCase({ medicationRepository });
+const addPrescriptionUseCase = new AddPrescriptionUseCase({
+    appointmentRepository,
+    medicationRepository,
+    medicalSafetyService
 });
 
-// 8. Notification Module
+// --- Module: Notification ---
 const GetNotificationsUseCase = require('../../application/use_cases/notification/GetNotificationsUseCase');
 const MarkNotificationAsReadUseCase = require('../../application/use_cases/notification/MarkNotificationAsReadUseCase');
 const DeleteNotificationUseCase = require('../../application/use_cases/notification/DeleteNotificationUseCase');
@@ -219,30 +146,13 @@ const getNotificationsUseCase = new GetNotificationsUseCase({ notificationReposi
 const markNotificationAsReadUseCase = new MarkNotificationAsReadUseCase({ notificationRepository });
 const deleteNotificationUseCase = new DeleteNotificationUseCase({ notificationRepository });
 
-// 9. Payment Module (VNPAY)
+// --- Module: Payment ---
 const CreateVnPayUrlUseCase = require('../../application/use_cases/payment/CreateVnPayUrlUseCase');
-// Lưu ý: Nếu bạn chưa tách logic return ra UseCase riêng thì dùng vnPayPaymentService trong Controller
-// Nhưng theo chuẩn Clean Architecture thì nên dùng UseCase này:
 const HandleVnPayCallbackUseCase = require('../../application/use_cases/payment/HandleVnPayCallbackUseCase');
 
-const createVnPayUrlUseCase = new CreateVnPayUrlUseCase({
-    appointmentRepository,
-    paymentService: vnPayPaymentService // Inject Service VNPAY vào UseCase
-});
+const createVnPayUrlUseCase = new CreateVnPayUrlUseCase({ appointmentRepository, paymentService: vnPayPaymentService });
+const handleVnPayCallbackUseCase = new HandleVnPayCallbackUseCase({ appointmentRepository, paymentRepository, vnPayPaymentService, socketService, notificationRepository, userRepository, emailService });
 
-// UseCase xử lý khi VNPAY gọi về (Return URL / IPN)
-const handleVnPayCallbackUseCase = new HandleVnPayCallbackUseCase({
-    appointmentRepository,
-    paymentRepository,
-    vnPayPaymentService, // Cần cái này để verify checksum
-    socketService,
-    notificationRepository,
-    userRepository,
-    emailService
-});
-
-
-// ================= CONTROLLERS =================
 const AuthController = require("../../presentation/controllers/AuthController");
 const AdminController = require("../../presentation/controllers/AdminController");
 const DoctorController = require("../../presentation/controllers/DoctorController");
@@ -256,82 +166,38 @@ const ChatController = require("../../presentation/controllers/ChatController");
 const NotificationController = require('../../presentation/controllers/NotificationController');
 const PaymentController = require('../../presentation/controllers/PaymentController');
 const StatisticsController = require("../../presentation/controllers/StatisticsController");
+const MedicationController = require('../../presentation/controllers/MedicationController');
 
-const authController = new AuthController({
-    registerPatientUseCase,
-    loginUserUseCase,
-    refreshTokenUseCase,
-    logoutUserUseCase,
-    verifyEmailUseCase,
-    generatePasswordResetTokenUseCase,
-    resetPasswordUseCase
+const authController = new AuthController({ registerPatientUseCase, loginUserUseCase, refreshTokenUseCase, logoutUserUseCase, verifyEmailUseCase, generatePasswordResetTokenUseCase, resetPasswordUseCase });
+const adminController = new AdminController({ createDoctorUseCase, updateDoctorUseCase, deleteUserUseCase });
+const doctorController = new DoctorController({ getDoctorListUseCase, getDoctorDetailUseCase, getAvailableSlotsUseCase });
+const patientController = new PatientController({ getPatientListUseCase, updatePatientProfileUseCase, getPatientProfileUseCase });
+const userController = new UserController({ getUserProfileUseCase });
+const appointmentController = new AppointmentController({ bookAppointmentUseCase, updateAppointmentStatusUseCase, getMyAppointmentsUseCase, getBusySlotsUseCase, completeAppointmentUseCase });
+const specializationController = new SpecializationController({ getAllSpecializationsUseCase, createSpecializationUseCase, updateSpecializationUseCase, deleteSpecializationUseCase, getSpecializationDetailUseCase });
+const chatController = new ChatController({ getChatHistoryUseCase });
+const aiController = new AIController({ suggestSpecialtyUseCase });
+const uploadController = new UploadController({ storageService });
+const notificationController = new NotificationController({ getNotificationsUseCase, markNotificationAsReadUseCase, deleteNotificationUseCase });
+const paymentController = new PaymentController({ createVnPayUrlUseCase, handleVnPayCallbackUseCase, vnPayPaymentService });
+const statisticsController = new StatisticsController({ getDashboardStatsUseCase });
+
+
+const createMedicationUseCase = new CreateMedicationUseCase({ medicationRepository });
+const updateMedicationUseCase = new UpdateMedicationUseCase({ medicationRepository });
+const deleteMedicationUseCase = new DeleteMedicationUseCase({ 
+    medicationRepository, 
+    appointmentRepository 
 });
 
-const adminController = new AdminController({
-    createDoctorUseCase,
-    updateDoctorUseCase,
-    deleteUserUseCase
+const medicationController = new MedicationController({
+    getMedicationCatalogUseCase,
+    addPrescriptionUseCase,
+    createMedicationUseCase,
+    updateMedicationUseCase,
+    deleteMedicationUseCase
 });
 
-const doctorController = new DoctorController({
-    getDoctorListUseCase,
-    getDoctorDetailUseCase,
-    getAvailableSlotsUseCase 
-});
-
-const patientController = new PatientController({
-    getPatientListUseCase,
-    updatePatientProfileUseCase,
-    getPatientProfileUseCase
-});
-
-const userController = new UserController({
-    getUserProfileUseCase
-});
-
-const appointmentController = new AppointmentController({
-    bookAppointmentUseCase,
-    updateAppointmentStatusUseCase,
-    getMyAppointmentsUseCase,
-    getBusySlotsUseCase,
-    completeAppointmentUseCase
-});
-
-const specializationController = new SpecializationController({
-    getAllSpecializationsUseCase,
-    createSpecializationUseCase,
-    updateSpecializationUseCase,
-    deleteSpecializationUseCase,
-    getSpecializationDetailUseCase
-});
-
-const chatController = new ChatController({
-    getChatHistoryUseCase
-});
-
-const aiController = new AIController({
-    suggestSpecialtyUseCase
-});
-
-const uploadController = new UploadController({
-    storageService
-});
-
-const notificationController = new NotificationController({
-    getNotificationsUseCase,
-    markNotificationAsReadUseCase,
-    deleteNotificationUseCase 
-});
-
-const paymentController = new PaymentController({
-    createVnPayUrlUseCase, 
-    handleVnPayCallbackUseCase, // Inject UseCase xử lý Return
-    vnPayPaymentService // (Dự phòng) Nếu Controller bạn dùng service trực tiếp thì cần dòng này
-});
-
-const statisticsController = new StatisticsController({
-    getDashboardStatsUseCase
-});
 
 module.exports = {
     authController,
@@ -347,6 +213,7 @@ module.exports = {
     notificationController,
     paymentController,
     statisticsController,
+    medicationController, 
     socketService,
     tokenService,
     sendMessageUseCase,

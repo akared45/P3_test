@@ -126,3 +126,16 @@ export const paymentApi = {
 export const statisticsApi = {
   getDashboardStats: (params) => axiosClient.get('/admin/stats', { params }),
 };
+
+export const medicationApi = {
+  getAll: (params) => axiosClient.get("/medication", { params }),
+
+  create: (data) => axiosClient.post("/medication", data),
+
+  update: (id, data) => axiosClient.put(`/medication/${id}`, data),
+
+  delete: (id) => axiosClient.delete(`/medication/${id}`),
+
+  addPrescription: (appointmentId, data) =>
+    axiosClient.post(`/medication/appointments/${appointmentId}/prescriptions`, data),
+};

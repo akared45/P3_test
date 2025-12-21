@@ -1,5 +1,6 @@
 const IAppointmentRepository = require('../../../../domain/repositories/IAppointmentRepository');
 const AppointmentModel = require('../models/AppointmentModel');
+const {UserModel} = require('../models/UserModel');
 const AppointmentMapper = require('../mappers/AppointmentMapper');
 const { v4: uuidv4 } = require('uuid');
 
@@ -75,6 +76,39 @@ class MongoAppointmentRepository extends IAppointmentRepository {
             .lean();
 
         return docs;
+    }
+
+    async addPrescription(appointmentId, prescriptionItem) {
+        return await AppointmentModel.findByIdAndUpdate(
+            appointmentId,
+            {
+                $push: { prescriptions: prescriptionItem }
+            },
+            { new: true }
+        );
+    }
+
+    async getPatientProfile(patientId) {
+        const user = await UserModel.findById(patientId);
+        if (!user) throw new Error("Không tìm thấy thông tin bệnh nhân");
+
+        return {
+            age: this._calculateAge(user.dob),
+            isPregnant: user.healthDetails?.isPregnant || false,
+            allergies: user.healthDetails?.allergies || []
+        };
+    }
+
+    _calculateAge(dob) {
+        if (!dob) return 0;
+        const birthDate = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
     }
 }
 

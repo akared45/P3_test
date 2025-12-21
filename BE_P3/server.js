@@ -20,6 +20,7 @@
   const notificationRoutes = require('./src/presentation/routes/notification_routes');
   const chatRoutes = require ('./src/presentation/routes/chat_routes');
   const paymentRoutes = require('./src/presentation/routes/payment_routes');
+  const medicationRoutes = require ('./src/presentation/routes/medication_routes');
 
   const app = express();
   const PORT = process.env.PORT || 3000;
@@ -58,6 +59,7 @@
   app.use('/api/notifications', notificationRoutes);
   app.use('/api/chat',chatRoutes);
   app.use('/api/payment', paymentRoutes);
+  app.use('/api/medication', medicationRoutes)
 
   app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK', message: 'Server is healthy' });

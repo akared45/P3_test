@@ -18,8 +18,7 @@ const schemas = {
             'date.format': 'Định dạng ngày giờ không hợp lệ (ISO 8601)'
         }),
         symptoms: Joi.string().required().min(5),
-        // Thêm type
-        type: Joi.string().valid('VIDEO', 'VOICE', 'CHAT', 'in_person').default('VIDEO'),
+        type: Joi.string().valid('VIDEO', 'VOICE', 'CHAT', 'in_person').default('CHAT'),
         notes: Joi.string().allow('', null)
     })
 };

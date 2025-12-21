@@ -9,6 +9,7 @@ const MongoMessageRepository = require('./nosql/repositories/MongoMessageReposit
 const MongoVerificationTokenRepository = require('./nosql/repositories/MongoVerificationTokenRepository');
 const MongoPaymentRepository= require('./nosql/repositories/MongoPaymentRepository')
 const MongoStatisticsRepository= require('./nosql/repositories/MongoStatisticsRepository');
+const MongoMedicationRepository= require('./nosql/repositories/MongoMedicationRepository');
 
 const dbType = process.env.DB_TYPE || 'nosql';
 
@@ -30,7 +31,8 @@ if (dbType === 'nosql') {
     specializationRepository: new MongoSpecializationRepository(),
     verificationTokenRepository: new MongoVerificationTokenRepository(),
     paymentRepository: new MongoPaymentRepository(),
-    statisticsRepository: new MongoStatisticsRepository()
+    statisticsRepository: new MongoStatisticsRepository(),
+    medicationRepository: new MongoMedicationRepository()
   };
 } else {
   repositories = {
