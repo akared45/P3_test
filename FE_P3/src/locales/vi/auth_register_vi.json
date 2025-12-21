@@ -18,5 +18,42 @@
   "validationPasswordRequired": "Mật khẩu không được để trống", 
   "validationConfirmMismatch": "Mật khẩu không khớp", 
   "validationConfirmRequired": "Bạn cần nhập lại mật khẩu",
-  "toastSuccess": "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản." 
+  "toastSuccess": "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản." ,
+  "verifyEmail": {
+    "title": "Xác thực tài khoản",
+    "verifyingMessage": "Đang xác thực email...",
+    "successMessage": "Xác thực email thành công! Bạn có thể đăng nhập ngay bây giờ.",
+    "errorNoToken": "Không tìm thấy mã xác thực. Vui lòng kiểm tra lại đường dẫn.",
+    "errorInvalid": "Mã xác thực không hợp lệ hoặc đã hết hạn.",
+    "buttonGoToLogin": "Đến trang đăng nhập",
+    "buttonBackToRegister": "Quay lại đăng ký"
+  },
+  "forgotPassword": {
+    "title": "Quên mật khẩu?",
+    "description": "Nhập địa chỉ email đã đăng ký của bạn. Chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "nhap-email-cua-ban@example.com",
+    "buttonSubmit": "Gửi yêu cầu",
+    "buttonSubmitting": "Đang gửi...",
+    "linkBackToLogin": "Quay lại đăng nhập",
+    "validationEmailRequired": "Vui lòng nhập email",
+    "validationEmailInvalid": "Email không hợp lệ",
+    "toastSuccess": "Nếu email tồn tại trong hệ thống, hướng dẫn đặt lại mật khẩu đã được gửi!",
+    "toastError": "Có lỗi xảy ra, vui lòng thử lại."
+  },
+   "resetPassword": {
+    "title": "Đặt lại mật khẩu",
+    "description": "Vui lòng nhập mật khẩu mới của bạn bên dưới.",
+    "newPasswordLabel": "Mật khẩu mới",
+    "confirmPasswordLabel": "Xác nhận mật khẩu",
+    "buttonSubmit": "Xác nhận thay đổi",
+    "buttonSubmitting": "Đang xử lý...",
+    "validationNewPasswordMin": "Mật khẩu phải có ít nhất 6 kí tự",
+    "validationNewPasswordRequired": "Mật khẩu mới không được để trống",
+    "validationConfirmMismatch": "Mật khẩu xác nhận không khớp",
+    "validationConfirmRequired": "Vui lòng xác nhận mật khẩu",
+    "toastInvalidLink": "Liên kết không hợp lệ hoặc thiếu thông tin xác thực.",
+    "toastSuccess": "Đặt lại mật khẩu thành công! Vui lòng đăng nhập lại.",
+    "toastError": "Đặt lại mật khẩu thất bại."
+  }
 }
