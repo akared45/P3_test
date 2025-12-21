@@ -5,11 +5,12 @@ import * as Yup from "yup";
 import { ToastContext } from "@providers/ToastProvider";
 import Button from "@components/ui/Button";
 import TextFields from "@components/ui/TextFields";
-import { authApi } from "@services/api"; 
+import { authApi } from "@services/api";
 import styles from "./Login/style.module.scss";
 import Illustration from "@images/draw.png";
-
+import { useTranslation } from "react-i18next";
 const ForgotPassword = () => {
+  const { t } = useTranslation("auth_register");
   const { toast } = useContext(ToastContext);
   const [loading, setLoading] = useState(false);
 
@@ -19,18 +20,19 @@ const ForgotPassword = () => {
     },
     validationSchema: Yup.object({
       email: Yup.string()
-        .email("Email không hợp lệ")
-        .required("Vui lòng nhập email"),
+        .email(t("forgotPassword.validationEmailInvalid"))
+        .required(t("forgotPassword.validationEmailRequired")),
     }),
     onSubmit: async (values) => {
       setLoading(true);
       try {
         await authApi.forgotPassword(values);
-        toast.success("Nếu email tồn tại trong hệ thống, hướng dẫn đặt lại mật khẩu đã được gửi!");
-        
+        toast.success(t("forgotPassword.toastSuccess"));
       } catch (err) {
         console.error(err);
-        toast.error(err.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại.");
+        toast.error(
+          err.response?.data?.message || t("forgotPassword.toastError")
+        );
       } finally {
         setLoading(false);
       }
@@ -46,9 +48,11 @@ const ForgotPassword = () => {
       <div className={styles.auth__content}>
         <form className={styles.auth__form} onSubmit={formik.handleSubmit}>
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-primary mb-2">Quên mật khẩu?</h2>
+            <h2 className="text-2xl font-bold text-primary mb-2">
+              {t("forgotPassword.title")}
+            </h2>
             <p className="text-gray-500 text-sm">
-              Nhập địa chỉ email đã đăng ký của bạn. Chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu.
+              {t("forgotPassword.description")}
             </p>
           </div>
 
@@ -62,14 +66,18 @@ const ForgotPassword = () => {
           />
 
           <Button
-            content={loading ? "Đang gửi..." : "Gửi yêu cầu"}
+            content={
+              loading
+                ? t("forgotPassword.buttonSubmitting")
+                : t("forgotPassword.buttonSubmit")
+            }
             type="submit"
             disabled={loading}
           />
 
           <div className={styles.auth__register}>
             <Link to="/dang-nhap" className={styles.auth__register_link}>
-              &larr; Quay lại đăng nhập
+              &larr; {t("forgotPassword.linkBackToLogin")}
             </Link>
           </div>
         </form>

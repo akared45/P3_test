@@ -6,10 +6,11 @@ import { ToastContext } from "@providers/ToastProvider";
 import Button from "@components/ui/Button";
 import TextFields from "@components/ui/TextFields";
 import { authApi } from "@services/api";
-import styles from "./Login/style.module.scss"; 
+import styles from "./Login/style.module.scss";
 import Illustration from "@images/draw.png";
-
+import { useTranslation } from "react-i18next";
 const ResetPassword = () => {
+  const { t } = useTranslation("auth_register");
   const navigate = useNavigate();
   const { toast } = useContext(ToastContext);
   const [loading, setLoading] = useState(false);
@@ -24,15 +25,18 @@ const ResetPassword = () => {
     },
     validationSchema: Yup.object({
       newPassword: Yup.string()
-        .min(6, "Mật khẩu phải có ít nhất 6 kí tự")
-        .required("Mật khẩu mới không được để trống"),
+        .min(6, t("resetPassword.validationNewPasswordMin"))
+        .required(t("resetPassword.validationNewPasswordRequired")),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref("newPassword"), null], "Mật khẩu xác nhận không khớp")
-        .required("Vui lòng xác nhận mật khẩu"),
+        .oneOf(
+          [Yup.ref("newPassword"), null],
+          t("resetPassword.validationConfirmMismatch")
+        )
+        .required(t("resetPassword.validationConfirmRequired")),
     }),
     onSubmit: async (values) => {
       if (!token || !email) {
-        toast.error("Liên kết không hợp lệ hoặc thiếu thông tin xác thực.");
+        toast.error(t("resetPassword.toastInvalidLink"));
         return;
       }
 
@@ -42,15 +46,15 @@ const ResetPassword = () => {
           token: token,
           email: email,
           newPassword: values.newPassword,
-          confirmPassword: values.confirmPassword
+          confirmPassword: values.confirmPassword,
         });
 
-        toast.success("Đặt lại mật khẩu thành công! Vui lòng đăng nhập lại.");
+        toast.success(t("resetPassword.toastSuccess"));
         navigate("/dang-nhap");
-
       } catch (err) {
         console.error(err);
-        const errorMsg = err.response?.data?.message || "Đặt lại mật khẩu thất bại.";
+        const errorMsg =
+          err.response?.data?.message || t("resetPassword.toastError");
         toast.error(errorMsg);
       } finally {
         setLoading(false);
@@ -67,14 +71,16 @@ const ResetPassword = () => {
       <div className={styles.auth__content}>
         <form className={styles.auth__form} onSubmit={formik.handleSubmit}>
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-primary mb-2">Đặt lại mật khẩu</h2>
+            <h2 className="text-2xl font-bold text-primary mb-2">
+              {t("resetPassword.title")}
+            </h2>
             <p className="text-gray-500 text-sm">
-              Vui lòng nhập mật khẩu mới của bạn bên dưới.
+              {t("resetPassword.description")}
             </p>
           </div>
 
           <TextFields
-            label={"Mật khẩu mới"}
+            label={t("resetPassword.newPasswordLabel")}
             type="password"
             id="newPassword"
             name="newPassword"
@@ -82,7 +88,7 @@ const ResetPassword = () => {
           />
 
           <TextFields
-            label={"Xác nhận mật khẩu"}
+            label={t("resetPassword.confirmPasswordLabel")}
             type="password"
             id="confirmPassword"
             name="confirmPassword"
@@ -90,7 +96,11 @@ const ResetPassword = () => {
           />
 
           <Button
-            content={loading ? "Đang xử lý..." : "Xác nhận thay đổi"}
+            content={
+              loading
+                ? t("resetPassword.buttonSubmitting")
+                : t("resetPassword.buttonSubmit")
+            }
             type="submit"
             disabled={loading}
           />

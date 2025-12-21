@@ -18,5 +18,45 @@
   "validationPasswordRequired": "Password is required", 
   "validationConfirmMismatch": "Passwords do not match", 
   "validationConfirmRequired": "Please confirm your password", 
-  "toastSuccess": "Registration successful! Please check your email to activate your account."
+  "toastSuccess": "Registration successful! Please check your email to activate your account.",
+  "verifyEmail": {
+  "title": "Verify Account",
+  "verifyingMessage": "Verifying your email...",
+  "successMessage": "Email verified successfully! You can log in now.",
+  "errorNoToken": "No verification token found. Please check the link.",
+  "errorInvalid": "Invalid or expired verification token.",
+  "buttonGoToLogin": "Go to Login",
+  "buttonBackToRegister": "Back to Register"
+},
+"forgotPassword": {
+  "title": "Forgot Password?",
+  "description": "Enter your registered email address. We will send you a link to reset your password.",
+  "emailLabel": "Email",
+  "emailPlaceholder": "your-email@example.com",
+  "buttonSubmit": "Send Request",
+  "buttonSubmitting": "Sending...",
+  "linkBackToLogin": "Back to Login",
+  "validationEmailRequired": "Please enter your email",
+  "validationEmailInvalid": "Invalid email address",
+  "toastSuccess": "If the email exists in our system, a password reset link has been sent!",
+  "toastError": "An error occurred, please try again."
+},
+
+  "resetPassword": {
+    "title": "Reset Password",
+    "description": "Please enter your new password below.",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm Password",
+    "buttonSubmit": "Confirm Changes",
+    "buttonSubmitting": "Processing...",
+    "validationNewPasswordMin": "Password must be at least 6 characters",
+    "validationNewPasswordRequired": "New password is required",
+    "validationConfirmMismatch": "Confirm password does not match",
+    "validationConfirmRequired": "Please confirm your password",
+    "toastInvalidLink": "Invalid link or missing authentication info.",
+    "toastSuccess": "Password reset successfully! Please log in again.",
+    "toastError": "Password reset failed."
+  }
+
+
 }
