@@ -217,7 +217,7 @@ const DoctorCard = ({ doctor, onBook }) => {
           p: 3,
           pt: 2,
           display: "flex",
-          flexDirection: "row",
+          flexDirection: "column",
           gap: 2,
           alignItems: "center",
         }}

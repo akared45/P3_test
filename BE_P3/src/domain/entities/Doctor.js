@@ -45,8 +45,7 @@ class Doctor extends User {
     if (!(dateObj instanceof Date) || isNaN(dateObj)) return false;
     const dayName = getWeekdayInTimezone(dateObj, this.timeZone);
     const hasSchedule = this.schedules.some(s => s.day === dayName);
-    const isUnavailable = this.unavailableDates.some(u => u.includes(dateObj));
-    return hasSchedule && !isUnavailable;
+    return hasSchedule;
   }
 
   isWorkingAt(startTime, durationMinutes) {

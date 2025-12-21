@@ -30,7 +30,7 @@ class CreatePaymentUrlUseCase {
         const amount = 50000;
         const uniqueOrderId = `${appointmentId}_${new Date().getTime()}`;
         const notifyUrl = `${process.env.BACKEND_URL}/api/payment/momo/ipn`;
-        const returnUrl = `${process.env.FRONTEND_URL}/payment-result`;
+        const returnUrl = `${process.env.CLIENT_URL}/payment-result`;
 
         const payUrl = await this.momoPaymentService.createPaymentUrl({
             orderId: uniqueOrderId,

@@ -23,7 +23,6 @@ class HandleMomoCallbackUseCase {
     }
 
     async execute(momoRequest) {
-        console.log("Đang xử lý Momo IPN cho Order:", momoRequest.orderId);
         const isValidSignature = this.momoPaymentService.verifySignature({
             partnerCode: momoRequest.partnerCode,
             orderId: momoRequest.orderId,
@@ -46,7 +45,6 @@ class HandleMomoCallbackUseCase {
         }
 
         const realAppointmentId = momoRequest.orderId.split('_')[0];
-        console.log("👉 ID Lịch hẹn gốc:", realAppointmentId);
         const appointment = await this.appointmentRepository.findById(realAppointmentId);
 
         if (!appointment) {

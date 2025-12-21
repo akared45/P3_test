@@ -1,7 +1,8 @@
 import React from "react";
 import { Grid, TextField, MenuItem } from "@mui/material";
-
+import { useTranslation } from "react-i18next";
 const BasicInfo = ({ formik, isEditing }) => {
+  const { t } = useTranslation("profile_client");
   const { values, errors, touched, handleChange, handleBlur } = formik;
 
   return (
@@ -9,7 +10,7 @@ const BasicInfo = ({ formik, isEditing }) => {
       <Grid item xs={12} sm={6}>
         <TextField
           fullWidth
-          label="Họ và tên"
+          label={t("basicInfo.fullName")}
           name="fullName"
           value={values.fullName}
           onChange={handleChange}
@@ -35,7 +36,7 @@ const BasicInfo = ({ formik, isEditing }) => {
       <Grid item xs={12} sm={6}>
         <TextField
           fullWidth
-          label="Số điện thoại"
+          label={t("basicInfo.phone")}
           name="phone"
           value={values.phone}
           onChange={handleChange}
@@ -51,7 +52,7 @@ const BasicInfo = ({ formik, isEditing }) => {
         <TextField
           fullWidth
           select
-          label="Giới tính"
+          label={t("basicInfo.gender")}
           name="gender"
           value={values.gender}
           onChange={handleChange}
@@ -67,7 +68,7 @@ const BasicInfo = ({ formik, isEditing }) => {
       <Grid item xs={12} sm={6}>
         <TextField
           fullWidth
-          label="Ngày sinh"
+          label={t("basicInfo.dateOfBirth")}
           name="dateOfBirth"
           type="date"
           value={values.dateOfBirth}

@@ -4,7 +4,7 @@ class CreatePaymentUrlRequest {
         if (!appointmentId) throw new Error("Missing appointmentId");
         this.userId = userId;
         this.appointmentId = appointmentId;
-        this.method = method || 'MOMO';
+        this.method = method || 'VNPAY'; 
     }
 }
 

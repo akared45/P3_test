@@ -1,0 +1,152 @@
+{
+
+   
+      "title": "Personal Profile",
+      "subtitle": "Manage personal information, consultation history, and payments",
+      "tabs": {
+        "info": "Personal Information",
+        "history": "Consultation History",
+        "payment": "Payments"
+      },
+      "notifications": {
+        "updateSuccess": "Profile updated successfully!",
+        "updateError": "An error occurred while updating the profile",
+        "uploadError": "Image upload failed",
+        "loadError": "Unable to load profile information."
+      },
+
+
+    "avatar": {
+      "uploadError": "Image upload failed",
+      "noName": "No name provided"
+    },
+
+    "basicInfo": {
+      "fullName": "Full Name",
+      "phone": "Phone Number",
+      "gender": "Gender",
+      "dateOfBirth": "Date of Birth",
+      "genderOptions": {
+        "male": "Male",
+        "female": "Female",
+        "other": "Other"
+      }
+    },
+
+    "consultationHistory": {
+      "title": "Consultation History",
+      "loadError": "Error loading history:",
+      "empty": "You have no consultation history.",
+      "table": {
+        "time": "Time",
+        "doctor": "Doctor",
+        "type": "Type",
+        "status": "Status"
+      },
+      "typeLabel": {
+        "online": "Online Consultation",
+        "offline": "In-person Visit"
+      },
+      "statusLabel": {
+        "completed": "Completed",
+        "confirmed": "Confirmed",
+        "pending": "Pending",
+        "cancelled": "Cancelled"
+      }
+    },
+
+    "medicalInfo": {
+      "title": "Medical Profile (Self-reported)",
+      "sections": {
+        "conditions": "1. Medical History:",
+        "allergies": "2. Drug / Food Allergies:"
+      },
+      "fields": {
+        "conditionName": "Condition Name",
+        "status": "Status",
+        "diagnosedDate": "Diagnosis Date",
+        "treatmentPlan": "Treatment Plan / Current Medication",
+        "notes": "Notes",
+        "extraNotes": "Additional Notes",
+        "allergyName": "Allergy Name",
+        "severity": "Severity",
+        "reaction": "Reaction"
+      },
+      "conditionStatus": {
+        "active": "Under Treatment",
+        "chronic": "Chronic",
+        "cured": "Recovered"
+      },
+      "allergySeverity": {
+        "low": "Mild",
+        "medium": "Moderate",
+        "high": "Severe"
+      },
+      "buttons": {
+        "addCondition": "Add Condition",
+        "addAllergy": "Add Allergy"
+      },
+      "readonly": {
+        "diagnosis": "Diagnosis:",
+        "notAvailable": "N/A",
+        "noData": "No data available"
+      }
+    },
+
+    "paymentHistory": {
+      "errors": {
+        "fetchData": "Data error:",
+        "connectingGateway": "Connecting to VNPAY gateway...",
+        "noPaymentUrl": "Error: Payment URL not returned from server.",
+        "cannotConnect": "Unable to connect to payment gateway."
+      },
+      "unpaid": {
+        "title": "Pending Payments",
+        "fee": "Consultation Fee:",
+        "date": "Date:",
+        "expired": "Expired",
+        "paying": "Processing...",
+        "payNow": "Pay Now",
+        "empty": "You have no pending payments."
+      },
+      "paid": {
+        "title": "Transaction History",
+        "empty": "No transactions found.",
+        "paymentFor": "Consultation payment - Dr.",
+        "transactionCode": "Transaction Code:",
+        "date": "Date:",
+        "method": "Payment Method:",
+        "success": "Successful"
+      }
+    },
+
+    "form": {
+      "actions": {
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "save": "Save Changes"
+      },
+      "validation": {
+        "fullName": {
+          "required": "Full name is required",
+          "min": "Name is too short"
+        },
+        "phone": {
+          "required": "Phone number is required",
+          "invalid": "Invalid phone number"
+        },
+        "medicalConditions": {
+          "min": "At least one medical condition is required",
+          "nameRequired": "Condition name is required",
+          "statusRequired": "Condition status is required",
+          "diagnosedDateRequired": "Diagnosis date is required"
+        },
+        "allergies": {
+          "min": "At least one allergy is required",
+          "nameRequired": "Allergy name is required",
+          "severityRequired": "Allergy severity is required"
+        }
+      }
+    }
+
+}

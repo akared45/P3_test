@@ -118,7 +118,9 @@ export const notificationApi = {
 
 
 export const paymentApi = {
-  createMomoUrl: (appointmentId) => axiosClient.post("/payment/momo/create-url", { appointmentId })
+  createVnPayUrl: (data) => axiosClient.post("/payment/vnpay/create_payment_url", data),
+
+  verifyVnPayReturn: (params) => axiosClient.get("/payment/vnpay/vnpay_return", { params })
 }
 
 export const statisticsApi = {

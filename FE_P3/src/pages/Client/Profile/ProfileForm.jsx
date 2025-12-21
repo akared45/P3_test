@@ -8,44 +8,52 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import AvatarSection from "./AvatarSection";
 import BasicInfo from "./BasicInfo";
 import MedicalInfo from "./MedicalInfo";
-
-const validationSchema = Yup.object({
-  fullName: Yup.string()
-    .required("Họ và tên là bắt buộc")
-    .min(3, "Tên quá ngắn"),
-
-  phone: Yup.string()
-    .required("Số điện thoại là bắt buộc")
-    .matches(/^[0-9+]{9,15}$/, "Số điện thoại không hợp lệ"),
-
-  medicalConditions: Yup.array()
-    .min(1, "Phải có ít nhất 1 bệnh lý")
-    .of(
-      Yup.object().shape({
-        name: Yup.string().required("Tên bệnh lý bắt buộc"),
-        status: Yup.string()
-          .required("Trạng thái bệnh lý bắt buộc")
-          .oneOf(["active", "chronic", "cured"]),
-        diagnosedDate: Yup.date()
-          .nullable()
-          .required("Ngày chẩn đoán bắt buộc"),
-      })
-    ),
-
-  allergies: Yup.array()
-    .min(1, "Phải có ít nhất 1 dị ứng")
-    .of(
-      Yup.object().shape({
-        name: Yup.string().required("Tên dị ứng bắt buộc"),
-        severity: Yup.string()
-          .required("Mức độ dị ứng bắt buộc")
-          .oneOf(["low", "medium", "high"]),
-      })
-    ),
-});
+import { useTranslation } from "react-i18next";
 
 const ProfileForm = ({ initialValues, onSubmit, onUploadAvatar }) => {
+  const { t } = useTranslation("profile_client");
   const [isEditing, setIsEditing] = useState(false);
+
+  const validationSchema = Yup.object({
+    fullName: Yup.string()
+      .required(t("form.validation.fullName.required"))
+      .min(3, t("form.validation.fullName.min")),
+
+    phone: Yup.string()
+      .required(t("form.validation.phone.required"))
+      .matches(/^[0-9+]{9,15}$/, t("form.validation.phone.invalid")),
+
+    medicalConditions: Yup.array()
+      .min(1, t("form.validation.medicalConditions.min"))
+      .of(
+        Yup.object().shape({
+          name: Yup.string().required(
+            t("form.validation.medicalConditions.nameRequired")
+          ),
+          status: Yup.string().required(
+            t("form.validation.medicalConditions.statusRequired")
+          ),
+          diagnosedDate: Yup.date()
+            .nullable()
+            .required(
+              t("form.validation.medicalConditions.diagnosedDateRequired")
+            ),
+        })
+      ),
+
+    allergies: Yup.array()
+      .min(1, t("form.validation.allergies.min"))
+      .of(
+        Yup.object().shape({
+          name: Yup.string().required(
+            t("form.validation.allergies.nameRequired")
+          ),
+          severity: Yup.string().required(
+            t("form.validation.allergies.severityRequired")
+          ),
+        })
+      ),
+  });
 
   return (
     <Formik
@@ -71,21 +79,13 @@ const ProfileForm = ({ initialValues, onSubmit, onUploadAvatar }) => {
 
               <Box flex={8}>
                 <BasicInfo formik={formikProps} isEditing={isEditing} />
-                <Divider
-                  sx={{
-                    my: 2,
-                    borderColor: "rgba(0,0,0,0.3)",
-                    borderBottomWidth: "2px",
-                  }}
-                />
+
+                <Divider sx={{ my: 2, borderBottomWidth: 2 }} />
+
                 <MedicalInfo formik={formikProps} isEditing={isEditing} />
-                <Divider
-                  sx={{
-                    my: 2,
-                    borderColor: "rgba(0,0,0,0.3)",
-                    borderBottomWidth: "2px",
-                  }}
-                />
+
+                <Divider sx={{ my: 2, borderBottomWidth: 2 }} />
+
                 <Box display="flex" justifyContent="flex-end" mb={2}>
                   {!isEditing ? (
                     <Button
@@ -93,7 +93,7 @@ const ProfileForm = ({ initialValues, onSubmit, onUploadAvatar }) => {
                       startIcon={<EditIcon />}
                       onClick={() => setIsEditing(true)}
                     >
-                      Chỉnh sửa
+                      {t("form.actions.edit")}
                     </Button>
                   ) : (
                     <Box sx={{ display: "flex", gap: 2 }}>
@@ -106,7 +106,7 @@ const ProfileForm = ({ initialValues, onSubmit, onUploadAvatar }) => {
                           setIsEditing(false);
                         }}
                       >
-                        Hủy
+                        {t("form.actions.cancel")}
                       </Button>
 
                       <Button
@@ -116,7 +116,7 @@ const ProfileForm = ({ initialValues, onSubmit, onUploadAvatar }) => {
                         type="submit"
                         disabled={formikProps.isSubmitting}
                       >
-                        Lưu thay đổi
+                        {t("form.actions.save")}
                       </Button>
                     </Box>
                   )}
