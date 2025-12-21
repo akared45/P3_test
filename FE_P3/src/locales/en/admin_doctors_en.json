@@ -142,7 +142,7 @@
   
   "payment": {
     "successTitle": "Appointment booked successfully!",
-    "confirmPayment": "Please complete the payment to confirm your appointment with Dr. <strong>{{name}}</strong>.",
+    "confirmPayment": "Please complete the payment to confirm your appointment with Dr",
     "redirecting": "Redirecting...",
     "payNow": "Pay now via MoMo",
     "payLater": "I'll pay later (Go to appointment details)"

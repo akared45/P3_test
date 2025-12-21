@@ -1,0 +1,15 @@
+{
+  "notificationPage": {
+    "title": "Thông báo",
+    "newChip": "{count} mới",
+    "markAllReadButton": "Đánh dấu đã đọc hết",
+    "tabs": {
+      "all": "Tất cả",
+      "unread": "Chưa đọc"
+    },
+    "noNotifications": "Không có thông báo nào.",
+    "menuMarkAsRead": "Đánh dấu đã đọc",
+    "menuDelete": "Xóa thông báo",
+    "loading": "Đang tải..."
+  }
+}
