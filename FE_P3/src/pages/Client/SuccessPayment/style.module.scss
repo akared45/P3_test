@@ -1,0 +1,31 @@
+.success__container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.success__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  gap: 40px;
+  width: 650px;
+  margin: 0 auto;
+  background-color: #ffff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  border-radius: 18px;
+}
+
+.success__details {
+  font-size: 18px;
+  display: flex;
+  gap: 20px;
+}
+
+.success__key {
+  font-weight: bold;
+}

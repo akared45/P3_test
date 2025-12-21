@@ -1,0 +1,152 @@
+{
+ 
+ 
+      "title": "Hồ sơ cá nhân",
+      "subtitle": "Quản lý thông tin, lịch sử khám và thanh toán",
+      "tabs": {
+        "info": "Thông tin cá nhân",
+        "history": "Lịch sử khám",
+        "payment": "Thanh toán"
+      },
+      "notifications": {
+        "updateSuccess": "Cập nhật hồ sơ thành công!",
+        "updateError": "Có lỗi xảy ra khi cập nhật",
+        "uploadError": "Lỗi upload ảnh",
+        "loadError": "Không thể tải thông tin hồ sơ."
+      },
+
+
+    "avatar": {
+      "uploadError": "Lỗi upload ảnh",
+      "noName": "Chưa có tên"
+    },
+
+    "basicInfo": {
+      "fullName": "Họ và tên",
+      "phone": "Số điện thoại",
+      "gender": "Giới tính",
+      "dateOfBirth": "Ngày sinh",
+      "genderOptions": {
+        "male": "Nam",
+        "female": "Nữ",
+        "other": "Khác"
+      }
+    },
+
+    "consultationHistory": {
+      "title": "Lịch sử khám bệnh",
+      "loadError": "Lỗi tải lịch sử:",
+      "empty": "Bạn chưa có lịch sử khám bệnh nào.",
+      "table": {
+        "time": "Thời gian",
+        "doctor": "Bác sĩ",
+        "type": "Loại hình",
+        "status": "Trạng thái"
+      },
+      "typeLabel": {
+        "online": "Tư vấn Online",
+        "offline": "Khám tại chỗ"
+      },
+      "statusLabel": {
+        "completed": "Đã hoàn thành",
+        "confirmed": "Đã xác nhận",
+        "pending": "Chờ xác nhận",
+        "cancelled": "Đã hủy"
+      }
+    },
+
+    "medicalInfo": {
+      "title": "Hồ sơ Y tế (Tự khai báo)",
+      "sections": {
+        "conditions": "1. Tiền sử bệnh lý:",
+        "allergies": "2. Dị ứng thuốc / Thực phẩm:"
+      },
+      "fields": {
+        "conditionName": "Tên bệnh lý",
+        "status": "Trạng thái",
+        "diagnosedDate": "Ngày chẩn đoán",
+        "treatmentPlan": "Phác đồ / Thuốc đang dùng",
+        "notes": "Ghi chú",
+        "extraNotes": "Ghi chú thêm",
+        "allergyName": "Tên dị ứng",
+        "severity": "Mức độ",
+        "reaction": "Phản ứng"
+      },
+      "conditionStatus": {
+        "active": "Đang điều trị",
+        "chronic": "Mãn tính",
+        "cured": "Đã khỏi"
+      },
+      "allergySeverity": {
+        "low": "Nhẹ",
+        "medium": "Trung bình",
+        "high": "Nghiêm trọng"
+      },
+      "buttons": {
+        "addCondition": "Thêm bệnh lý",
+        "addAllergy": "Thêm dị ứng"
+      },
+      "readonly": {
+        "diagnosis": "Chẩn đoán:",
+        "notAvailable": "N/A",
+        "noData": "Chưa có dữ liệu"
+      }
+    },
+
+    "paymentHistory": {
+      "errors": {
+        "fetchData": "Lỗi data:",
+        "connectingGateway": "Đang kết nối đến cổng VNPAY...",
+        "noPaymentUrl": "Lỗi: Server không trả về link thanh toán.",
+        "cannotConnect": "Không thể kết nối đến cổng thanh toán."
+      },
+      "unpaid": {
+        "title": "Cần thanh toán",
+        "fee": "Phí khám:",
+        "date": "Ngày:",
+        "expired": "Đã quá hạn",
+        "paying": "Đang tạo...",
+        "payNow": "Thanh toán ngay",
+        "empty": "Bạn không có khoản phí nào cần thanh toán."
+      },
+      "paid": {
+        "title": "Lịch sử giao dịch",
+        "empty": "Chưa có giao dịch nào.",
+        "paymentFor": "Thanh toán phí khám - BS.",
+        "transactionCode": "Mã GD:",
+        "date": "Ngày:",
+        "method": "Phương thức:",
+        "success": "Thành công"
+      }
+    },
+
+    "form": {
+      "actions": {
+        "edit": "Chỉnh sửa",
+        "cancel": "Hủy",
+        "save": "Lưu thay đổi"
+      },
+      "validation": {
+        "fullName": {
+          "required": "Họ và tên là bắt buộc",
+          "min": "Tên quá ngắn"
+        },
+        "phone": {
+          "required": "Số điện thoại là bắt buộc",
+          "invalid": "Số điện thoại không hợp lệ"
+        },
+        "medicalConditions": {
+          "min": "Phải có ít nhất 1 bệnh lý",
+          "nameRequired": "Tên bệnh lý bắt buộc",
+          "statusRequired": "Trạng thái bệnh lý bắt buộc",
+          "diagnosedDateRequired": "Ngày chẩn đoán bắt buộc"
+        },
+        "allergies": {
+          "min": "Phải có ít nhất 1 dị ứng",
+          "nameRequired": "Tên dị ứng bắt buộc",
+          "severityRequired": "Mức độ dị ứng bắt buộc"
+        }
+      }
+    }
+
+}

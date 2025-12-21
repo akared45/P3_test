@@ -7,7 +7,7 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
-import SmsOutlinedIcon from "@mui/icons-material/SmsOutlined";
+import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -36,9 +36,9 @@ const Sidebar = () => {
       roles: ["admin"],
     },
     {
-      label: t("messagesMenu"),
-      to: "message",
-      icon: <SmsOutlinedIcon />,
+      label: t("medicineMenu"),
+      to: "thuoc",
+      icon: <MedicalServicesOutlinedIcon />,
       roles: ["doctor"],
     },
     {

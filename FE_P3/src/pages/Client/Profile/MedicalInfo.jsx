@@ -19,8 +19,9 @@ import WarningIcon from "@mui/icons-material/Warning";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import dayjs from "dayjs";
-
+import { useTranslation } from "react-i18next";
 const MedicalInfo = ({ formik, isEditing }) => {
+  const { t } = useTranslation("profile_client");
   const { values, handleChange, handleBlur, errors, touched } = formik;
 
   return (
@@ -36,7 +37,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
           mb: 2,
         }}
       >
-        <MedicalServicesIcon /> Hồ sơ Y tế (Tự khai báo)
+        <MedicalServicesIcon /> {t("medicalInfo.title")}
       </Typography>
 
       <Grid container spacing={4}>
@@ -47,7 +48,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
             fontWeight="bold"
             color="textSecondary"
           >
-            1. Tiền sử bệnh lý:
+            {t("medicalInfo.sections.conditions")}
           </Typography>
 
           {getIn(touched, "medicalConditions") &&
@@ -84,7 +85,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
                             <Grid item xs={12} sm={6}>
                               <TextField
                                 fullWidth
-                                label="Tên bệnh lý"
+                                label={t("medicalInfo.fields.conditionName")}
                                 size="small"
                                 name={`${fieldName}.name`}
                                 value={item.name}
@@ -105,7 +106,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
                               <TextField
                                 fullWidth
                                 select
-                                label="Trạng thái"
+                                label={t("medicalInfo.fields.status")}
                                 size="small"
                                 name={`${fieldName}.status`}
                                 value={item.status}
@@ -120,10 +121,14 @@ const MedicalInfo = ({ formik, isEditing }) => {
                                 }
                               >
                                 <MenuItem value="active">
-                                  Đang điều trị
+                                  {t("medicalInfo.conditionStatus.active")}
                                 </MenuItem>
-                                <MenuItem value="chronic">Mãn tính</MenuItem>
-                                <MenuItem value="cured">Đã khỏi</MenuItem>
+                                <MenuItem value="chronic">
+                                  {t("medicalInfo.conditionStatus.chronic")}
+                                </MenuItem>
+                                <MenuItem value="cured">
+                                  {t("medicalInfo.conditionStatus.cured")}
+                                </MenuItem>
                               </TextField>
                             </Grid>
 
@@ -131,7 +136,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
                               <TextField
                                 fullWidth
                                 type="date"
-                                label="Ngày chẩn đoán"
+                                label={t("medicalInfo.fields.diagnosedDate")}
                                 size="small"
                                 InputLabelProps={{ shrink: true }}
                                 name={`${fieldName}.diagnosedDate`}
@@ -166,7 +171,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
                             <Grid item xs={12} sm={6}>
                               <TextField
                                 fullWidth
-                                label="Phác đồ / Thuốc đang dùng"
+                                label={t("medicalInfo.fields.treatmentPlan")}
                                 size="small"
                                 name={`${fieldName}.treatmentPlan`}
                                 value={item.treatmentPlan}
@@ -177,7 +182,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
                             <Grid item xs={12}>
                               <TextField
                                 fullWidth
-                                label="Ghi chú thêm"
+                                label={t("medicalInfo.fields.extraNotes")}
                                 size="small"
                                 multiline
                                 rows={2}
@@ -203,10 +208,10 @@ const MedicalInfo = ({ formik, isEditing }) => {
                                 size="small"
                                 label={
                                   item.status === "chronic"
-                                    ? "Mãn tính"
+                                    ? t("medicalInfo.conditionStatus.chronic")
                                     : item.status === "active"
-                                    ? "Đang điều trị"
-                                    : "Đã khỏi"
+                                    ? t("medicalInfo.conditionStatus.active")
+                                    : t("medicalInfo.conditionStatus.cured")
                                 }
                                 color={
                                   item.status === "chronic"
@@ -219,10 +224,12 @@ const MedicalInfo = ({ formik, isEditing }) => {
                             </Box>
 
                             <Typography variant="body2">
-                              <strong>Chẩn đoán:</strong>{" "}
+                              <strong>
+                                {t("medicalInfo.readonly.diagnosis")}:
+                              </strong>{" "}
                               {item.diagnosedDate
                                 ? dayjs(item.diagnosedDate).format("DD/MM/YYYY")
-                                : "N/A"}
+                                : t("medicalInfo.readonly.notAvailable")}
                             </Typography>
                           </CardContent>
                         </Card>
@@ -245,7 +252,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
                       })
                     }
                   >
-                    Thêm bệnh lý
+                    {t("medicalInfo.buttons.addCondition")}
                   </Button>
                 )}
               </Box>
@@ -261,8 +268,8 @@ const MedicalInfo = ({ formik, isEditing }) => {
             color="textSecondary"
             sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
           >
-            <WarningIcon fontSize="small" color="error" /> 2. Dị ứng thuốc /
-            Thực phẩm:
+            <WarningIcon fontSize="small" color="error" />{" "}
+            {t("medicalInfo.sections.allergies")}
           </Typography>
 
           {getIn(touched, "allergies") &&
@@ -299,7 +306,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
                             <Grid item xs={12} sm={4}>
                               <TextField
                                 fullWidth
-                                label="Tên dị ứng"
+                                label={t("medicalInfo.fields.allergyName")}
                                 size="small"
                                 name={`${fieldName}.name`}
                                 value={item.name}
@@ -320,7 +327,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
                               <TextField
                                 fullWidth
                                 select
-                                label="Mức độ"
+                                label={t("medicalInfo.fields.severity")}
                                 size="small"
                                 name={`${fieldName}.severity`}
                                 value={item.severity}
@@ -337,16 +344,22 @@ const MedicalInfo = ({ formik, isEditing }) => {
                                   getIn(errors, `${fieldName}.severity`)
                                 }
                               >
-                                <MenuItem value="low">Nhẹ</MenuItem>
-                                <MenuItem value="medium">Trung bình</MenuItem>
-                                <MenuItem value="high">Nghiêm trọng</MenuItem>
+                                <MenuItem value="low">
+                                  {t("medicalInfo.allergySeverity.low")}
+                                </MenuItem>
+                                <MenuItem value="medium">
+                                  {t("medicalInfo.allergySeverity.medium")}
+                                </MenuItem>
+                                <MenuItem value="high">
+                                  {t("medicalInfo.allergySeverity.high")}
+                                </MenuItem>
                               </TextField>
                             </Grid>
 
                             <Grid item xs={12} sm={4}>
                               <TextField
                                 fullWidth
-                                label="Phản ứng"
+                                label={t("medicalInfo.fields.reaction")}
                                 size="small"
                                 name={`${fieldName}.reaction`}
                                 value={item.reaction}
@@ -368,7 +381,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
                             <Grid item xs={12}>
                               <TextField
                                 fullWidth
-                                label="Ghi chú"
+                                label={t("medicalInfo.fields.notes")}
                                 size="small"
                                 name={`${fieldName}.notes`}
                                 value={item.notes}
@@ -399,7 +412,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
                         fontStyle="italic"
                         color="textSecondary"
                       >
-                        Chưa có dữ liệu
+                        {t("medicalInfo.readonly.noData")}
                       </Typography>
                     )}
                   </Stack>
@@ -423,7 +436,7 @@ const MedicalInfo = ({ formik, isEditing }) => {
                       })
                     }
                   >
-                    Thêm dị ứng
+                    {t("medicalInfo.buttons.addAllergy")}
                   </Button>
                 )}
               </Box>

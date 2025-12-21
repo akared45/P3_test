@@ -17,11 +17,11 @@ import Contact from "../pages/Client/Contact/Contact";
 import VerifyEmail from "../pages/Auth/Register/VerifyEmail";
 import ForgotPassword from "../pages/Auth/ForgotPassword";
 import ResetPassword from "../pages/Auth/ResetPassword";
-import DoctorChat from "../pages/Admin/Message/DoctorChat";
+
 import NotificationPage from "../pages/Client/Notification/NotificationPage";
 import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
 import PaymentResult from "../pages/Client/Payment/PaymentResult";
-
+import Medicines from "../pages/Admin/Medicines/Medicines";
 const routes = [
   {
     path: "/",
@@ -39,7 +39,7 @@ const routes = [
       { path: "quen-mat-khau", element: <ForgotPassword /> },
       { path: "reset-password", element: <ResetPassword /> },
       { path: "notifications", element: <NotificationPage /> },
-      {path: "payment-result", element: <PaymentResult/>}
+      { path: "payment-result", element: <PaymentResult /> },
     ],
   },
   {
@@ -54,9 +54,9 @@ const routes = [
       { path: "profile", element: <Profile /> },
       { path: "benh-nhan", element: <Patients /> },
       { path: "chuyen-khoa", element: <Specialty /> },
-      { path: "message", element: <DoctorChat /> },
+      { path: "thuoc", element: <Medicines /> },
       { path: "bac-si", element: <Doctors /> },
-      { path: "lich-lam-viec", element: <AdminSchedule /> }
+      { path: "lich-lam-viec", element: <AdminSchedule /> },
     ],
   },
 ];
