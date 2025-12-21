@@ -5,6 +5,7 @@ class AppointmentResponse {
         this.type = appointmentEntity.type;
         this.appointmentDate = appointmentEntity.appointmentDate;
         this.startTime = appointmentEntity.appointmentDate;
+        this.endTime = appointmentEntity.endTime;
         this.durationMinutes = appointmentEntity.durationMinutes;
         this.patient = {
             id: appointmentEntity.patientId,

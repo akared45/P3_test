@@ -1,0 +1,22 @@
+{
+  "socialTitle": "Đăng ký với", 
+  "divider": "hoặc", 
+  "fullNameLabel": "Họ và tên", 
+  "usernameLabel": "Tên đăng nhập",
+  "emailLabel": "Email", 
+  "passwordLabel": "Mật khẩu", 
+  "confirmPasswordLabel": "Nhập lại mật khẩu", 
+  "termsCheckbox": "Tôi đã đọc và đồng ý các điều khoản",
+  "button": "Đăng ký", 
+  "haveAccountText": "Đã có tài khoản?", 
+  "loginLink": "Đăng nhập", 
+  "validationFullNameRequired": "Họ và tên không được để trống", 
+  "validationUsernameRequired": "Tên đăng nhập không được để trống",
+  "validationEmailInvalid": "Email không hợp lệ", 
+  "validationEmailRequired": "Email không được để trống",
+  "validationPasswordMin": "Mật khẩu phải có ít nhất 6 ký tự",
+  "validationPasswordRequired": "Mật khẩu không được để trống", 
+  "validationConfirmMismatch": "Mật khẩu không khớp", 
+  "validationConfirmRequired": "Bạn cần nhập lại mật khẩu",
+  "toastSuccess": "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản." 
+}

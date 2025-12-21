@@ -72,17 +72,6 @@ const schemas = {
                 department: Joi.string().allow('', null)
             })
         ),
-        unavailableDates: Joi.array().items(
-            Joi.object({
-                _id: Joi.any().strip(),
-                date: Joi.date().required(),
-                start: Joi.date().allow(null),
-                end: Joi.date().allow(null),
-                reason: Joi.string().allow('', null),
-                allDay: Joi.boolean().default(true),
-                _id: Joi.any().strip()
-            })
-        ).optional(),
         schedules: Joi.array().items(
             Joi.object({
                 _id: Joi.any().strip(),

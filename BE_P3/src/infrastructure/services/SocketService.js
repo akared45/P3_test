@@ -5,6 +5,8 @@ class SocketService extends ISocketService {
     constructor() {
         super();
         this.io = null;
+        this.roomParticipants = new Map();
+        this.socketInfo = new Map();
     }
 
     init(httpServer, { sendMessageUseCase, aiService } = {}) {
@@ -17,20 +19,31 @@ class SocketService extends ISocketService {
         });
 
         this.io.on('connection', (socket) => {
-            console.log('🔌 Client connected:', socket.id);
-
+            console.log('Client connected:', socket.id);
             socket.on('join_user_room', (userId) => {
-                if (userId) socket.join(userId.toString());
+                if (userId) {
+                    socket.join(userId.toString());
+                    socket.userId = userId.toString();
+                }
             });
 
-            socket.on('join_chat_room', (roomId) => {
+            socket.on('join_chat_room', ({ roomId, userId }) => {
+                if (!roomId || !userId) return;
                 socket.join(roomId);
+                if (!this.roomParticipants.has(roomId)) {
+                    this.roomParticipants.set(roomId, new Set());
+                }
+                this.roomParticipants.get(roomId).add(userId.toString());
+                this.socketInfo.set(socket.id, { roomId, userId: userId.toString() });
+                this.broadcastOnlineList(roomId);
+
+                console.log(`User ${userId} joined chat: ${roomId}`);
             });
 
             socket.on('send_message', async (payload) => {
                 try {
                     if (!sendMessageUseCase) {
-                        console.error("CRITICAL: sendMessageUseCase missing in SocketService");
+                        console.error("CRITICAL: sendMessageUseCase missing");
                         return;
                     }
 
@@ -43,20 +56,18 @@ class SocketService extends ISocketService {
                     });
 
                     this.sendMessageToRoom(payload.appointmentId, savedMessageDto);
-
                     if (aiService && payload.senderRole === 'patient' && payload.type === 'text') {
                         aiService.generateSmartReplies(payload.content)
                             .then(suggestions => {
-                                if (suggestions && suggestions.length > 0) {
+                                if (suggestions?.length > 0) {
                                     this.io.to(payload.appointmentId).emit('receive_suggestions', {
                                         appointmentId: payload.appointmentId,
-                                        suggestions: suggestions
+                                        suggestions
                                     });
                                 }
                             })
                             .catch(err => console.error("AI Reply Failed:", err));
-                        }
-
+                    }
                 } catch (error) {
                     console.error("Socket Message Error:", error);
                     socket.emit('error_message', { message: "Gửi tin nhắn thất bại" });
@@ -64,18 +75,33 @@ class SocketService extends ISocketService {
             });
 
             socket.on('disconnect', () => {
-                console.log('Client disconnected:', socket.id);
+                const info = this.socketInfo.get(socket.id);
+                if (info) {
+                    const { roomId, userId } = info;
+                    if (this.roomParticipants.has(roomId)) {
+                        this.roomParticipants.get(roomId).delete(userId);
+                        this.broadcastOnlineList(roomId);
+                        if (this.roomParticipants.get(roomId).size === 0) {
+                            this.roomParticipants.delete(roomId);
+                        }
+                    }
+                    this.socketInfo.delete(socket.id);
+                }
+                console.log('🔌 Client disconnected:', socket.id);
             });
         });
     }
 
-    sendToUser(userId, eventName, data) {
-        if (!this.io) {
-            console.warn("[Socket] IO chưa khởi tạo!");
-            return;
+    broadcastOnlineList(roomId) {
+        if (this.roomParticipants.has(roomId)) {
+            const participants = Array.from(this.roomParticipants.get(roomId));
+            this.io.to(roomId).emit('update_online_list', participants);
         }
+    }
+
+    sendToUser(userId, eventName, data) {
+        if (!this.io) return;
         this.io.to(userId.toString()).emit(eventName, data);
-        console.log(`Đã gửi sự kiện '${eventName}' tới user ${userId}`);
     }
 
     sendMessageToRoom(roomId, messageDto) {

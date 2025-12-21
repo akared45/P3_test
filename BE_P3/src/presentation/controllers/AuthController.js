@@ -62,17 +62,10 @@ class AuthController {
 
   verifyEmail = async (req, res, next) => {
     try {
-      console.log("Body nhận được từ FE:", req.body);
-            
-            // 1. Lấy chuỗi token từ body (Bất kể req.body là Object thường hay VerifyEmailRequest)
-            const { token } = req.body;
+      const { token } = req.body;
+      const result = await this.verifyEmailUseCase.execute({ token });
 
-            // 2. [QUAN TRỌNG] Đóng gói lại thành Object trước khi truyền vào UseCase
-            // Nếu bạn truyền execute(token) -> LỖI
-            // Bạn phải truyền execute({ token }) -> ĐÚNG
-            const result = await this.verifyEmailUseCase.execute({ token });
-            
-            return res.status(200).json(result);
+      return res.status(200).json(result);
     } catch (error) {
       next(error);
     }

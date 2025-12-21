@@ -1,0 +1,9 @@
+{
+  "loginButton": "Đăng nhập",
+  "registerButton": "Đăng ký", 
+  "userMenuProfile": "Hồ sơ cá nhân", 
+  "userMenuInbox": "Hộp thư", 
+  "userMenuSettings": "Cài đặt tài khoản",
+  "userMenuLogout": "Đăng xuất", 
+  "tooltipAccount": "Tài khoản" 
+}

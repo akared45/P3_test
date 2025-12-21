@@ -16,9 +16,9 @@ export default function PatientChat() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const messagesEndRef = useRef(null);
 
-  const { messages, sendMessage, loading } = useChat(activeId);
+  // 1. LẤY onlineUsers RA TỪ HOOK useChat
+  const { messages, sendMessage, loading, onlineUsers } = useChat(activeId);
 
-  // 1. Theo dõi trạng thái Socket
   useEffect(() => {
     const updateStatus = () => setIsConnected(socket.connected);
     socket.on("connect", updateStatus);
@@ -30,18 +30,18 @@ export default function PatientChat() {
     };
   }, []);
 
-  // 2. [SỬA QUAN TRỌNG] Tải danh sách NGAY LẬP TỨC khi vào trang
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     setMyId(user.id || user._id);
 
-    // Gọi API luôn, KHÔNG chờ isOpen nữa
     const fetchAppointments = async () => {
       try {
         const res = await appointmentApi.getMyAppointments();
-        console.log("Danh sách chat:", res.data.data); // Log để check
-        const validApps = res.data.data.filter(a =>
-          ['confirmed', 'in_progress', 'pending'].includes(a.status)
+
+        const validApps = res.data.data.filter((a) =>
+          ["confirmed", "in_progress", "active", "pending"].includes(
+            a.status?.toLowerCase()
+          )
         );
         setAppointments(validApps);
       } catch (error) {
@@ -49,13 +49,12 @@ export default function PatientChat() {
       }
     };
 
-    fetchAppointments();
-  }, []); // [] rỗng nghĩa là chạy 1 lần duy nhất khi F5 hoặc load trang
+    if (isOpen) fetchAppointments();
+  }, [isOpen]);
 
-  // 3. Tự động cuộn xuống khi có tin nhắn hoặc mở chat
   useEffect(() => {
     if (isOpen) {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isOpen]);
 
@@ -65,45 +64,48 @@ export default function PatientChat() {
     setText("");
   };
 
-  const activeApp = appointments.find(a => a.id === activeId);
+  const activeApp = appointments.find((a) => a.id === activeId);
 
   return (
     <>
-      {/* Nút FAB hiển thị Badge */}
       {!isOpen && (
         <Fab
           color="primary"
           onClick={() => setIsOpen(true)}
-          sx={{ position: 'fixed', bottom: 30, right: 30, zIndex: 1300 }}
+          sx={{ position: "fixed", bottom: 30, right: 30, zIndex: 1300 }}
         >
-          {/* Badge hiển thị số lượng cuộc hẹn lấy được từ API ngay lúc đầu */}
-          <Badge badgeContent={appointments.length} color="error">
+          <Badge
+            badgeContent={
+              appointments.filter((a) => a.status === "confirmed").length
+            }
+            color="error"
+          >
             <ChatIcon />
           </Badge>
         </Fab>
       )}
 
-      {/* Cửa sổ Chat */}
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
         maxWidth={false}
         PaperProps={{
           sx: {
-            width: '90vw',
-            height: '85vh',
-            maxWidth: '1200px',
+            width: "90vw",
+            height: "85vh",
+            maxWidth: "1200px",
             borderRadius: 3,
-            overflow: 'hidden'
-          }
+            overflow: "hidden",
+          },
         }}
       >
-        <Grid container sx={{ height: '100%', flexWrap: 'nowrap' }}>
+        <Grid container sx={{ height: "100%", flexWrap: "nowrap" }}>
           <DoctorListSidebar
             appointments={appointments}
             activeId={activeId}
             setActiveId={setActiveId}
             isConnected={isConnected}
+            onlineUsers={onlineUsers}
           />
 
           <PatientChatWindow
@@ -117,6 +119,7 @@ export default function PatientChat() {
             isConnected={isConnected}
             messagesEndRef={messagesEndRef}
             onClose={() => setIsOpen(false)}
+            onlineUsers={onlineUsers}
           />
         </Grid>
       </Dialog>

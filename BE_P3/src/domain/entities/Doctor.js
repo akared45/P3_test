@@ -20,7 +20,6 @@ class Doctor extends User {
     this.rating = Number(data.rating) || 0;
     this.reviewCount = Number(data.reviewCount) || 0;
     this.schedules = (data.schedules || []).map(s => s instanceof Schedule ? s : new Schedule(s));
-    this.unavailableDates = (data.unavailableDates || []).map(d => d instanceof UnavailableDate ? d : new UnavailableDate(d));
     this.timeZone = data.timeZone || 'Asia/Ho_Chi_Minh';
     this.yearsExperience = this._calculateYearsExperience();
 

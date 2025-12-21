@@ -1,0 +1,41 @@
+{
+  "heroSection": {
+    "overline": "ABOUT MEDICARE",
+    "title": "Comprehensive & Caring Healthcare",
+    "subtitle": "We are committed to providing high-quality medical services...",
+    "primaryButton": "Book an Appointment",
+    "secondaryButton": "Learn More"
+  },
+  "ctaSection": {
+    "title": "Ready to take care of your health?",
+    "subtitle": "Book online now for the best consultation.",
+    "button": "Book Now"
+  },
+  "doctorsSection": {
+    "title": "Our Expert Team",
+    "subtitle": "Meet top doctors",
+    "viewAll": "View All",
+    "list": [
+      { "name": "Dr. Nguyen Van A, PhD", "specialty": "Cardiology" },
+      { "name": "Dr. Tran Thi B, MSc", "specialty": "Pediatrics" },
+      { "name": "Dr. Le Van C, Specialist", "specialty": "Neurology" }
+    ]
+  },
+  "featuresSection": {
+    "title": "Why Choose Medicare?",
+    "subtitle": "We don’t just treat, we care for you like family.",
+    "features": [
+      { "title": "Advanced Technology", "desc": "Using modern medical equipment..." },
+      { "title": "Dedicated Team", "desc": "Always prioritizing patients’ health." },
+      { "title": "Fast Process", "desc": "Book online – no waiting." }
+    ]
+  },
+  "statsSection": {
+    "stats": [
+      { "number": "15+", "label": "Years of Experience" },
+      { "number": "50k+", "label": "Satisfied Patients" },
+      { "number": "100+", "label": "Specialist Doctors" },
+      { "number": "24/7", "label": "Medical Support" }
+    ]
+  }
+}

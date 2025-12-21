@@ -1,0 +1,89 @@
+{
+  "contact": {
+    "title": "Liên hệ với chúng tôi",
+    "subtitle": "Chúng tôi luôn sẵn sàng lắng nghe",
+    "description": "Đội ngũ chăm sóc khách hàng của Medicare luôn túc trực để giải đáp mọi thắc mắc và hỗ trợ bạn một cách nhanh nhất.",
+    "hotline": {
+      "title": "Hotline khẩn cấp",
+      "desc": "24/7 cho mọi tình huống",
+      "info": "1900 1234"
+    },
+    "address": {
+      "title": "Địa chỉ phòng khám",
+      "desc": "Tòa nhà Imperial Suites",
+      "info": "71 Vạn Phúc, Ba Đình, Hà Nội"
+    },
+    "email": {
+      "title": "Email hỗ trợ",
+      "desc": "Phản hồi trong 24h",
+      "info": "care@doctor4u.vn"
+    },
+    "workingHours": {
+      "title": "Giờ làm việc",
+      "desc": "Thứ 2 - Chủ Nhật",
+      "info": "07:00 - 20:00"
+    },
+    "form": {
+      "name": "Họ và tên",
+      "phone": "Số điện thoại",
+      "email": "Email",
+      "subject": "Vấn đề cần hỗ trợ",
+      "message": "Nội dung tin nhắn",
+      "submit": "Gửi tin nhắn"
+    },
+    "subjects": {
+      "tuvan": "Tư vấn sức khỏe",
+      "datlich": "Hỗ trợ đặt lịch",
+      "khieu_nai": "Phản ánh dịch vụ",
+      "hop_tac": "Liên hệ hợp tác"
+    },
+    "faqTitle": "Câu hỏi thường gặp"
+  },
+  "chatAccessControl": {
+    "early": {
+      "title": "Chưa đến giờ tư vấn",
+      "subtitle": "Phòng tư vấn sẽ mở trong:",
+      "info": "Bạn có thể vào phòng sớm 10 phút để chuẩn bị"
+    },
+    "expired": {
+      "title": "Phiên tư vấn đã kết thúc",
+      "info": "Cảm ơn bạn đã sử dụng dịch vụ"
+    }
+  },
+  "doctorListSidebar": {
+    "header": "Phòng tư vấn",
+    "server": {
+      "connected": "Máy chủ: Đã kết nối",
+      "disconnected": "Máy chủ: Mất kết nối"
+    },
+    "status": {
+      "activeOnline": "Bác sĩ đã sẵn sàng",
+      "activeOffline": "Chờ bác sĩ vào",
+      "pending": "Chờ xác nhận",
+      "completed": "Đã hoàn thành",
+      "cancelled": "Đã hủy"
+    },
+    "groups": {
+      "active": "Đang hoạt động",
+      "pending": "Chờ xác nhận",
+      "completed": "Lịch sử tư vấn",
+      "cancelled": "Đã hủy"
+    },
+    "noAppointments": "Không có lịch hẹn nào"
+  },
+  "chatWindow": {
+    "welcome": "Chào mừng đến với phòng tư vấn",
+    "selectDoctor": "Chọn bác sĩ để bắt đầu chat",
+    "session": {
+      "active": "🟢 Đang trong phiên tư vấn",
+      "inactive": "⚪ Chưa bắt đầu / Đã kết thúc"
+    },
+    "input": {
+      "placeholder": "Nhập tin nhắn cho bác sĩ...",
+      "reconnecting": "Đang kết nối lại..."
+    }
+  },
+  "patientChat": {
+    "fabBadge": "{count} lịch hẹn đã xác nhận"
+  }
+}

@@ -49,7 +49,6 @@ export const doctors = [
   },
 ];
 
-// Thêm 37 bác sĩ nữa để tổng là 40+
 for (let i = 4; i <= 60; i++) {
   doctors.push({
     id: i,
@@ -58,7 +57,7 @@ for (let i = 4; i <= 60; i++) {
       i % 5
     ],
     experience: 5 + (i % 20),
-    rating: (3 + (i % 3) * 0.5).toFixed(1), // 3.0, 3.5, 4.0
+    rating: (3 + (i % 3) * 0.5).toFixed(1),
     hospital: `Bệnh viện ${i}`,
     avatar: `https://i.pravatar.cc/300?img=${i + 10}`,
     shortDesc: `Bác sĩ chuyên khoa với kinh nghiệm ${5 + (i % 20)} năm.`,

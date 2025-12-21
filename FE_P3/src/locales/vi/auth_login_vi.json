@@ -1,0 +1,18 @@
+{
+  "socialTitle": "Đăng nhập với",
+  "divider": "Hoặc",
+  "emailLabel": "Email", 
+  "passwordLabel": "Mật khẩu",
+  "rememberMe": "Remember me",
+  "forgotPasswordLink": "Quên mật khẩu?", 
+  "buttonLoading": "Đang xử lý...", 
+  "button": "Đăng nhập",
+  "noAccountText": "Không có tài khoản?",
+  "registerLink": "Đăng ký", 
+  "validationEmailInvalid": "Email không hợp lệ", 
+  "validationEmailRequired": "Email không được để trống", 
+  "validationPasswordMin": "Mật khẩu phải có ít nhất 6 kí tự", 
+  "validationPasswordRequired": "Mật khẩu không được để trống",
+  "toastSuccess": "Đăng nhập thành công",
+  "toastUnverified": "Tài khoản chưa được kích hoạt. Vui lòng kiểm tra email." 
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Doctor Schedule Management",
+  "tabs": {
+    "hospital_schedule": "Hospital-wide Schedule",
+    "individual_schedule": "Individual Scheduling"
+  },
+  "actions": {
+    "save_config": "Save Configuration",
+    "saving": "Saving...",
+    "add_slot": "Add Shift",
+    "add_new": "Add New",
+    "cancel": "Cancel",
+    "export_report": "Export Monthly Report",
+    "today": "Today"
+  },
+  "form": {
+    "select_doctor": "Select Doctor to schedule",
+    "search_doctor": "Search doctor name...",
+    "no_doctor_found": "No doctor found",
+    "scheduling_for": "Scheduling for:",
+    "start_time": "Start Time",
+    "end_time": "End Time",
+    "max_patients": "Max Patients",
+    "add_work_shift": "Add Work Shift"
+  },
+  "visual": {
+    "shifts_count": "{{count}} shifts",
+    "no_shifts": "No shifts scheduled",
+    "shift_detail": "Shift"
+  },
+  "calendar": {
+    "appointment_schedule": "Appointment Schedule",
+    "month": "Month",
+    "off_duty": "Off",
+    "legend": "Legend",
+    "total_appt": "Total Appt (TA)",
+    "slot_empty": "Slot Empty (SE)",
+    "not_available": "Not Available (NA)",
+    "status": {
+      "full": "Full",
+      "few_slots": "Few slots",
+      "available": "Available"
+    }
+  },
+  "days": {
+    "Monday": "Monday",
+    "Tuesday": "Tuesday",
+    "Wednesday": "Wednesday",
+    "Thursday": "Thursday",
+    "Friday": "Friday",
+    "Saturday": "Saturday",
+    "Sunday": "Sunday"
+  },
+  "messages": {
+    "select_doctor_prompt": "Please select a doctor above to start scheduling.",
+    "error_time_range": "End time must be greater than start time",
+    "save_success": "Schedule updated successfully!",
+    "save_error": "Error saving schedule!"
+  }
+}

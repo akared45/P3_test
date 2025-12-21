@@ -23,7 +23,7 @@ class MongoUserSessionRepository extends IUserSessionRepository {
     await UserSessionModel.deleteOne({ refreshToken: token });
   }
 
-  async deleteAllByUserId(userId) {
+  async deleteByUserId(userId) {
     await UserSessionModel.deleteMany({ userId: userId });
   }
 }

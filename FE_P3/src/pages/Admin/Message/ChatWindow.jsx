@@ -14,6 +14,7 @@ import {
   FiberManualRecord as DotIcon
 } from "@mui/icons-material";
 import SuggestionStrip from "./SuggestionStrip";
+import SessionTimer from "../../../components/ui/SessionTimer";
 export default function ChatWindow({
   activeApp,
   messages,
@@ -28,7 +29,7 @@ export default function ChatWindow({
   suggestions,           
   onSelectSuggestion
 }) {
-  console.log(suggestions);
+
   const getAvatarUrl = (url) => {
     if (!url) return "";
     if (url.startsWith("http")) return url;
@@ -124,6 +125,20 @@ export default function ChatWindow({
                 <Typography variant="caption" color="text.secondary">
                   Mã hồ sơ: {activeApp.patientId} • Ngày hẹn: {new Date(activeApp.appointmentDate).toLocaleDateString('vi-VN')}
                 </Typography>
+                {['active', 'confirmed', 'in_progress'].includes(activeApp.status?.toLowerCase()) && activeApp.endTime && (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                 <Typography variant="caption" color="text.secondary" sx={{ display: { xs: 'none', sm: 'block' } }}>
+                    Thời gian còn lại:
+                 </Typography>
+                 <SessionTimer 
+        appointment={activeApp} 
+        onTimeUp={() => {
+            // Logic khi hết sạch cả thời gian bù giờ
+            console.log("Phòng chat đóng hoàn toàn");
+        }} 
+    />
+              </Box>
+            )}
               </Box>
             </Box>
           ) : (

@@ -1,18 +1,26 @@
 import React from "react";
 import { Box, Typography, Button, CircularProgress } from "@mui/material";
 import { CheckCircle, Payment } from "@mui/icons-material";
-
+import { useTranslation } from "react-i18next";
 const PaymentPrompt = ({ doctor, onPayment, onClose, loading }) => {
+  const { t } = useTranslation("admin_doctors");
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" py={3} className="fade-in">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      py={3}
+      className="fade-in"
+    >
       <CheckCircle color="success" sx={{ fontSize: 60, mb: 2 }} />
-      
+
       <Typography variant="h6" gutterBottom>
-        Đặt lịch thành công!
+        {t("payment.successTitle")}
       </Typography>
-      
+
       <Typography variant="body1" color="text.secondary" align="center" mb={3}>
-        Vui lòng thanh toán để xác nhận lịch hẹn với Bác sĩ <strong>{doctor?.profile?.fullName}</strong>.
+        {t("payment.confirmPayment")}
+        <strong>{doctor?.profile?.fullName}</strong>.
       </Typography>
 
       <Button
@@ -22,23 +30,25 @@ const PaymentPrompt = ({ doctor, onPayment, onClose, loading }) => {
         onClick={onPayment}
         disabled={loading}
         sx={{
-          bgcolor: '#A50064',
-          color: '#fff',
+          bgcolor: "#A50064",
+          color: "#fff",
           mb: 2,
-          '&:hover': { bgcolor: '#80004d' }
+          "&:hover": { bgcolor: "#80004d" },
         }}
-        startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Payment />}
+        startIcon={
+          loading ? <CircularProgress size={20} color="inherit" /> : <Payment />
+        }
       >
-        {loading ? "Đang chuyển hướng..." : "Thanh toán ngay qua MoMo"}
+        {loading ? t("payment.redirecting") : t("payment.payNow")}
       </Button>
 
       <Button
         variant="text"
         onClick={onClose}
         color="inherit"
-        sx={{ textDecoration: 'underline' }}
+        sx={{ textDecoration: "underline" }}
       >
-        Tôi sẽ thanh toán sau (Vào chi tiết lịch hẹn)
+        {t("payment.payLater")}
       </Button>
     </Box>
   );

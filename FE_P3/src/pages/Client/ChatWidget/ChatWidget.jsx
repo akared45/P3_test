@@ -1,14 +1,16 @@
 import { useState } from "react";
-
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./style.module.scss";
 import { aiApi } from "../../../services/api";
+const doctorAvatarUrl = "https://img.freepik.com/free-vector/hand-drawn-ai-healthcare-illustration_52683-156475.jpg?semt=ais_hybrid&w=740&q=80";
 
 const ChatWidget = () => {
+    console.log(doctorAvatarUrl);
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    { from: "doctor", text: "Xin chào! Tôi là trợ lý y tế ảo. Bạn đang gặp vấn đề gì về sức khỏe? Hãy mô tả để tôi tư vấn chuyên khoa phù hợp nhé." }
+  ])
   const [loading, setLoading] = useState(false);
 
   const sendMessage = async () => {
@@ -40,9 +42,19 @@ const ChatWidget = () => {
   return (
     <>
       {!open && (
-        <button className={styles.floatingBtn} onClick={() => setOpen(true)}>
-          <ChatBubbleOutlineIcon />
-        </button>
+        <div
+          className={`${styles.floatingImageContainer} ${styles.wobbleAnimation}`}
+          onClick={() => setOpen(true)}
+        >
+          <div className={styles.chatBubbleHint}>
+            Tư vấn ngay!
+          </div>
+          <img
+            src={doctorAvatarUrl}
+            alt="Chat với bác sĩ AI"
+            className={styles.doctorImage}
+          />
+        </div>
       )}
 
       {open && (
@@ -58,14 +70,12 @@ const ChatWidget = () => {
               </button>
             </div>
 
-            {/* Message list */}
             <div className={styles.messages}>
               {messages.map((msg, i) => (
                 <div
                   key={i}
-                  className={`${styles.msg} ${
-                    msg.from === "user" ? styles.msgUser : styles.msgDoctor
-                  }`}
+                  className={`${styles.msg} ${msg.from === "user" ? styles.msgUser : styles.msgDoctor
+                    }`}
                 >
                   {msg.text}
                 </div>
@@ -77,7 +87,6 @@ const ChatWidget = () => {
               )}
             </div>
 
-            {/* Input */}
             <div className={styles.footer}>
               <input
                 className={styles.input}

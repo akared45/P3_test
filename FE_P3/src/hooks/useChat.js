@@ -5,12 +5,13 @@ import { AuthContext } from "../providers/AuthProvider";
 
 export const useChat = (appointmentId) => {
   const [messages, setMessages] = useState([]);
-  const [suggestions, setSuggestions] = useState([]); // [MỚI] State chứa gợi ý AI
+  const [suggestions, setSuggestions] = useState([]);
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user, token } = useContext(AuthContext);
 
   useEffect(() => {
-    if (!appointmentId) return;
+    if (!appointmentId || !user?.id) return;
 
     if (!socket.connected) {
       const storedToken = localStorage.getItem("accessToken") || token;
@@ -18,17 +19,21 @@ export const useChat = (appointmentId) => {
     }
 
     const joinRoom = () => {
-      console.log("🔄 Joining chat room:", appointmentId);
-      socket.emit("join_chat_room", appointmentId);
+      socket.emit("join_chat_room", {
+        roomId: appointmentId,
+        userId: user.id
+      });
     };
 
     joinRoom();
     socket.on("connect", joinRoom);
+    const handleOnlineList = (participants) => {
+      setOnlineUsers(participants);
+    };
+    socket.on("update_online_list", handleOnlineList);
 
-    // [MỚI] Lắng nghe gợi ý từ AI
     const handleSuggestions = (data) => {
       if (String(data.appointmentId) === String(appointmentId)) {
-        console.log("🤖 AI Suggestions:", data.suggestions);
         setSuggestions(data.suggestions);
       }
     };
@@ -49,9 +54,10 @@ export const useChat = (appointmentId) => {
 
     return () => {
       socket.off("connect", joinRoom);
-      socket.off("receive_suggestions", handleSuggestions); // [MỚI] Cleanup
+      socket.off("receive_suggestions", handleSuggestions);
+      socket.off("update_online_list", handleOnlineList);
     };
-  }, [appointmentId, token]);
+  }, [appointmentId, token, user?.id]);
 
   useEffect(() => {
     if (!appointmentId) return;
@@ -64,9 +70,8 @@ export const useChat = (appointmentId) => {
           return [...prev, newMessage];
         });
 
-        // [MỚI] Nếu tin nhắn mới là của chính mình (Bác sĩ) -> Xóa gợi ý đi
         if (user && newMessage.senderId === user.id) {
-            setSuggestions([]); 
+          setSuggestions([]);
         }
       }
     };
@@ -77,12 +82,8 @@ export const useChat = (appointmentId) => {
 
   const sendMessage = useCallback(
     (content) => {
-      if (!appointmentId || !content.trim()) return;
-      if (!user || !user.id) {
-        console.error("Chưa đăng nhập, không thể gửi tin");
-        return;
-      }
-      console.log(user);
+      if (!appointmentId || !content.trim() || !user?.id) return;
+
       const payload = {
         appointmentId,
         content,
@@ -91,13 +92,11 @@ export const useChat = (appointmentId) => {
         senderRole: user.userType || (user.id.includes('DOC') ? 'doctor' : 'patient')
       };
 
-      console.log("📤 Sending message payload:", payload); 
-
       socket.emit("send_message", payload);
       setSuggestions([]);
     },
     [appointmentId, user]
   );
 
-  return { messages, sendMessage, loading, suggestions, setSuggestions };
+  return { messages, sendMessage, loading, suggestions, setSuggestions, onlineUsers };
 };

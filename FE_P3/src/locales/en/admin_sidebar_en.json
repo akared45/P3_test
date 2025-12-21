@@ -1,0 +1,15 @@
+{
+  "dashboardMenu": "Dashboard",
+  "patientsMenu": "Patients",
+  "messagesMenu": "Messages", 
+  "doctorsMenu": "Doctors",
+  "scheduleMenu": "Work Schedule", 
+  "specialtiesMenu": "Specialties",
+  "settingsMenu": "Settings", 
+  "logoSubtitle": "Management System", 
+  "adminRole": "Administrator",
+  "doctorRole": "Doctor",
+  "logoutButton": "Logout", 
+  "toggleExpandAria": "Expand sidebar",
+  "toggleCollapseAria": "Collapse sidebar"
+}

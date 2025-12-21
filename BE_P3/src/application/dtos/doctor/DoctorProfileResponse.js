@@ -6,6 +6,7 @@ class DoctorProfileResponse {
         this.fullName = doctorEntity.profile.fullName;
         this.avatarUrl = doctorEntity.profile.avatarUrl;
         this.bio = doctorEntity.bio;
+        this.yearsExperience=doctorEntity.yearsExperience;
         this.specialization = {
             code: doctorEntity.specCode,
             name: doctorEntity.specializationName

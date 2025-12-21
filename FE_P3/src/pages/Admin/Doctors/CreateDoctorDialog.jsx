@@ -26,25 +26,22 @@ import {
 } from "@mui/icons-material";
 import { uploadApi, specApi } from "@services/api";
 import { UserContext } from "../../../providers/UserProvider";
+import { useTranslation } from "react-i18next";
 
-const DAYS_OF_WEEK = [
-  { value: "Monday", label: "Thứ 2" },
-  { value: "Tuesday", label: "Thứ 3" },
-  { value: "Wednesday", label: "Thứ 4" },
-  { value: "Thursday", label: "Thứ 5" },
-  { value: "Friday", label: "Thứ 6" },
-  { value: "Saturday", label: "Thứ 7" },
-  { value: "Sunday", label: "Chủ nhật" },
-];
-
-const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
+const CreateDoctorDialog = ({ open, onClose, onSuccess }) => {
+  const { t } = useTranslation("admin_doctors"); // namespace mới
   const { addDoctor } = useContext(UserContext);
   const fileInputRef = useRef(null);
 
-  const [loading, setLoading] = useState(false);
-  const [specializations, setSpecializations] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState("");
+  const DAYS_OF_WEEK = [
+    { value: "Monday", label: t("form.daysOfWeek.Monday") },
+    { value: "Tuesday", label: t("form.daysOfWeek.Tuesday") },
+    { value: "Wednesday", label: t("form.daysOfWeek.Wednesday") },
+    { value: "Thursday", label: t("form.daysOfWeek.Thursday") },
+    { value: "Friday", label: t("form.daysOfWeek.Friday") },
+    { value: "Saturday", label: t("form.daysOfWeek.Saturday") },
+    { value: "Sunday", label: t("form.daysOfWeek.Sunday") },
+  ];
 
   const initialForm = {
     username: "",
@@ -60,6 +57,10 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
   };
 
   const [formData, setFormData] = useState(initialForm);
+  const [loading, setLoading] = useState(false);
+  const [specializations, setSpecializations] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
   const [notification, setNotification] = useState({
     open: false,
     message: "",
@@ -72,7 +73,6 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
 
   useEffect(() => {
     if (!open) {
-      // Reset form khi đóng dialog
       setFormData(initialForm);
       setPreviewUrl("");
       setSelectedFile(null);
@@ -89,7 +89,6 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
       .catch(console.error);
   }, [open]);
 
-  // --- LOGIC VALIDATION ---
   const validateForm = () => {
     const {
       username,
@@ -102,52 +101,28 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
       schedules,
     } = formData;
 
-    // 1. Kiểm tra thông tin chính
     if (!username || !email || !password || !fullName || !specCode) {
-      showNotification(
-        "Vui lòng điền đầy đủ thông tin bắt buộc (Dấu *)",
-        "warning"
-      );
+      showNotification(t("form.notifications.validationError"), "warning");
       return false;
     }
 
-    // 2. Validate Bằng cấp
     for (const q of qualifications) {
       if (!q.degree || !q.institution || !q.year) {
-        showNotification("Vui lòng nhập đầy đủ thông tin bằng cấp!", "warning");
+        showNotification(t("form.notifications.validationError"), "warning");
         return false;
       }
     }
 
-    // 3. Validate Quá trình công tác
     for (const w of workHistory) {
       if (!w.position || !w.place || !w.from) {
-        showNotification("Vui lòng nhập đầy đủ thông tin công tác!", "warning");
-        return false;
-      }
-      if (w.to && new Date(w.to) < new Date(w.from)) {
-        showNotification(
-          `Lỗi tại '${w.position}': Ngày kết thúc không thể trước ngày bắt đầu!`,
-          "warning"
-        );
+        showNotification(t("form.notifications.validationError"), "warning");
         return false;
       }
     }
 
-    // 4. Validate Lịch làm việc
     for (const s of schedules) {
       if (!s.start || !s.end) {
-        showNotification(
-          "Vui lòng nhập giờ bắt đầu và kết thúc cho lịch làm việc!",
-          "warning"
-        );
-        return false;
-      }
-      if (s.start >= s.end) {
-        showNotification(
-          `Lỗi lịch ${s.day}: Giờ kết thúc phải sau giờ bắt đầu!`,
-          "warning"
-        );
+        showNotification(t("form.notifications.validationError"), "warning");
         return false;
       }
     }
@@ -157,7 +132,6 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
 
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -195,11 +169,14 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
         avatarUrl = res.data?.url || res.url;
       }
       await addDoctor({ ...formData, avatarUrl });
-      showNotification("Thêm bác sĩ thành công!", "success");
+      showNotification(t("form.notifications.addSuccess"), "success");
       onSuccess();
       onClose();
     } catch (err) {
-      showNotification(err.response?.data?.message || "Có lỗi xảy ra", "error");
+      showNotification(
+        err.response?.data?.message || t("form.notifications.addError"),
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -208,12 +185,18 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
   return (
     <>
       <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-        <DialogTitle sx={{ fontWeight: "bold", color: "primary.main" }}>
-          THÊM BÁC SĨ MỚI
+        <DialogTitle
+          sx={{
+            fontWeight: "bold",
+            color: "primary.main",
+            textTransform: "uppercase",
+          }}
+        >
+          {t("createDialogTitle")}
         </DialogTitle>
         <DialogContent dividers>
           <Box sx={{ mt: 1 }}>
-            {/* Avatar Section */}
+            {/* Avatar */}
             <Stack
               direction="row"
               spacing={3}
@@ -254,21 +237,21 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
               </Box>
               <Box>
                 <Typography variant="subtitle1" fontWeight="bold">
-                  Ảnh đại diện
+                  {t("form.fields.avatar")}
                 </Typography>
                 <Typography
                   variant="caption"
                   display="block"
                   color="text.secondary"
                 >
-                  Định dạng: JPG, PNG. Dung lượng tối đa: 5MB
+                  JPG, PNG. Max: 5MB
                 </Typography>
               </Box>
             </Stack>
 
-            {/* 1. Thông tin cơ bản */}
+            {/* Thông tin cơ bản */}
             <Typography variant="h6" gutterBottom color="primary">
-              1. Thông tin tài khoản & cơ bản
+              {t("form.section.general")}
             </Typography>
             <Grid container spacing={2} sx={{ mb: 3 }}>
               <Grid item xs={3}>
@@ -295,7 +278,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                 <TextField
                   fullWidth
                   required
-                  label="Mật khẩu"
+                  label="Password"
                   type="password"
                   name="password"
                   value={formData.password}
@@ -306,7 +289,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                 <TextField
                   fullWidth
                   required
-                  label="Họ tên"
+                  label={t("form.fields.fullName")}
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
@@ -317,7 +300,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   select
                   fullWidth
                   required
-                  label="Chuyên khoa"
+                  label={t("form.fields.specCode")}
                   name="specCode"
                   value={formData.specCode}
                   onChange={handleChange}
@@ -332,7 +315,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
               <Grid item xs={4}>
                 <TextField
                   fullWidth
-                  label="Số chứng chỉ hành nghề"
+                  label={t("form.fields.licenseNumber")}
                   name="licenseNumber"
                   value={formData.licenseNumber}
                   onChange={handleChange}
@@ -342,12 +325,11 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
 
             <Divider sx={{ my: 3 }} />
 
-            {/* 2. Bằng cấp */}
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
             >
               <Typography variant="h6" color="primary">
-                2. Bằng cấp
+                {t("form.section.qualifications")}
               </Typography>
               <Button
                 startIcon={<AddCircleOutline />}
@@ -361,7 +343,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   })
                 }
               >
-                Thêm bằng cấp
+                {t("form.buttons.add")}
               </Button>
             </Box>
             {formData.qualifications.map((item, idx) => (
@@ -374,7 +356,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   <Grid item xs={5}>
                     <TextField
                       fullWidth
-                      label="Tên bằng cấp (VD: Thạc sĩ)"
+                      label={t("form.fields.degree")}
                       size="small"
                       value={item.degree}
                       onChange={(e) =>
@@ -390,7 +372,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   <Grid item xs={4}>
                     <TextField
                       fullWidth
-                      label="Nơi cấp"
+                      label={t("form.fields.institution")}
                       size="small"
                       value={item.institution}
                       onChange={(e) =>
@@ -406,7 +388,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   <Grid item xs={2}>
                     <TextField
                       fullWidth
-                      label="Năm"
+                      label={t("form.fields.year")}
                       type="number"
                       size="small"
                       value={item.year}
@@ -434,12 +416,12 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
 
             <Divider sx={{ my: 3 }} />
 
-            {/* 3. Quá trình công tác */}
+            {/* Quá trình công tác */}
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
             >
               <Typography variant="h6" color="primary">
-                3. Quá trình công tác
+                {t("form.section.workHistory")}
               </Typography>
               <Button
                 startIcon={<AddCircleOutline />}
@@ -454,7 +436,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   })
                 }
               >
-                Thêm công tác
+                {t("form.buttons.add")}
               </Button>
             </Box>
             {formData.workHistory.map((item, idx) => (
@@ -467,7 +449,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   <Grid item xs={3}>
                     <TextField
                       fullWidth
-                      label="Chức vụ"
+                      label={t("form.fields.position")}
                       size="small"
                       value={item.position}
                       onChange={(e) =>
@@ -483,7 +465,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   <Grid item xs={4}>
                     <TextField
                       fullWidth
-                      label="Nơi làm việc"
+                      label={t("form.fields.place")}
                       size="small"
                       value={item.place}
                       onChange={(e) =>
@@ -494,7 +476,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   <Grid item xs={2}>
                     <TextField
                       fullWidth
-                      label="Từ ngày"
+                      label={t("form.fields.from")}
                       type="date"
                       size="small"
                       InputLabelProps={{ shrink: true }}
@@ -507,7 +489,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   <Grid item xs={2}>
                     <TextField
                       fullWidth
-                      label="Đến ngày"
+                      label={t("form.fields.to")}
                       type="date"
                       size="small"
                       InputLabelProps={{ shrink: true }}
@@ -531,12 +513,12 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
 
             <Divider sx={{ my: 3 }} />
 
-            {/* 4. Lịch làm việc */}
+            {/* Lịch làm việc */}
             <Box
               sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
             >
               <Typography variant="h6" color="primary">
-                4. Lịch khám cố định
+                {t("form.section.schedules")}
               </Typography>
               <Button
                 startIcon={<AddCircleOutline />}
@@ -551,7 +533,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   })
                 }
               >
-                Thêm lịch
+                {t("form.buttons.add")}
               </Button>
             </Box>
             {formData.schedules.map((item, idx) => (
@@ -581,7 +563,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   <Grid item xs={3}>
                     <TextField
                       fullWidth
-                      label="Bắt đầu"
+                      label={t("form.fields.start")}
                       type="time"
                       size="small"
                       InputLabelProps={{ shrink: true }}
@@ -594,7 +576,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   <Grid item xs={3}>
                     <TextField
                       fullWidth
-                      label="Kết thúc"
+                      label={t("form.fields.end")}
                       type="time"
                       size="small"
                       InputLabelProps={{ shrink: true }}
@@ -607,7 +589,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
                   <Grid item xs={2}>
                     <TextField
                       fullWidth
-                      label="Số BN tối đa"
+                      label={t("form.fields.maxPatients")}
                       type="number"
                       size="small"
                       value={item.maxPatients}
@@ -636,7 +618,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
           <Button onClick={onClose} color="inherit">
-            Hủy bỏ
+            {t("form.buttons.close")}
           </Button>
           <Button
             variant="contained"
@@ -644,7 +626,7 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
             disabled={loading}
             size="large"
           >
-            {loading ? "Đang xử lý..." : "Lưu bác sĩ"}
+            {loading ? "..." : t("form.buttons.submit")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -667,4 +649,4 @@ const AddDoctorDialog = ({ open, onClose, onSuccess }) => {
   );
 };
 
-export default AddDoctorDialog;
+export default CreateDoctorDialog;

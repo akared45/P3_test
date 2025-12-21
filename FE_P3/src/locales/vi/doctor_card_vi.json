@@ -1,0 +1,66 @@
+{
+  "departmentLabel": "Chuyên khoa:",
+  "registerButton": "Đặt lịch ngay",
+  "detailButton": "Xem chi tiết",
+
+  "experience": "Kinh nghiệm",
+  "year": "năm",
+  "ratingLabel": "Đánh giá",
+  "consultingTurn": "lượt tư vấn",
+
+  "step1": "1. Chọn buổi khám",
+  "step2": "2. Chọn giờ khám",
+  "step3": "3. Mô tả triệu chứng *",
+  "placeholderSymptoms": "Ví dụ: Đau đầu, sốt cao...",
+
+  "cancelButton": "Hủy bỏ",
+  "confirmButton": "Xác nhận đặt lịch",
+  "checking": "Đang xử lý...",
+  "slotInfo": "Giờ khám đã được chuyển sang múi giờ của bạn",
+
+  "sunday": "Chủ Nhật",
+  "monday": "Thứ 2",
+  "tuesday": "Thứ 3",
+  "wednesday": "Thứ 4",
+  "thursday": "Thứ 5",
+  "friday": "Thứ 6",
+  "saturday": "Thứ 7",
+
+  "bookingTitle": "Đặt lịch khám",
+  "paymentTitle": "Thanh toán phí khám",
+
+  "bookingSuccessNoId": "Đặt lịch thành công nhưng không lấy được mã lịch hẹn.",
+  "bookingFailed": "Đặt lịch thất bại",
+
+  "paymentLinkError": "Không lấy được link thanh toán MoMo",
+  "paymentCreateError": "Lỗi tạo thanh toán",
+  "unknownError": "Lỗi không xác định",
+
+ 
+
+  "home": "Trang chủ",
+  "doctor": "Bác sĩ",
+  "doctorNotFound": "Không tìm thấy bác sĩ",
+
+  "consultationPrice": "Giá tư vấn",
+
+  "tabInfo": "Thông tin",
+  "tabExperience": "Kinh nghiệm & Học vấn",
+  "tabReview": "Đánh giá",
+  "workHistory": "Qúa trình công tác",
+  "introduction": "Giới thiệu",
+  "quickInfo": "Thông tin nhanh",
+  "experienceYears": "{{count}}+ năm kinh nghiệm trong nghề",
+  "licenseNumber": "Số chứng chỉ hành nghề",
+  "workingAt": "Công tác tại",
+  "defaultClinic": "Phòng khám Telemedicine",
+  "bioNotUpdated": "(Chưa cập nhật tiểu sử)",
+
+  "workProcess": "Quá trình công tác",
+  "educationProcess": "Quá trình đào tạo",
+  "notUpdated": "Chưa cập nhật thông tin.",
+  "present": "Nay",
+  "bookNow": "Đăng ký khám",
+  "patientReviews": "Phản hồi từ bệnh nhân",
+  "reviewCount": "{{count}} đánh giá"
+}

@@ -1,0 +1,23 @@
+{  
+  "breadcrumbHome": "Home",
+  "breadcrumbDoctors": "Doctors",
+  "doctorNotFound": "Doctor not found",
+  "bookingButton": "Book Now",
+  "tabInfo": "Information",
+  "tabExperienceEducation": "Experience & Education",
+  "tabReviews": "Reviews",
+  "doctorBioPlaceholder": "Dr. {{name}} is a leading specialist... (Biography not updated)",
+  "sectionIntro": "Introduction",
+  "sectionQuickInfo": "Quick Info",
+  "yearsExperienceLabel": "Years of experience",
+  "licenseNumberLabel": "License number",
+  "workPlaceLabel": "Workplace",
+  "consultationPriceLabel": "Consultation Fee",
+  "workHistoryTitle": "Work History",
+  "educationHistoryTitle": "Education History",
+  "patientFeedbackTitle": "Patient Feedback",
+  "reviewsCount": "{{count}} reviews",
+  "notUpdated": "Information not updated",
+  "presentLabel": "Present",
+  "defaultClinic": "Telemedicine Clinic"
+}

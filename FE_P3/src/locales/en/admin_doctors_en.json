@@ -1,0 +1,151 @@
+{
+  "listTitle": "Doctor List",
+  "addButton": "+ Add Doctor",
+  "editDialogTitle": "Edit Doctor Information",
+  "createDialogTitle": "Add New Doctor",
+  "generalInfo": "General Information",
+  "avatar": "Avatar",
+  "fullName": "Full Name",
+  "specialization": "Specialization",
+  "specCode": "Specialization",
+  "licenseNumber": "License Number",
+  "qualifications": "Qualifications / Education",
+  "workHistory": "Work History",
+  "schedules": "Schedules",
+  "day": "Day",
+  "startTime": "Start",
+  "endTime": "End",
+  "maxPatients": "Max Patients",
+  "total": "Total",
+  "active": "Active",
+  "onLeave": "On Leave",
+  "statusActive": "Active",
+  "statusInactive": "Inactive",
+  "actions": "Actions",
+  "edit": "Edit",
+  "delete": "Delete",
+  "add": "Add",
+  "close": "Close",
+  "updateChanges": "Update Changes",
+  "submit": "Submit Changes",
+  "processing": "Processing...",
+  "form": {
+    "section": {
+      "general": "General Information",
+      "qualifications": "Qualifications / Education",
+      "workHistory": "Work History",
+      "schedules": "Schedules"
+    },
+    "fields": {
+      "avatar": "Avatar",
+      "fullName": "Full Name",
+      "specCode": "Specialization",
+      "licenseNumber": "License Number",
+      "degree": "Degree Name",
+      "institution": "Institution",
+      "year": "Year",
+      "position": "Position",
+      "place": "Workplace",
+      "from": "From",
+      "to": "To",
+      "start": "Start",
+      "end": "End",
+      "maxPatients": "Max Patients"
+    },
+    "buttons": {
+      "add": "Add",
+      "close": "Close",
+      "submit": "Submit Changes"
+    },
+    "daysOfWeek": {
+      "Monday": "Monday",
+      "Tuesday": "Tuesday",
+      "Wednesday": "Wednesday",
+      "Thursday": "Thursday",
+      "Friday": "Friday",
+      "Saturday": "Saturday",
+      "Sunday": "Sunday"
+    },
+    "notifications": {
+      "validationError": "Please check the information",
+      "updateSuccess": "Update successful!",
+      "updateError": "Error updating data",
+      "addSuccess": "Doctor added successfully",
+      "addError": "Error adding doctor",
+      "loadError": "Error loading data",
+      "checkInfo": "Please check the information"
+    }
+  },
+  "errors": {
+    "fullNameRequired": "Full name is required",
+    "specializationRequired": "Please select a specialization",
+    "licenseRequired": "License number is required",
+    "qualification": {
+      "degreeRequired": "Degree name is required",
+      "institutionRequired": "Institution is required",
+      "yearRequired": "Year is required"
+    },
+    "workHistory": {
+      "positionRequired": "Position is required",
+      "placeRequired": "Workplace is required",
+      "fromRequired": "Start date is required",
+      "toFuture": "End date cannot be in the future",
+      "toBeforeFrom": "End date must be after start date"
+    },
+    "schedule": {
+      "dayRequired": "Please select a day",
+      "startRequired": "Start time is required",
+      "endRequired": "End time is required",
+      "maxPatientsInvalid": "Max patients must be greater than 0"
+    }
+  },
+  
+  "filter": {
+    "title": "Search Filters",
+    "doctorName": "Doctor name",
+    "searchPlaceholder": "Enter name...",
+    "specialization": "Specialization",
+    "allSpecializations": "All specializations",
+    "experience": "Experience",
+    "experienceRange": "Experience: {{min}} - {{max}} years",
+    "year": "year",
+    "experienceUnit": "years",
+    "workingDays": "Working days",
+    "clearAll": "Clear all filters",
+    "apply": "Apply",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
+  },
+
+  "pageHeader": {
+    "breadcrumb": {
+      "home": "Home",
+      "booking": "Book an appointment"
+    },
+    "title": "Find a Doctor"
+  },
+  "doctorList": {
+    "found": "Found <b>{{count}}</b> matching doctors",
+    "showing": "Showing {{start}}–{{end}} of {{total}} results",
+    "clearFilter": "Clear filters",
+    "clearAll": "Clear all filters",
+    "noResult": "No doctors match your filters.",
+    "noResultAlt": "No results"
+  },
+  
+  "payment": {
+    "successTitle": "Appointment booked successfully!",
+    "confirmPayment": "Please complete the payment to confirm your appointment with Dr. <strong>{{name}}</strong>.",
+    "redirecting": "Redirecting...",
+    "payNow": "Pay now via MoMo",
+    "payLater": "I'll pay later (Go to appointment details)"
+  }
+
+}

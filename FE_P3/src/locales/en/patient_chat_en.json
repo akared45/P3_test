@@ -1,0 +1,89 @@
+{
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We are always ready to listen",
+    "description": "The Medicare customer care team is always available to answer your questions and assist you as quickly as possible.",
+    "hotline": {
+      "title": "Emergency Hotline",
+      "desc": "24/7 for any situation",
+      "info": "1900 1234"
+    },
+    "address": {
+      "title": "Clinic Address",
+      "desc": "Imperial Suites Building",
+      "info": "71 Van Phuc, Ba Dinh, Hanoi"
+    },
+    "email": {
+      "title": "Support Email",
+      "desc": "Response within 24 hours",
+      "info": "care@doctor4u.vn"
+    },
+    "workingHours": {
+      "title": "Working Hours",
+      "desc": "Monday - Sunday",
+      "info": "07:00 - 20:00"
+    },
+    "form": {
+      "name": "Full Name",
+      "phone": "Phone Number",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message Content",
+      "submit": "Send Message"
+    },
+    "subjects": {
+      "tuvan": "Health Consultation",
+      "datlich": "Appointment Support",
+      "khieu_nai": "Service Feedback",
+      "hop_tac": "Cooperation Contact"
+    },
+    "faqTitle": "Frequently Asked Questions"
+  },
+  "chatAccessControl": {
+    "early": {
+      "title": "Consultation not started yet",
+      "subtitle": "Room will open in:",
+      "info": "You can enter 10 minutes early to prepare"
+    },
+    "expired": {
+      "title": "Consultation session has ended",
+      "info": "Thank you for using the service"
+    }
+  },
+  "doctorListSidebar": {
+    "header": "Consultation Room",
+    "server": {
+      "connected": "Server: Connected",
+      "disconnected": "Server: Disconnected"
+    },
+    "status": {
+      "activeOnline": "Doctor is ready",
+      "activeOffline": "Waiting for doctor",
+      "pending": "Pending confirmation",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "groups": {
+      "active": "Active",
+      "pending": "Pending Confirmation",
+      "completed": "Consultation History",
+      "cancelled": "Cancelled"
+    },
+    "noAppointments": "No appointments available"
+  },
+  "chatWindow": {
+    "welcome": "Welcome to the consultation room",
+    "selectDoctor": "Select a doctor to start chat",
+    "session": {
+      "active": "🟢 In consultation session",
+      "inactive": "⚪ Not started / Ended"
+    },
+    "input": {
+      "placeholder": "Type your message to the doctor...",
+      "reconnecting": "Reconnecting..."
+    }
+  },
+  "patientChat": {
+    "fabBadge": "{count} confirmed appointments"
+  }
+}

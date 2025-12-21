@@ -9,19 +9,23 @@ import {
   Button,
   Box,
   Chip,
-  Rating,
   Stack,
   Divider,
 } from "@mui/material";
-import { AccessTime, Star, WorkOutline } from "@mui/icons-material";
+import { Star, WorkOutline } from "@mui/icons-material";
 import { getImageUrl } from "../../../utils/imageHelper";
+import { useTranslation } from "react-i18next";
+
 const DoctorCard = ({ doctor, onBook }) => {
+  const { t } = useTranslation("doctorcard");
   const navigate = useNavigate();
+
   const formatCurrency = (value) =>
     new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
     }).format(value);
+
   const degree = doctor.qualifications?.[0]?.degree || "Bác sĩ";
   const specName = doctor.specialization?.name || "Đa khoa";
   const price = doctor.fee?.final || 50000;
@@ -145,14 +149,14 @@ const DoctorCard = ({ doctor, onBook }) => {
                   color="text.secondary"
                   display="block"
                 >
-                  Kinh nghiệm
+                  {t("experience")}
                 </Typography>
                 <Typography
                   variant="body2"
                   fontWeight={700}
                   color="primary.main"
                 >
-                  {doctor.yearsExperience || 5}+ Năm
+                  {doctor.yearsExperience || 5}+ {t("year")}
                 </Typography>
               </Box>
             </Box>
@@ -165,7 +169,7 @@ const DoctorCard = ({ doctor, onBook }) => {
                   color="text.secondary"
                   display="block"
                 >
-                  Đánh giá
+                  {t("ratingLabel")}
                 </Typography>
                 <Typography variant="body2" fontWeight={700} color="#ffb400">
                   {doctor.rating || 5.0} ⭐ ({doctor.reviewCount || 0})
@@ -201,7 +205,7 @@ const DoctorCard = ({ doctor, onBook }) => {
               letterSpacing: "0.5px",
             }}
           >
-            / lượt tư vấn
+            / {t("consultingTurn")}
           </Typography>
         </Box>
       </CardContent>
@@ -235,7 +239,7 @@ const DoctorCard = ({ doctor, onBook }) => {
             },
           }}
         >
-          Xem chi tiết
+          {t("detailButton")}
         </Button>
         <Button
           size="medium"
@@ -254,7 +258,7 @@ const DoctorCard = ({ doctor, onBook }) => {
             },
           }}
         >
-          Đặt lịch ngay
+          {t("registerButton")}
         </Button>
       </CardActions>
     </Card>

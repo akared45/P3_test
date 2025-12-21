@@ -1,0 +1,35 @@
+{
+  "header": {
+    "title": "Quản lý Bệnh nhân"
+  },
+  "search": {
+    "placeholder": "Tìm kiếm..."
+  },
+  "columns": {
+    "id": "ID",
+    "fullName": "Họ và tên",
+    "email": "Email",
+    "gender": "Giới tính",
+    "dateOfBirth": "Ngày sinh",
+    "actions": "Thao tác"
+  },
+  "actions": {
+    "delete": "Xóa bệnh nhân",
+    "confirm_delete": "Bạn có chắc chắn muốn xóa bệnh nhân này không?",
+    "delete_failed": "Xóa thất bại!"
+  },
+  "gender": {
+    "male": "Nam",
+    "female": "Nữ",
+    "other": "Khác"
+  },
+  "dob": {
+    "not_available": "Chưa có"
+  },
+  "fullName": {
+    "not_available": "Chưa cập nhật"
+  },
+  "pagination": {
+    "pageSizeOptions": [10, 25, 50]
+  }
+}

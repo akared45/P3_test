@@ -1,0 +1,18 @@
+{
+  "socialTitle": "Sign in with",
+  "divider": "Or",
+  "emailLabel": "Email",
+  "passwordLabel": "Password", 
+  "rememberMe": "Remember me", 
+  "forgotPasswordLink": "Forgot password?", 
+  "buttonLoading": "Processing...", 
+  "button": "Login",
+  "noAccountText": "Don't have an account?",
+  "registerLink": "Register", 
+  "validationEmailInvalid": "Invalid email", 
+  "validationEmailRequired": "Email is required", 
+  "validationPasswordMin": "Password must be at least 6 characters", 
+  "validationPasswordRequired": "Password is required", 
+  "toastSuccess": "Login successful", 
+  "toastUnverified": "Account not activated yet. Please check your email." 
+}

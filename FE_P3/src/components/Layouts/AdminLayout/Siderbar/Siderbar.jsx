@@ -12,58 +12,60 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
-
-const menuItems = [
-  {
-    label: "Thống kê",
-    to: "bang-dieu-khien",
-    icon: <GridViewIcon />,
-    roles: ["admin", "doctor"],
-  },
-  {
-    label: "Bệnh nhân",
-    to: "benh-nhan",
-    icon: <PersonOutlineOutlinedIcon />,
-    roles: ["admin"],
-  },
-  {
-    label: "Tin nhắn",
-    to: "message",
-    icon: <SmsOutlinedIcon />,
-    roles: ["doctor"],
-  },
-  {
-    label: "Bác sĩ",
-    to: "bac-si",
-    icon: <PeopleAltOutlinedIcon />,
-    roles: ["admin"],
-  },
-  {
-    label: "Lịch làm việc",
-    to: "lich-lam-viec",
-    icon: <CalendarMonthOutlinedIcon />,
-    roles: ["admin", "doctor"],
-  },
-  {
-    label: "Chuyên khoa",
-    to: "chuyen-khoa",
-    icon: <MedicalInformationOutlinedIcon />,
-    roles: ["admin"],
-  },
-  {
-    label: "Cài đặt",
-    to: "cai-dat",
-    icon: <SettingsOutlinedIcon />,
-    roles: ["admin"],
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const Sidebar = () => {
+  const { t } = useTranslation("admin_sidebar");
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem("user"));
   const role = user?.userType?.toLowerCase();
   const [collapsed, setCollapsed] = useState(false);
   const [activePath, setActivePath] = useState("");
+
+  const menuItems = [
+    {
+      label: t("dashboardMenu"),
+      to: "bang-dieu-khien",
+      icon: <GridViewIcon />,
+      roles: ["admin", "doctor"],
+    },
+    {
+      label: t("patientsMenu"),
+      to: "benh-nhan",
+      icon: <PersonOutlineOutlinedIcon />,
+      roles: ["admin"],
+    },
+    {
+      label: t("messagesMenu"),
+      to: "message",
+      icon: <SmsOutlinedIcon />,
+      roles: ["doctor"],
+    },
+    {
+      label: t("doctorsMenu"),
+      to: "bac-si",
+      icon: <PeopleAltOutlinedIcon />,
+      roles: ["admin"],
+    },
+    {
+      label: t("scheduleMenu"),
+      to: "lich-lam-viec",
+      icon: <CalendarMonthOutlinedIcon />,
+      roles: ["admin", "doctor"],
+    },
+    {
+      label: t("specialtiesMenu"),
+      to: "chuyen-khoa",
+      icon: <MedicalInformationOutlinedIcon />,
+      roles: ["admin"],
+    },
+    {
+      label: t("settingsMenu"),
+      to: "cai-dat",
+      icon: <SettingsOutlinedIcon />,
+      roles: ["admin"],
+    },
+  ];
 
   useEffect(() => {
     const path = location.pathname.split("/").pop();
@@ -75,41 +77,48 @@ const Sidebar = () => {
     window.location.href = "/dang-nhap";
   };
 
-  const filteredMenuItems = menuItems.filter((item) => item.roles.includes(role));
+  const filteredMenuItems = menuItems.filter((item) =>
+    item.roles.includes(role)
+  );
 
   return (
-    <section className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""}`} id="sidebar">
+    <section
+      className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""}`}
+      id="sidebar"
+    >
       <div className={styles.sidebarHeader}>
         <div className={styles.logo}>
           <LocalHospitalIcon className={styles.logoIcon} />
           {!collapsed && (
             <div className={styles.logoText}>
               <h2>HealthCare</h2>
-              <span className={styles.logoSubtitle}>Management System</span>
+              <span className={styles.logoSubtitle}>{t("logoSubtitle")}</span>
             </div>
           )}
         </div>
+
         <button
           className={styles.toggleButton}
           onClick={() => setCollapsed(!collapsed)}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {collapsed ?
-            <ChevronRightIcon sx={{ fontSize: 30 }} /> :
-            <ChevronLeftIcon sx={{ fontSize: 30 }} />
+          aria-label={
+            collapsed ? t("toggleExpandAria") : t("toggleCollapseAria")
           }
+        >
+          {collapsed ? (
+            <ChevronRightIcon sx={{ fontSize: 30 }} />
+          ) : (
+            <ChevronLeftIcon sx={{ fontSize: 30 }} />
+          )}
         </button>
       </div>
 
       {!collapsed && user && (
         <div className={styles.userProfile}>
-          <div className={styles.avatar}>
-            {user?.name?.charAt(0) || "U"}
-          </div>
+          <div className={styles.avatar}>{user?.name?.charAt(0) || "U"}</div>
           <div className={styles.userInfo}>
             <h4>{user?.name || "User"}</h4>
             <span className={styles.userType}>
-              {role === "admin" ? "Quản trị viên" : "Bác sĩ"}
+              {role === "admin" ? t("adminRole") : t("doctorRole")}
             </span>
           </div>
         </div>
@@ -140,7 +149,7 @@ const Sidebar = () => {
       <div className={styles.sidebarFooter}>
         <button onClick={handleLogout} className={styles.logoutButton}>
           <LogoutOutlinedIcon />
-          {!collapsed && <span>Đăng xuất</span>}
+          {!collapsed && <span>{t("logoutButton")}</span>}
         </button>
       </div>
     </section>

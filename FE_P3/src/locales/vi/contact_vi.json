@@ -1,0 +1,60 @@
+{
+  "page": {
+    "overline": "LIÊN HỆ VỚI CHÚNG TÔI",
+    "h3": "Chúng tôi luôn sẵn sàng lắng nghe",
+    "subtitle": "Đội ngũ chăm sóc khách hàng của Medicare luôn túc trực để giải đáp mọi thắc mắc và hỗ trợ bạn một cách nhanh nhất."
+  },
+  "contactInfo": [
+    {
+      "title": "Hotline khẩn cấp",
+      "desc": "24/7 cho mọi tình huống",
+      "info": "1900 1234"
+    },
+    {
+      "title": "Địa chỉ phòng khám",
+      "desc": "Tòa nhà Imperial Suites",
+      "info": "71 Vạn Phúc, Ba Đình, Hà Nội"
+    },
+    {
+      "title": "Email hỗ trợ",
+      "desc": "Phản hồi trong 24h",
+      "info": "care@doctor4u.vn"
+    },
+    {
+      "title": "Giờ làm việc",
+      "desc": "Thứ 2 - Chủ Nhật",
+      "info": "07:00 - 20:00"
+    }
+  ],
+  "form": {
+    "name": "Họ và tên",
+    "phone": "Số điện thoại",
+    "email": "Email",
+    "subject": "Vấn đề cần hỗ trợ",
+    "message": "Nội dung tin nhắn",
+    "button": "Gửi tin nhắn",
+    "infoText": "Vui lòng điền thông tin vào biểu mẫu bên dưới, chúng tôi sẽ phản hồi qua Email hoặc Số điện thoại của bạn.",
+    "alert": "Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất!"
+  },
+  "subjects": [
+    { "value": "tuvan", "label": "Tư vấn sức khỏe" },
+    { "value": "datlich", "label": "Hỗ trợ đặt lịch" },
+    { "value": "khieu_nai", "label": "Phản ánh dịch vụ" },
+    { "value": "hop_tac", "label": "Liên hệ hợp tác" }
+  ],
+  "faqs": [
+    {
+      "q": "Tôi có cần đặt lịch trước khi đến khám không?",
+      "a": "Để giảm thiểu thời gian chờ đợi, chúng tôi khuyến khích bạn đặt lịch trước thông qua Website hoặc Ứng dụng. Tuy nhiên, chúng tôi vẫn tiếp nhận bệnh nhân đến trực tiếp."
+    },
+    {
+      "q": "Chi phí khám bệnh là bao nhiêu?",
+      "a": "Chi phí khám tổng quát bắt đầu từ 300.000 VNĐ. Chi phí chi tiết phụ thuộc vào chuyên khoa và các xét nghiệm (nếu có)."
+    },
+    {
+      "q": "Phòng khám có thanh toán bảo hiểm y tế không?",
+      "a": "Có. Chúng tôi hỗ trợ thanh toán bảo hiểm y tế nhà nước và bảo lãnh viện phí cho hơn 20 đơn vị bảo hiểm tư nhân."
+    }
+  ],
+  "sectionHeader": "Gửi tin nhắn cho chúng tôi"
+}

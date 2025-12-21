@@ -116,6 +116,10 @@ const DoctorSchema = new mongoose.Schema({
         reason: { type: String, default: '' },
         allDay: { type: Boolean, default: true }
     }],
+    yearsExperience: {
+        type: Number,
+        default: 0
+    },
     qualifications: [{
         degree: String,
         institution: String,

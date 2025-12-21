@@ -15,10 +15,10 @@ class RefreshTokenUseCase {
     const session = await this.userSessionRepository.findByRefreshToken(oldRefreshToken);
 
     if (!session || !session.isValid()) {
-      if (session) {
-        await this.userSessionRepository.deleteByRefreshToken(oldRefreshToken);
-      }
-      throw new AuthorizationException("Invalid, expired, or revoked refresh token");
+        if (session) {
+            await this.userSessionRepository.deleteByUserId(session.userId);
+        }
+        throw new AuthorizationException("Invalid, expired, or revoked refresh token");
     }
 
     const decoded = this.tokenService.verifyToken(oldRefreshToken);
@@ -28,11 +28,13 @@ class RefreshTokenUseCase {
     }
 
     const user = await this.userRepository.findById(session.userId);
+    await this.userSessionRepository.deleteByUserId(user.id.toString());
 
     if (!user || !user.isActive) {
       await this.userSessionRepository.deleteByRefreshToken(oldRefreshToken);
       throw new AuthorizationException("User not found or inactive");
     }
+    
     const payload = {
       sub: user.id.toString(),
       role: user.userType
@@ -40,15 +42,15 @@ class RefreshTokenUseCase {
 
     const newAccessToken = this.tokenService.generateAccessToken(payload);
     const newRefreshToken = this.tokenService.generateRefreshToken(payload);
-
     const sessionExpiry = this.tokenService.getRefreshTokenExpiry();
+
     const newSession = new UserSession({
       userId: user.id.toString(),
       refreshToken: newRefreshToken,
       expiresAt: sessionExpiry
     });
+
     await this.userSessionRepository.save(newSession);
-    await this.userSessionRepository.deleteByRefreshToken(oldRefreshToken);
 
     return new RefreshTokenResponse({
       accessToken: newAccessToken,
