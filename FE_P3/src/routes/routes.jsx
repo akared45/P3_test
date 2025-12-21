@@ -20,6 +20,7 @@ import ResetPassword from "../pages/Auth/ResetPassword";
 import DoctorChat from "../pages/Admin/Message/DoctorChat";
 import NotificationPage from "../pages/Client/Notification/NotificationPage";
 import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard";
+import PaymentResult from "../pages/Client/Payment/PaymentResult";
 
 const routes = [
   {
@@ -38,6 +39,7 @@ const routes = [
       { path: "quen-mat-khau", element: <ForgotPassword /> },
       { path: "reset-password", element: <ResetPassword /> },
       { path: "notifications", element: <NotificationPage /> },
+      {path: "payment-result", element: <PaymentResult/>}
     ],
   },
   {

@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import paymentApi from '../../services/api';
+import { paymentApi } from '../../services/api';
 import { Button, CircularProgress } from '@mui/material';
 import { toast } from 'react-toastify';
 
-const MomoPaymentButton = ({ appointmentId }) => {
+const VnPayPaymentButton = ({ appointmentId }) => {
     const [loading, setLoading] = useState(false);
 
     const handlePayment = async () => {
         try {
             setLoading(true);
+            const res = await paymentApi.createVnPayUrl({ appointmentId });
+            const paymentUrl = res.data.data || res.data;
 
-            const res = await paymentApi.createMomoUrl(appointmentId);
-
-            if (res && res.payUrl) {
-                window.location.href = res.payUrl;
+            if (paymentUrl) {
+                window.location.href = paymentUrl;
             } else {
-                toast.error("Không lấy được link thanh toán");
+                toast.error("Không lấy được link thanh toán VNPAY");
             }
         } catch (error) {
             console.error(error);
@@ -28,14 +28,17 @@ const MomoPaymentButton = ({ appointmentId }) => {
     return (
         <Button
             variant="contained"
-            color="secondary" 
             onClick={handlePayment}
             disabled={loading}
-            style={{ backgroundColor: '#A50064', color: 'white' }}
+            style={{ 
+                backgroundColor: '#005baa', 
+                color: 'white',
+                fontWeight: 'bold'
+            }}
         >
-            {loading ? <CircularProgress size={24} color="inherit" /> : "Thanh toán qua MoMo"}
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Thanh toán qua VNPAY"}
         </Button>
     );
 };
 
-export default MomoPaymentButton;
+export default VnPayPaymentButton;

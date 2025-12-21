@@ -1,5 +1,6 @@
 const { repositories } = require("../database/database");
 
+// Services
 const BcryptAuthenticationService = require("../services/BcryptAuthenticationService");
 const JwtTokenService = require("../services/JwtTokenService");
 const AuthorizationService = require("../../domain/policies/AuthorizationService");
@@ -8,13 +9,15 @@ const LocalDiskStorageService = require('../storage/LocalDiskStorageService');
 const SocketService = require('../services/SocketService');
 const NodemailerEmailService = require("../services/NodemailerEmailService"); 
 const SecurityService = require('../services/SecurityService'); 
-const MomoPaymentService = require('../services/MomoPaymentService');
+const VnPayPaymentService = require('../services/VnPayPaymentService');
 
+// Repositories (NoSQL specific)
 const MongoNotificationRepository = require('../../infrastructure/database/nosql/repositories/MongoNotificationRepository');
 const MongoMessageRepository = require('../../infrastructure/database/nosql/repositories/MongoMessageRepository');
 const MongoPaymentRepository = require('../../infrastructure/database/nosql/repositories/MongoPaymentRepository');
 const MongoStatisticsRepository = require('../../infrastructure/database/nosql/repositories/MongoStatisticsRepository');
 
+// --- INSTANCE CREATION ---
 const authenticationService = new BcryptAuthenticationService();
 const tokenService = new JwtTokenService();
 const authorizationService = new AuthorizationService();
@@ -23,8 +26,7 @@ const storageService = new LocalDiskStorageService();
 const socketService = new SocketService();
 const emailService = new NodemailerEmailService(); 
 const securityService = new SecurityService();
-const momoPaymentService = new MomoPaymentService();
-
+const vnPayPaymentService = new VnPayPaymentService(); 
 const {
     userRepository,
     userSessionRepository,
@@ -37,6 +39,8 @@ const notificationRepository = new MongoNotificationRepository();
 const messageRepository = new MongoMessageRepository();
 const paymentRepository = new MongoPaymentRepository();
 const statisticsRepository = new MongoStatisticsRepository();
+
+// ================= USE CASES =================
 
 // 1. Auth Module
 const RegisterPatientUseCase = require("../../application/use_cases/auth/RegisterPatientUseCase");
@@ -215,19 +219,22 @@ const getNotificationsUseCase = new GetNotificationsUseCase({ notificationReposi
 const markNotificationAsReadUseCase = new MarkNotificationAsReadUseCase({ notificationRepository });
 const deleteNotificationUseCase = new DeleteNotificationUseCase({ notificationRepository });
 
-// 9. Payment Module
-const CreatePaymentUrlUseCase = require('../../application/use_cases/payment/CreatePaymentUrlUseCase');
-const HandleMomoCallbackUseCase = require('../../application/use_cases/payment/HandleMomoCallbackUseCase');
+// 9. Payment Module (VNPAY)
+const CreateVnPayUrlUseCase = require('../../application/use_cases/payment/CreateVnPayUrlUseCase');
+// Lưu ý: Nếu bạn chưa tách logic return ra UseCase riêng thì dùng vnPayPaymentService trong Controller
+// Nhưng theo chuẩn Clean Architecture thì nên dùng UseCase này:
+const HandleVnPayCallbackUseCase = require('../../application/use_cases/payment/HandleVnPayCallbackUseCase');
 
-const createPaymentUrlUseCase = new CreatePaymentUrlUseCase({
+const createVnPayUrlUseCase = new CreateVnPayUrlUseCase({
     appointmentRepository,
-    momoPaymentService
+    paymentService: vnPayPaymentService // Inject Service VNPAY vào UseCase
 });
 
-const handleMomoCallbackUseCase = new HandleMomoCallbackUseCase({
+// UseCase xử lý khi VNPAY gọi về (Return URL / IPN)
+const handleVnPayCallbackUseCase = new HandleVnPayCallbackUseCase({
     appointmentRepository,
     paymentRepository,
-    momoPaymentService,
+    vnPayPaymentService, // Cần cái này để verify checksum
     socketService,
     notificationRepository,
     userRepository,
@@ -235,7 +242,7 @@ const handleMomoCallbackUseCase = new HandleMomoCallbackUseCase({
 });
 
 
-//--CONTROLLERS--//
+// ================= CONTROLLERS =================
 const AuthController = require("../../presentation/controllers/AuthController");
 const AdminController = require("../../presentation/controllers/AdminController");
 const DoctorController = require("../../presentation/controllers/DoctorController");
@@ -317,8 +324,9 @@ const notificationController = new NotificationController({
 });
 
 const paymentController = new PaymentController({
-    createPaymentUrlUseCase,
-    handleMomoCallbackUseCase
+    createVnPayUrlUseCase, 
+    handleVnPayCallbackUseCase, // Inject UseCase xử lý Return
+    vnPayPaymentService // (Dự phòng) Nếu Controller bạn dùng service trực tiếp thì cần dòng này
 });
 
 const statisticsController = new StatisticsController({

@@ -3,8 +3,7 @@ import { Dialog, DialogTitle, DialogContent, Box } from "@mui/material";
 import { CalendarMonth, Payment } from "@mui/icons-material";
 import BookingForm from "./BookingForm";
 import PaymentPrompt from "./PaymentPrompt";
-import { appointmentApi } from "../../../services/api";
-import { paymentApi } from "../../../services/api";
+import { appointmentApi, paymentApi } from "../../../services/api";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -53,23 +52,46 @@ const BookingDialog = ({ open, onClose, doctor }) => {
     }
   };
 
-  const handleMomoPayment = async () => {
+const handleVnPayPayment = async () => {
     if (!newAppointmentId) return;
+    
     setPaymentLoading(true);
+    const paymentWindow = window.open("", "_blank");
+    if (paymentWindow) {
+        paymentWindow.document.write(
+            '<html><head><title>Thanh toán VNPAY</title></head><body><h3 style="text-align:center; margin-top: 50px; font-family: sans-serif;">Đang kết nối đến VNPAY, vui lòng chờ...</h3></body></html>'
+        );
+    }
+
     try {
-      const res = await paymentApi.createMomoUrl(newAppointmentId);
-      if (res?.data?.payUrl) {
-        window.location.href = res.data.payUrl;
+      const res = await paymentApi.createVnPayUrl({ appointmentId: newAppointmentId });
+      const responseData = res.data.data || res.data;
+      let paymentUrl = "";
+
+      if (typeof responseData === 'string') {
+          paymentUrl = responseData;
+      } else if (responseData?.payUrl) {
+          paymentUrl = responseData.payUrl;
+      }
+
+      if (paymentUrl) {
+        if (paymentWindow) {
+            paymentWindow.location.href = paymentUrl;
+        } else {
+            window.open(paymentUrl, "_blank");
+        }
       } else {
-        alert(t("paymentLinkError"));
+        paymentWindow?.close();
+        alert(t("paymentLinkError") || "Không lấy được link thanh toán");
       }
     } catch (error) {
       console.error(error);
+      paymentWindow?.close();
+      alert("Lỗi kết nối cổng thanh toán VNPAY");
     } finally {
       setPaymentLoading(false);
     }
   };
-
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ bgcolor: "#f8f9fa", borderBottom: "1px solid #eee" }}>
@@ -88,7 +110,7 @@ const BookingDialog = ({ open, onClose, doctor }) => {
           <PaymentPrompt
             doctor={doctor}
             loading={paymentLoading}
-            onPayment={handleMomoPayment}
+            onPayment={handleVnPayPayment}
             onClose={onClose}
           />
         ) : (

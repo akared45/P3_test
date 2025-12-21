@@ -15,7 +15,6 @@ const PaymentHistory = () => {
 
     // Hàm kiểm tra xem lịch hẹn có quá hạn không
     const isExpired = (dateString) => {
-        // So sánh thời gian hiện tại với thời gian hẹn
         return new Date() > new Date(dateString);
     };
 
@@ -49,20 +48,17 @@ const PaymentHistory = () => {
     const handlePayNow = async (appointmentId) => {
         setPayingId(appointmentId);
         
-        // 1. Mở trước cửa sổ để tránh popup blocker
         const paymentWindow = window.open('', '_blank');
         if (paymentWindow) {
-            paymentWindow.document.write('<html><body><h3 style="text-align:center; margin-top: 50px; font-family: sans-serif;">Đang chuyển hướng đến MoMo...</h3></body></html>');
+            paymentWindow.document.write('<html><head><title>VNPAY</title></head><body><h3 style="text-align:center; margin-top: 50px; font-family: sans-serif;">Đang kết nối đến cổng VNPAY...</h3></body></html>');
         }
 
-        try {
-            // 2. Gọi API lấy link
-            const res = await paymentApi.createMomoUrl({ appointmentId });
-            console.log(res);
-            const paymentUrl = res.data.payUrl || res.data.url || res.data;
+        try {            
+            const res = await paymentApi.createVnPayUrl({ appointmentId });
+            const responseData = res.data.data || res.data;
+            const paymentUrl = typeof responseData === 'string' ? responseData : responseData?.payUrl;
 
             if (paymentUrl) {
-                // 3. Gán link vào cửa sổ đã mở
                 if (paymentWindow) {
                     paymentWindow.location.href = paymentUrl;
                 } else {
@@ -93,13 +89,10 @@ const PaymentHistory = () => {
                 {unpaidItems.length > 0 ? (
                     <Grid container spacing={2}>
                         {unpaidItems.map((item) => {
-                            // Kiểm tra quá hạn cho từng item
                             const expired = isExpired(item.appointmentDate);
-
                             return (
-                                <Grid item xs={12} md={6} key={item.id}>
+                                <Grid item xs={12} md={6} key={item.id || item._id}>
                                     <Card sx={{ 
-                                        // Nếu quá hạn: Viền xám, nền xám nhạt, mờ đi chút
                                         borderLeft: expired ? '4px solid #9e9e9e' : '4px solid #d32f2f', 
                                         bgcolor: expired ? '#f5f5f5' : '#fff5f5',
                                         opacity: expired ? 0.8 : 1
@@ -118,7 +111,6 @@ const PaymentHistory = () => {
 
                                                 <Box>
                                                     {expired ? (
-                                                        // HIỂN THỊ KHI QUÁ HẠN
                                                         <Chip 
                                                             icon={<EventBusy />} 
                                                             label="Đã quá hạn" 
@@ -128,16 +120,15 @@ const PaymentHistory = () => {
                                                             sx={{ borderColor: '#9e9e9e', color: '#616161' }}
                                                         />
                                                     ) : (
-                                                        // HIỂN THỊ KHI CÒN HẠN -> Nút thanh toán
                                                         <Button
                                                             variant="contained"
                                                             color="error"
                                                             size="small"
-                                                            endIcon={payingId === item.id ? <CircularProgress size={20} color="inherit" /> : <ArrowForward />}
-                                                            disabled={payingId === item.id}
-                                                            onClick={() => handlePayNow(item.id)}
+                                                            endIcon={payingId === (item.id || item._id) ? <CircularProgress size={20} color="inherit" /> : <ArrowForward />}
+                                                            disabled={payingId === (item.id || item._id)}
+                                                            onClick={() => handlePayNow(item.id || item._id)}
                                                         >
-                                                            {payingId === item.id ? "Đang tạo link..." : "Thanh toán ngay"}
+                                                            {payingId === (item.id || item._id) ? "Đang tạo..." : "Thanh toán ngay"}
                                                         </Button>
                                                     )}
                                                 </Box>
@@ -165,14 +156,14 @@ const PaymentHistory = () => {
                 ) : (
                     <Box display="flex" flexDirection="column" gap={2}>
                         {paidItems.map(item => (
-                            <Paper key={item.id} variant="outlined" sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Paper key={item.id || item._id} variant="outlined" sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Box>
                                     <Typography variant="subtitle2" fontWeight="bold">Thanh toán phí khám - BS. {item.doctorName}</Typography>
                                     <Typography variant="caption" color="text.secondary">
                                         Mã GD: {item.transactionId || '---'} | Ngày: {dayjs(item.updatedAt).format("DD/MM/YYYY HH:mm")}
                                     </Typography>
                                     <Typography variant="caption" display="block" color="text.secondary">
-                                        Phương thức: {item.paymentMethod || 'MOMO'}
+                                        Phương thức: {item.paymentMethod || 'VNPAY'}
                                     </Typography>
                                 </Box>
                                 <Box textAlign="right">
