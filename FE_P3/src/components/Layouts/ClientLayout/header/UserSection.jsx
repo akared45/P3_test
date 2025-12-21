@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -16,8 +16,8 @@ import { settings as rawSettings } from "./menuData";
 import NotificationBell from "../../../ui/NotificationBell";
 import { useTranslation } from "react-i18next";
 
-const UserSection = ({ user, isLoggedIn, onLogoutRequest }) => {
-  const { t } = useTranslation("usersection"); // dùng namespace usersection
+const UserSection = ({ user, isLoggedIn, onLogoutRequest, fetchProfile }) => {
+  const { t } = useTranslation("usersection");
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
@@ -28,6 +28,10 @@ const UserSection = ({ user, isLoggedIn, onLogoutRequest }) => {
     if (url.startsWith("http")) return url;
     return "http://localhost:3000" + url;
   };
+
+  useEffect(() => {
+    fetchProfile();
+  });
 
   // Map settings để dịch
   const settings = rawSettings.map((s) => ({

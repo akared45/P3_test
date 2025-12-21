@@ -1,12 +1,7 @@
 {
   "hero": {
     "subtitle": "Chào mừng bạn đến với Medicare",
-    "title": {
-      "health": "Sức khỏe",
-      "your": "của bạn",
-      "our": "của chúng tôi",
-      "responsibility": "Trách nhiệm"
-    },
+    "title": "SỨC KHỎE CỦA BẠN LÀ TRÁCH NHIỆM CỦA CHÚNG TÔI",
     "description": "Tại Medicare, chúng tôi kết hợp đội ngũ bác sĩ hàng đầu cùng công nghệ y khoa tiên tiến nhất để mang lại lộ trình điều trị tối ưu. Sức khỏe của bạn là sứ mệnh cao cả nhất của chúng tôi",
     "buttons": {
       "register": "Đăng ký ngay",

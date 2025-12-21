@@ -10,9 +10,7 @@ const Hero = () => {
       <div className={styles.hero__left}>
         <h5 className={styles.hero__subtitle}>{t("hero.subtitle")}</h5>
 
-        <h1 className={styles.hero__title}>
-          <span>Sức khỏe</span> của bạn, <span>Trách nhiệm</span> của chúng tôi
-        </h1>
+        <h1 className={styles.hero__title}>{t("hero.title")}</h1>
 
         <p className={styles.hero__description}>{t("hero.description")}</p>
 

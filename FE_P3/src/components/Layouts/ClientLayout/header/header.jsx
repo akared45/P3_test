@@ -21,17 +21,18 @@ const Header = () => {
     setOpenLogoutModal(false);
   };
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (!user?.id) return;
+  const fetchProfile = async () => {
+    if (!user?.id) return;
 
-      try {
-        const res = await patientApi.getById(user.id);
-        setProfile(res.data);
-      } catch (error) {
-        console.error("Lỗi lấy profile:", error);
-      }
-    };
+    try {
+      const res = await patientApi.getById(user.id);
+      setProfile(res.data);
+    } catch (error) {
+      console.error("Lỗi lấy profile:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchProfile();
   }, [user?.id]);
 
@@ -51,19 +52,17 @@ const Header = () => {
             <MobileMenu />
             <Logo isMobile={true} />
             <DesktopMenu />
-            <div style={{ marginRight: '20px' }}>
+            <div style={{ marginRight: "20px" }}>
               <LanguageSwitcher />
             </div>
             <UserSection
+              fetchProfile={fetchProfile}
               user={profile}
               isLoggedIn={!!user}
               onLogoutRequest={() => setOpenLogoutModal(true)}
             />
-
           </Toolbar>
-
         </Container>
-
       </AppBar>
 
       <Modal
