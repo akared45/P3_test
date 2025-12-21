@@ -68,14 +68,19 @@ const BasicInfo = ({ formik, isEditing }) => {
       <Grid item xs={12} sm={6}>
         <TextField
           fullWidth
+          type="date"
           label={t("basicInfo.dateOfBirth")}
           name="dateOfBirth"
-          type="date"
-          value={values.dateOfBirth}
-          onChange={handleChange}
+          value={formik.values.dateOfBirth}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           disabled={!isEditing}
+          error={
+            formik.touched.dateOfBirth && Boolean(formik.errors.dateOfBirth)
+          }
+          helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
           InputLabelProps={{ shrink: true }}
-          variant={isEditing ? "outlined" : "filled"}
+          inputProps={{ max: new Date().toISOString().split("T")[0] }}
         />
       </Grid>
     </Grid>

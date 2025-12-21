@@ -1,12 +1,7 @@
 {
   "hero": {
     "subtitle": "Welcome to Medicare",
-    "title": {
-      "health": "Health",
-      "your": "Your",
-      "our": "Our",
-      "responsibility": "Responsibility"
-    },
+    "title": "YOUR HEALTH IS OUR RESPONSIBILITY",
     "description": "At Medicare, we combine top doctors with the most advanced medical technology to provide the optimal treatment plan. Your health is our highest mission.",
     "buttons": {
       "register": "Register Now",

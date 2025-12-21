@@ -23,6 +23,10 @@ const ProfileForm = ({ initialValues, onSubmit, onUploadAvatar }) => {
       .required(t("form.validation.phone.required"))
       .matches(/^[0-9+]{9,15}$/, t("form.validation.phone.invalid")),
 
+    dateOfBirth: Yup.date()
+      .required(t("form.validation.dateOfBirth.required"))
+      .max(new Date(), t("form.validation.dateOfBirth.future")), // ❌ không được chọn ngày tương lai
+
     medicalConditions: Yup.array()
       .min(1, t("form.validation.medicalConditions.min"))
       .of(
