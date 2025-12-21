@@ -22,6 +22,8 @@ import VisualSchedule from "./VisualSchedule";
 
 const AdminSchedule = () => {
   const { t } = useTranslation("admin_schedule");
+  const user = JSON.parse(localStorage.getItem("user"));
+  const role = user?.userType?.toLowerCase();
 
   const DAYS = [
     { key: "Monday", label: t("days.Monday") },
@@ -46,6 +48,11 @@ const AdminSchedule = () => {
     end: "17:00",
     maxPatients: 10,
   });
+  useEffect(() => {
+    if (role !== "admin" && tabValue === 1) {
+      setTabValue(0);
+    }
+  }, [role, tabValue]);
 
   const fetchDoctors = async () => {
     try {
@@ -122,11 +129,13 @@ const AdminSchedule = () => {
             iconPosition="start"
             label={t("tabs.hospital_schedule")}
           />
-          <Tab
-            icon={<Settings />}
-            iconPosition="start"
-            label={t("tabs.individual_schedule")}
-          />
+          {role === "admin" && (
+            <Tab
+              icon={<Settings />}
+              iconPosition="start"
+              label={t("tabs.individual_schedule")}
+            />
+          )}
         </Tabs>
       </Paper>
 
