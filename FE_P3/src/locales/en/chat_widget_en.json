@@ -2,5 +2,18 @@
   "chatHeaderTitle": "Chat with Doctor",
   "inputPlaceholder": "Type a message...",
   "sendButton": "Send",
-  "botResponse": "The doctor has received your message!" 
+  "botResponse": "The doctor has received your message!",
+  "chatWidget": {
+    "floatingHint": "Get advice now!",
+    "doctorAlt": "Chat with AI doctor",
+    "headerTitle": "Chat with the doctor",
+    "loadingMessage": "Responding...",
+    "inputPlaceholder": "Type your message...",
+    "sendButton": "Send",
+    "initialMessage": "Hello! I am your virtual health assistant. Please describe your health issue so I can suggest the appropriate specialty.",
+    "errorMessage": "An error occurred, please try again.",
+    "fallbackMessage": "Sorry, the doctor hasn't replied yet."
+  }
+ 
+
 }

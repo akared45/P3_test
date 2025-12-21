@@ -2,5 +2,16 @@
   "chatHeaderTitle": "Chat với bác sĩ",
   "inputPlaceholder": "Nhập tin nhắn...",
   "sendButton": "Gửi", 
-  "botResponse": "Bác sĩ đã nhận được tin nhắn của bạn!" 
+  "botResponse": "Bác sĩ đã nhận được tin nhắn của bạn!" ,
+   "chatWidget": {
+    "floatingHint": "Tư vấn ngay!",
+    "doctorAlt": "Chat với bác sĩ AI",
+    "headerTitle": "Chat với bác sĩ",
+    "loadingMessage": "Đang trả lời...",
+    "inputPlaceholder": "Nhập tin nhắn...",
+    "sendButton": "Gửi",
+    "initialMessage": "Xin chào! Tôi là trợ lý y tế ảo. Bạn đang gặp vấn đề gì về sức khỏe? Hãy mô tả để tôi tư vấn chuyên khoa phù hợp nhé.",
+    "errorMessage": "Có lỗi xảy ra, vui lòng thử lại.",
+    "fallbackMessage": "Xin lỗi, bác sĩ chưa trả lời kịp."
+  }
 }

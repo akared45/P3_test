@@ -46,7 +46,7 @@ const DoctorDetail = () => {
           <BreadCrumb
             items={[
               { label: t("breadcrumbHome"), to: "/" },
-              { label: t("breadcrumbDoctors"), to: "/bac-si" },
+              { label: t("breadcrumbDoctors"), to: "/doi-ngu-bac-si" },
               { label: doctor.fullName, to: "#" },
             ]}
           />
@@ -61,8 +61,11 @@ const DoctorDetail = () => {
             flexDirection: { xs: "column", md: "row" },
           }}
         >
-          <DoctorInfoSidebar doctor={doctor} onBook={() => setOpenBooking(true)} />
-          
+          <DoctorInfoSidebar
+            doctor={doctor}
+            onBook={() => setOpenBooking(true)}
+          />
+
           <Box
             sx={{
               flex: 1,

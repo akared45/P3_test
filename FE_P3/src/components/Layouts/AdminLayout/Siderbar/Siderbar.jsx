@@ -39,7 +39,7 @@ const Sidebar = () => {
       label: t("medicineMenu"),
       to: "thuoc",
       icon: <MedicalServicesOutlinedIcon />,
-      roles: ["doctor"],
+      roles: ["doctor", "admin"],
     },
     {
       label: t("doctorsMenu"),
@@ -57,12 +57,6 @@ const Sidebar = () => {
       label: t("specialtiesMenu"),
       to: "chuyen-khoa",
       icon: <MedicalInformationOutlinedIcon />,
-      roles: ["admin"],
-    },
-    {
-      label: t("settingsMenu"),
-      to: "cai-dat",
-      icon: <SettingsOutlinedIcon />,
       roles: ["admin"],
     },
   ];

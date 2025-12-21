@@ -31,7 +31,7 @@ const UserSection = ({ user, isLoggedIn, onLogoutRequest, fetchProfile }) => {
 
   useEffect(() => {
     fetchProfile();
-  });
+  }, []);
 
   // Map settings để dịch
   const settings = rawSettings.map((s) => ({

@@ -1,0 +1,15 @@
+{
+  "notificationPage": {
+    "title": "Notifications",
+    "newChip": "{count} new",
+    "markAllReadButton": "Mark all as read",
+    "tabs": {
+      "all": "All",
+      "unread": "Unread"
+    },
+    "noNotifications": "No notifications.",
+    "menuMarkAsRead": "Mark as read",
+    "menuDelete": "Delete notification",
+    "loading": "Loading..."
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -18,19 +18,21 @@ import { fromZonedTime } from "date-fns-tz";
 import { appointmentApi } from "../../../services/api";
 import { useTranslation } from "react-i18next";
 
-const DAYS_CONFIG = {
-  Sunday: { index: 0, key: "sunday" },
-  Monday: { index: 1, key: "monday" },
-  Tuesday: { index: 2, key: "tuesday" },
-  Wednesday: { index: 3, key: "wednesday" },
-  Thursday: { index: 4, key: "thursday" },
-  Friday: { index: 5, key: "friday" },
-  Saturday: { index: 6, key: "saturday" },
+// Mapping chuẩn để so sánh ngày
+const DAYS_MAP = {
+  Sunday: 0,
+  Monday: 1,
+  Tuesday: 2,
+  Wednesday: 3,
+  Thursday: 4,
+  Friday: 5,
+  Saturday: 6,
 };
 
 const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
   const { t } = useTranslation("doctorcard");
 
+  // States
   const [selectedScheduleIndex, setSelectedScheduleIndex] = useState(null);
   const [generatedSlots, setGeneratedSlots] = useState([]);
   const [busySlots, setBusySlots] = useState([]);
@@ -38,100 +40,111 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [symptoms, setSymptoms] = useState("");
 
-  const getNextDate = (dayName) => {
-    const targetIndex = DAYS_CONFIG[dayName]?.index;
-    if (targetIndex === undefined) return null;
+  /**
+   * Tính toán ngày tiếp theo dựa trên thứ (Monday, Tuesday...)
+   * Nếu là hôm nay và đã qua giờ kết thúc ca, sẽ nhảy sang tuần sau.
+   */
+  const getTargetDate = (dayName, endTimeStr) => {
+    const targetDayIndex = DAYS_MAP[dayName];
+    if (targetDayIndex === undefined) return null;
 
-    const date = new Date();
-    const currentDayIndex = date.getDay();
-
-    let daysToAdd = targetIndex - currentDayIndex;
-
-    if (daysToAdd < 0) {
-      daysToAdd += 7;
-    }
-
-    date.setDate(date.getDate() + daysToAdd);
-    return date.toISOString().split("T")[0];
-  };
-  
-  const isSlotBusy = (slotIsoTime) => {
-    if (!busySlots?.length) return false;
-    const slotTime = new Date(slotIsoTime).getTime();
-    return busySlots.some(
-      (busy) => new Date(busy.startTime).getTime() === slotTime
-    );
-  };
-
-  const handleSelectSchedule = async (index, schedule) => {
-    setSelectedScheduleIndex(index);
-    setSelectedSlot(null);
-    setBusySlots([]);
-
-    const date = new Date();
-    const currentDayIndex = date.getDay();
-    const targetDayIndex = DAYS_CONFIG[schedule.day]?.index;
+    const now = new Date();
+    const currentDayIndex = now.getDay();
     let daysToAdd = targetDayIndex - currentDayIndex;
 
     if (daysToAdd < 0) daysToAdd += 7;
 
+    // Xử lý nếu chọn trúng ngày hôm nay
     if (daysToAdd === 0) {
-      const [endH, endM] = schedule.end.split(":").map(Number);
-      const nowH = date.getHours();
-      const nowM = date.getMinutes();
+      const [endH, endM] = endTimeStr.split(":").map(Number);
+      const shiftEnd = new Date(now);
+      shiftEnd.setHours(endH, endM, 0, 0);
 
-      if (nowH > endH || (nowH === endH && nowM >= endM)) {
+      // Nếu hiện tại đã quá giờ kết thúc ca khám hôm nay -> Nhảy sang tuần sau
+      if (now > shiftEnd) {
         daysToAdd = 7;
       }
     }
 
-    const nextDateStr = new Date(date.setDate(date.getDate() + daysToAdd))
-      .toISOString()
-      .split("T")[0];
+    const targetDate = new Date(now);
+    targetDate.setDate(now.getDate() + daysToAdd);
+    return targetDate;
+  };
 
+  /**
+   * Kiểm tra xem slot có bị trùng lịch (busy) hay không
+   */
+  const isSlotBusy = (slotIsoTime) => {
+    if (!busySlots?.length) return false;
+    const targetTime = new Date(slotIsoTime).getTime();
+    return busySlots.some(
+      (busy) => new Date(busy.startTime).getTime() === targetTime
+    );
+  };
+
+  /**
+   * Xử lý khi người dùng chọn một ca khám (Thứ 2, Thứ 3...)
+   */
+  const handleSelectSchedule = async (index, schedule) => {
+    setSelectedScheduleIndex(index);
+    setSelectedSlot(null);
+    setGeneratedSlots([]);
     setCheckingSlots(true);
+
+    const doctorTimeZone = doctor.timeZone || "Asia/Ho_Chi_Minh";
+    const targetDateObj = getTargetDate(schedule.day, schedule.end);
+    const dateStr = format(targetDateObj, "yyyy-MM-dd");
+
     try {
+      // 1. Gọi API lấy các slot đã bị đặt
       const res = await appointmentApi.getBusySlots(
         doctor.id || doctor._id,
-        nextDateStr
+        dateStr
       );
-      setBusySlots(res.data?.data || res.data || []);
-    } catch (e) {
-      console.error(e);
+      const busyData = res.data?.data || res.data || [];
+      setBusySlots(busyData);
+
+      // 2. Tạo danh sách các slot 30 phút
+      const slots = [];
+      const [startH, startM] = schedule.start.split(":").map(Number);
+      const [endH, endM] = schedule.end.split(":").map(Number);
+
+      let currentTotalMins = startH * 60 + startM;
+      const endTotalMins = endH * 60 + endM;
+
+      while (currentTotalMins < endTotalMins) {
+        const h = Math.floor(currentTotalMins / 60);
+        const m = currentTotalMins % 60;
+        const timeStr = `${h.toString().padStart(2, "0")}:${m
+          .toString()
+          .padStart(2, "0")}`;
+
+        // Chuyển đổi giờ địa phương của bác sĩ sang ISO dựa trên múi giờ
+        const slotDateObj = fromZonedTime(
+          `${dateStr} ${timeStr}`,
+          doctorTimeZone
+        );
+
+        // Chỉ thêm slot nếu nó ở tương lai so với thời điểm hiện tại
+        if (slotDateObj.getTime() > new Date().getTime()) {
+          slots.push({
+            display: timeStr,
+            iso: slotDateObj.toISOString(),
+            dateObj: slotDateObj,
+          });
+        }
+        currentTotalMins += 30;
+      }
+      setGeneratedSlots(slots);
+    } catch (error) {
+      console.error("Error fetching slots:", error);
     } finally {
       setCheckingSlots(false);
     }
-
-    const doctorTimeZone = doctor.timeZone || "Asia/Ho_Chi_Minh";
-    const slots = [];
-    const [startH, startM] = schedule.start.split(":").map(Number);
-    const [endH, endM] = schedule.end.split(":").map(Number);
-    let currentTotalMins = startH * 60 + startM;
-    const endTotalMins = endH * 60 + endM;
-
-    while (currentTotalMins < endTotalMins) {
-      const h = Math.floor(currentTotalMins / 60);
-      const m = currentTotalMins % 60;
-      const timeStr = `${h.toString().padStart(2, "0")}:${m
-        .toString()
-        .padStart(2, "0")}`;
-      const dateTimeString = `${nextDateStr} ${timeStr}`;
-      const dateObj = fromZonedTime(dateTimeString, doctorTimeZone);
-
-      if (dateObj.getTime() > new Date().getTime()) {
-        slots.push({
-          display: format(dateObj, "HH:mm"),
-          iso: dateObj.toISOString(),
-          dateObj: dateObj,
-        });
-      }
-      currentTotalMins += 30;
-    }
-    setGeneratedSlots(slots);
   };
 
-  const handleSubmit = () => {
-    if (!selectedSlot || !symptoms) return;
+  const handleFinalSubmit = () => {
+    if (!selectedSlot || !symptoms.trim()) return;
     onSubmit({
       appointmentDate: selectedSlot.iso,
       symptoms,
@@ -139,55 +152,64 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
   };
 
   return (
-    <>
+    <Box>
+      {/* Bước 1: Chọn ca khám */}
       <Box mb={3}>
-        <Typography variant="subtitle2" fontWeight={600}>
-          <EventNote fontSize="small" /> {t("step1")}
+        <Typography
+          variant="subtitle2"
+          fontWeight={600}
+          display="flex"
+          alignItems="center"
+          gap={1}
+          mb={1.5}
+        >
+          <EventNote color="primary" fontSize="small" /> {t("step1")}
         </Typography>
-
         <Grid container spacing={1.5}>
-          {doctor?.schedules?.map((schedule, index) => {
-            const isSelected = selectedScheduleIndex === index;
-            const dayKey = DAYS_CONFIG[schedule.day]?.key;
-
-            return (
-              <Grid item xs={6} sm={4} key={index}>
-                <Button
-                  fullWidth
-                  variant={isSelected ? "contained" : "outlined"}
-                  onClick={() => handleSelectSchedule(index, schedule)}
-                  sx={{ 
-                    flexDirection: "column", 
-                    py: 1.5,
-                    borderColor: isSelected ? "primary.main" : undefined,
-                    borderWidth: isSelected ? 2 : 1,
-                  }}
-                >
-                  <Typography fontWeight={700}>
-                    {dayKey ? t(dayKey) : schedule.day}
-                  </Typography>
-                  <Typography variant="caption">
-                    {schedule.start} - {schedule.end}
-                  </Typography>
-                </Button>
-              </Grid>
-            );
-          })}
+          {doctor?.schedules?.map((schedule, index) => (
+            <Grid item xs={6} sm={4} key={index}>
+              <Button
+                fullWidth
+                variant={
+                  selectedScheduleIndex === index ? "contained" : "outlined"
+                }
+                onClick={() => handleSelectSchedule(index, schedule)}
+                sx={{ flexDirection: "column", py: 1.5, borderRadius: 2 }}
+              >
+                <Typography fontWeight={700} variant="body2">
+                  {t(schedule.day.toLowerCase()) || schedule.day}
+                </Typography>
+                <Typography variant="caption">
+                  {schedule.start} - {schedule.end}
+                </Typography>
+              </Button>
+            </Grid>
+          ))}
         </Grid>
       </Box>
 
       <Divider />
 
+      {/* Bước 2: Chọn khung giờ cụ thể */}
       {selectedScheduleIndex !== null && (
         <Box mt={3}>
-          <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
-            <Typography variant="subtitle2" fontWeight={600}>
-              <AccessTime fontSize="small" /> {t("step2")}
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            mb={2}
+          >
+            <Typography
+              variant="subtitle2"
+              fontWeight={600}
+              display="flex"
+              alignItems="center"
+              gap={1}
+            >
+              <AccessTime color="primary" fontSize="small" /> {t("step2")}
             </Typography>
-            
-            {/* Hiá»ƒn thá»‹ thÃ´ng tin ngÃ y Ä‘Ã£ chá»n */}
             {generatedSlots.length > 0 && (
-              <Chip 
+              <Chip
                 label={format(generatedSlots[0].dateObj, "dd/MM/yyyy")}
                 color="primary"
                 variant="outlined"
@@ -196,20 +218,19 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
             )}
           </Box>
 
-          <Alert severity="info" sx={{ mb: 2 }}>{t("slotInfo")}</Alert>
-
           {checkingSlots ? (
-            <Box display="flex" justifyContent="center" alignItems="center" p={3}>
+            <Box textAlign="center" py={3}>
               <CircularProgress size={24} />
-              <Typography ml={1}>{t("checking")}</Typography>
+              <Typography variant="caption" display="block" mt={1}>
+                {t("checking")}
+              </Typography>
             </Box>
           ) : (
-            <>
-              <Grid container spacing={1.5}>
-                {generatedSlots.map((slot, idx) => {
+            <Grid container spacing={1}>
+              {generatedSlots.length > 0 ? (
+                generatedSlots.map((slot, idx) => {
                   const isBusy = isSlotBusy(slot.iso);
                   const isSelected = selectedSlot?.iso === slot.iso;
-                  
                   return (
                     <Grid item xs={4} sm={3} md={2.4} key={idx}>
                       <Button
@@ -217,50 +238,44 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
                         variant={isSelected ? "contained" : "outlined"}
                         disabled={isBusy}
                         onClick={() => setSelectedSlot(slot)}
-                        sx={{
-                          py: 1.5,
-                          fontWeight: isSelected ? 700 : 400,
-                          borderColor: isSelected ? 'primary.main' : undefined,
-                          borderWidth: isSelected ? 2 : 1,
-                          bgcolor: isSelected ? 'primary.main' : 'transparent',
-                          '&:hover': {
-                            bgcolor: isSelected ? 'primary.dark' : 'action.hover',
-                          },
-                          position: 'relative',
-                          overflow: 'hidden',
-                        }}
+                        sx={{ position: "relative", py: 1 }}
                       >
                         {slot.display}
                         {isSelected && (
-                          <CheckCircle 
-                            sx={{ 
-                              position: 'absolute', 
-                              top: 4, 
-                              right: 4, 
-                              fontSize: 16 
-                            }} 
+                          <CheckCircle
+                            sx={{
+                              position: "absolute",
+                              top: 2,
+                              right: 2,
+                              fontSize: 12,
+                            }}
                           />
                         )}
                       </Button>
                       {isBusy && (
-                        <Typography 
-                          variant="caption" 
-                          color="error" 
-                          sx={{ display: 'block', textAlign: 'center', mt: 0.5 }}
+                        <Typography
+                          variant="caption"
+                          color="error"
+                          display="block"
+                          textAlign="center"
                         >
                           {t("busy")}
                         </Typography>
                       )}
                     </Grid>
                   );
-                })}
-              </Grid>
-          
-            </>
+                })
+              ) : (
+                <Grid item xs={12}>
+                  <Alert severity="warning">{t("noSlotsAvailable")}</Alert>
+                </Grid>
+              )}
+            </Grid>
           )}
         </Box>
       )}
 
+      {/* Bước 3: Nhập triệu chứng */}
       {selectedSlot && (
         <Box mt={3}>
           <Typography variant="subtitle2" fontWeight={600} mb={1}>
@@ -273,25 +288,24 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
             placeholder={t("placeholderSymptoms")}
             value={symptoms}
             onChange={(e) => setSymptoms(e.target.value)}
-            sx={{ mb: 2 }}
           />
         </Box>
       )}
 
       <DialogActions sx={{ mt: 3, px: 0 }}>
-        <Button onClick={onCancel} variant="outlined">
+        <Button onClick={onCancel} color="inherit">
           {t("cancelButton")}
         </Button>
         <Button
           variant="contained"
-          onClick={handleSubmit}
-          disabled={loading || !selectedSlot || !symptoms}
-          startIcon={loading ? <CircularProgress size={16} /> : null}
+          onClick={handleFinalSubmit}
+          disabled={loading || !selectedSlot || !symptoms.trim()}
+          startIcon={loading && <CircularProgress size={16} />}
         >
-          {loading ? t("checking") : t("confirmButton")}
+          {loading ? t("processing") : t("confirmButton")}
         </Button>
       </DialogActions>
-    </>
+    </Box>
   );
 };
 

@@ -23,7 +23,7 @@ const DoctorPage = () => {
   const itemsPerPage = 5;
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,8 +46,8 @@ const DoctorPage = () => {
   }, []);
 
   const handleDayChange = (day) => {
-    setSelectedDays(prev =>
-      prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]
+    setSelectedDays((prev) =>
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
     );
   };
 
@@ -66,14 +66,20 @@ const DoctorPage = () => {
 
   const filteredDoctors = useMemo(() => {
     return doctors.filter((doc) => {
-      const nameMatch = doc.profile?.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      const nameMatch =
+        doc.profile?.fullName
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
         doc.username?.toLowerCase().includes(searchTerm.toLowerCase());
       const docSpecCode = doc.specialization?.code || doc.specCode || "";
       const specMatch = selectedSpec === "all" || docSpecCode === selectedSpec;
       const years = doc.yearsExperience || 0;
-      const expMatch = years >= experienceRange[0] && years <= experienceRange[1];
-      const docDays = doc.schedules?.map(s => s.day) || [];
-      const dayMatch = selectedDays.length === 0 || selectedDays.some(d => docDays.includes(d));
+      const expMatch =
+        years >= experienceRange[0] && years <= experienceRange[1];
+      const docDays = doc.schedules?.map((s) => s.day) || [];
+      const dayMatch =
+        selectedDays.length === 0 ||
+        selectedDays.some((d) => docDays.includes(d));
       return nameMatch && specMatch && expMatch && dayMatch;
     });
   }, [doctors, searchTerm, selectedSpec, selectedDays, experienceRange]);
@@ -89,7 +95,7 @@ const DoctorPage = () => {
 
   const handlePageChange = (event, value) => {
     setPage(value);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -134,15 +140,15 @@ const DoctorPage = () => {
             handleClearFilters={handleClearFilters}
             isMobile={isMobile}
             setFilterDrawerOpen={setFilterDrawerOpen}
-            drawerOpen={filterDrawerOpen}  
-            setDrawerOpen={setFilterDrawerOpen}  
-            isDrawerOnly={true}  
+            drawerOpen={filterDrawerOpen}
+            setDrawerOpen={setFilterDrawerOpen}
+            isDrawerOnly={true}
           />
 
           <Grid item xs={12} md={9} lg={9.5} sx={{ flexGrow: 1, minWidth: 0 }}>
             <DoctorList
               filteredDoctors={paginatedDoctors}
-              totalDoctors={filteredDoctors.length} 
+              totalDoctors={filteredDoctors.length}
               loading={loading}
               handleOpenBooking={handleOpenBooking}
               handleClearFilters={handleClearFilters}
@@ -154,16 +160,16 @@ const DoctorPage = () => {
               page={page}
               itemsPerPage={itemsPerPage}
             />
-            
+
             {!loading && filteredDoctors.length > itemsPerPage && (
-              <Stack spacing={2} sx={{ mt: 6, alignItems: 'center' }}>
-                <Pagination 
-                  count={Math.ceil(filteredDoctors.length / itemsPerPage)} 
-                  page={page} 
-                  onChange={handlePageChange} 
-                  color="primary" 
+              <Stack spacing={2} sx={{ mt: 6, alignItems: "center" }}>
+                <Pagination
+                  count={Math.ceil(filteredDoctors.length / itemsPerPage)}
+                  page={page}
+                  onChange={handlePageChange}
+                  color="primary"
                   size={isMobile ? "small" : "large"}
-                  variant="outlined" 
+                  variant="outlined"
                   shape="rounded"
                 />
               </Stack>
