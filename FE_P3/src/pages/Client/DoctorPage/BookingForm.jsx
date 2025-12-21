@@ -9,8 +9,10 @@ import {
   TextField,
   DialogActions,
   Alert,
+  Chip,
+  Paper,
 } from "@mui/material";
-import { AccessTime, EventNote } from "@mui/icons-material";
+import { AccessTime, EventNote, CheckCircle } from "@mui/icons-material";
 import { format } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
 import { appointmentApi } from "../../../services/api";
@@ -52,6 +54,7 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
     date.setDate(date.getDate() + daysToAdd);
     return date.toISOString().split("T")[0];
   };
+  
   const isSlotBusy = (slotIsoTime) => {
     if (!busySlots?.length) return false;
     const slotTime = new Date(slotIsoTime).getTime();
@@ -119,6 +122,7 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
         slots.push({
           display: format(dateObj, "HH:mm"),
           iso: dateObj.toISOString(),
+          dateObj: dateObj,
         });
       }
       currentTotalMins += 30;
@@ -152,7 +156,12 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
                   fullWidth
                   variant={isSelected ? "contained" : "outlined"}
                   onClick={() => handleSelectSchedule(index, schedule)}
-                  sx={{ flexDirection: "column", py: 1.5 }}
+                  sx={{ 
+                    flexDirection: "column", 
+                    py: 1.5,
+                    borderColor: isSelected ? "primary.main" : undefined,
+                    borderWidth: isSelected ? 2 : 1,
+                  }}
                 >
                   <Typography fontWeight={700}>
                     {dayKey ? t(dayKey) : schedule.day}
@@ -170,56 +179,114 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
       <Divider />
 
       {selectedScheduleIndex !== null && (
-        <Box mt={2}>
-          <Typography variant="subtitle2" fontWeight={600}>
-            <AccessTime fontSize="small" /> {t("step2")}
-          </Typography>
+        <Box mt={3}>
+          <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+            <Typography variant="subtitle2" fontWeight={600}>
+              <AccessTime fontSize="small" /> {t("step2")}
+            </Typography>
+            
+            {/* Hiá»ƒn thá»‹ thÃ´ng tin ngÃ y Ä‘Ã£ chá»n */}
+            {generatedSlots.length > 0 && (
+              <Chip 
+                label={format(generatedSlots[0].dateObj, "dd/MM/yyyy")}
+                color="primary"
+                variant="outlined"
+                size="small"
+              />
+            )}
+          </Box>
 
-          <Alert severity="info">{t("slotInfo")}</Alert>
+          <Alert severity="info" sx={{ mb: 2 }}>{t("slotInfo")}</Alert>
 
           {checkingSlots ? (
-            <Box display="flex" justifyContent="center">
+            <Box display="flex" justifyContent="center" alignItems="center" p={3}>
               <CircularProgress size={24} />
               <Typography ml={1}>{t("checking")}</Typography>
             </Box>
           ) : (
-            <Grid container spacing={1.5}>
-              {generatedSlots.map((slot, idx) => (
-                <Grid item xs={3} key={idx}>
-                  <Button
-                    fullWidth
-                    disabled={isSlotBusy(slot.iso)}
-                    onClick={() => setSelectedSlot(slot)}
-                  >
-                    {slot.display}
-                  </Button>
-                </Grid>
-              ))}
-            </Grid>
+            <>
+              <Grid container spacing={1.5}>
+                {generatedSlots.map((slot, idx) => {
+                  const isBusy = isSlotBusy(slot.iso);
+                  const isSelected = selectedSlot?.iso === slot.iso;
+                  
+                  return (
+                    <Grid item xs={4} sm={3} md={2.4} key={idx}>
+                      <Button
+                        fullWidth
+                        variant={isSelected ? "contained" : "outlined"}
+                        disabled={isBusy}
+                        onClick={() => setSelectedSlot(slot)}
+                        sx={{
+                          py: 1.5,
+                          fontWeight: isSelected ? 700 : 400,
+                          borderColor: isSelected ? 'primary.main' : undefined,
+                          borderWidth: isSelected ? 2 : 1,
+                          bgcolor: isSelected ? 'primary.main' : 'transparent',
+                          '&:hover': {
+                            bgcolor: isSelected ? 'primary.dark' : 'action.hover',
+                          },
+                          position: 'relative',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {slot.display}
+                        {isSelected && (
+                          <CheckCircle 
+                            sx={{ 
+                              position: 'absolute', 
+                              top: 4, 
+                              right: 4, 
+                              fontSize: 16 
+                            }} 
+                          />
+                        )}
+                      </Button>
+                      {isBusy && (
+                        <Typography 
+                          variant="caption" 
+                          color="error" 
+                          sx={{ display: 'block', textAlign: 'center', mt: 0.5 }}
+                        >
+                          {t("busy")}
+                        </Typography>
+                      )}
+                    </Grid>
+                  );
+                })}
+              </Grid>
+          
+            </>
           )}
         </Box>
       )}
 
       {selectedSlot && (
-        <Box mt={2}>
-          <Typography fontWeight={600}>{t("step3")}</Typography>
+        <Box mt={3}>
+          <Typography variant="subtitle2" fontWeight={600} mb={1}>
+            {t("step3")}
+          </Typography>
           <TextField
             fullWidth
             multiline
-            rows={2}
+            rows={3}
             placeholder={t("placeholderSymptoms")}
             value={symptoms}
             onChange={(e) => setSymptoms(e.target.value)}
+            sx={{ mb: 2 }}
           />
         </Box>
       )}
 
-      <DialogActions>
-        <Button onClick={onCancel}>{t("cancelButton")}</Button>
+      <DialogActions sx={{ mt: 3, px: 0 }}>
+        <Button onClick={onCancel} variant="outlined">
+          {t("cancelButton")}
+        </Button>
         <Button
           variant="contained"
           onClick={handleSubmit}
           disabled={loading || !selectedSlot || !symptoms}
+          startIcon={loading ? <CircularProgress size={16} /> : null}
         >
           {loading ? t("checking") : t("confirmButton")}
         </Button>

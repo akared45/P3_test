@@ -213,6 +213,7 @@ const DoctorCard = ({ doctor, onBook }) => {
       <Divider sx={{ my: 1 }} />
 
       <CardActions
+      disableSpacing
         sx={{
           p: 3,
           pt: 2,

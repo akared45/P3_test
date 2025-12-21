@@ -88,10 +88,6 @@ export default function ChatWindow({
         flexDirection: 'column',
         gap: 2
       }}>
-        <SuggestionStrip 
-                suggestions={suggestions} 
-                onSelect={onSelectSuggestion} 
-             />
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
           {activeApp ? (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
