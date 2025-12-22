@@ -9,8 +9,10 @@ import {
   Stack,
   MenuItem,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const MedicineForm = ({ open, onClose, onSubmit, initialData }) => {
+  const { t } = useTranslation("admin_sidebar");
   const [form, setForm] = useState({
     code: "",
     name: "",
@@ -58,12 +60,14 @@ const MedicineForm = ({ open, onClose, onSubmit, initialData }) => {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>{initialData ? "Cập nhật thuốc" : "Thêm thuốc"}</DialogTitle>
+      <DialogTitle>
+        {initialData ? t("title_update") : t("title_add")}
+      </DialogTitle>
 
       <DialogContent>
         <Stack spacing={2} mt={1}>
           <TextField
-            label="Mã thuốc"
+            label={t("label_code")}
             name="code"
             value={form.code}
             onChange={handleChange}
@@ -71,7 +75,7 @@ const MedicineForm = ({ open, onClose, onSubmit, initialData }) => {
           />
 
           <TextField
-            label="Tên thuốc"
+            label={t("label_name")}
             name="name"
             value={form.name}
             onChange={handleChange}
@@ -79,7 +83,7 @@ const MedicineForm = ({ open, onClose, onSubmit, initialData }) => {
           />
 
           <TextField
-            label="Hoạt chất"
+            label={t("label_generic_name")}
             name="genericName"
             value={form.genericName}
             onChange={handleChange}
@@ -87,7 +91,7 @@ const MedicineForm = ({ open, onClose, onSubmit, initialData }) => {
           />
 
           <TextField
-            label="Nhóm thuốc"
+            label={t("label_drug_class")}
             name="drugClass"
             value={form.drugClass}
             onChange={handleChange}
@@ -96,23 +100,23 @@ const MedicineForm = ({ open, onClose, onSubmit, initialData }) => {
 
           <TextField
             select
-            label="Thời điểm dùng"
+            label={t("label_timing")}
             name="timing"
             value={form.timing}
             onChange={handleChange}
             fullWidth
           >
-            <MenuItem value="BEFORE_MEAL">Trước ăn</MenuItem>
-            <MenuItem value="AFTER_MEAL">Sau ăn</MenuItem>
-            <MenuItem value="ANYTIME">Bất kỳ</MenuItem>
+            <MenuItem value="BEFORE_MEAL">{t("timing_before_meal")}</MenuItem>
+            <MenuItem value="AFTER_MEAL">{t("timing_after_meal")}</MenuItem>
+            <MenuItem value="ANYTIME">{t("timing_anytime")}</MenuItem>
           </TextField>
         </Stack>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose}>Hủy</Button>
+        <Button onClick={onClose}>{t("button_cancel")}</Button>
         <Button variant="contained" onClick={handleSubmit}>
-          Lưu
+          {t("button_save")}
         </Button>
       </DialogActions>
     </Dialog>

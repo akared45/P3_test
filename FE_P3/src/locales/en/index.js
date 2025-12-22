@@ -20,6 +20,7 @@ import patient_chat_en from "./patient_chat_en.json";
 import homepage_en from "./homepage_en.json";
 import profile_client_en from "./profile_client_en.json";
 import noti_en from "./noti_en.json";
+import payment_en from "./payment_en.json";
 const en = {
   common,
   admin_layout: admin_header_en,
@@ -43,6 +44,7 @@ const en = {
   homepage: homepage_en,
   profile_client: profile_client_en,
   noti: noti_en,
+  payment: payment_en,
 };
 
 export default en;
