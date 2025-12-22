@@ -1,38 +1,28 @@
-import { Typography } from "@mui/material";
-import { MedicalServices as MedicalIcon } from "@mui/icons-material";
+import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const Logo = ({ isMobile }) => {
   return (
-    <>
-      <MedicalIcon 
-        sx={{ 
-          display: { xs: isMobile ? "flex" : "none", md: isMobile ? "none" : "flex" }, 
-          mr: 1, 
-          color: 'primary.main', 
-          fontSize: isMobile ? 24 : 32 
-        }} 
-      />
-      <Typography
-        variant={isMobile ? "h5" : "h6"}
-        noWrap
-        component={Link}
-        to="/"
+    <Box
+      component={Link}
+      to="/"
+      sx={{
+        display: { xs: isMobile ? "flex" : "none", md: isMobile ? "none" : "flex" },
+        alignItems: "center",
+        mr: isMobile ? 2 : 4,
+      }}
+    >
+      <Box
+        component="img"
+        src="./logo.png"  
+        alt="Medicare Logo"
         sx={{
-          mr: isMobile ? 2 : 4,
-          display: { xs: isMobile ? "flex" : "none", md: isMobile ? "none" : "flex" },
-          flexGrow: isMobile ? 1 : 0,
-          fontFamily: "monospace",
-          fontWeight: isMobile ? 700 : 800,
-          letterSpacing: isMobile ? ".1rem" : ".2rem",
-          color: 'primary.main',
-          textDecoration: "none",
-          fontSize: isMobile ? '1.2rem' : '1.5rem'
+          height: isMobile ? 32 : 44,
+          width: "auto",
+          cursor: "pointer",
         }}
-      >
-        MEDICARE
-      </Typography>
-    </>
+      />
+    </Box>
   );
 };
 

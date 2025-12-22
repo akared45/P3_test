@@ -7,32 +7,32 @@
     <div style="max-width: 600px; margin: 20px auto; font-family: 'Segoe UI', Arial, sans-serif; border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden; background-color: #ffffff; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
         
         <div style="background-color: #1976d2; color: white; padding: 30px 20px; text-align: center;">
-            <h1 style="margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px;">Đơn Thuốc Điện Tử</h1>
-            <p style="margin: 5px 0 0 0; opacity: 0.8;">BookingCare - Hệ thống quản lý khám bệnh</p>
+            <h1 style="margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px;">Electronic Prescription</h1>
+            <p style="margin: 5px 0 0 0; opacity: 0.8;">BookingCare - Medical Appointment Management System</p>
         </div>
 
         <div style="padding: 30px 25px; color: #333; line-height: 1.6;">
-            <p style="margin-top: 0;">Chào bạn <strong>{{patientName}}</strong>,</p>
-            <p>Bác sĩ đã hoàn thành buổi tư vấn. Dưới đây là thông tin chẩn đoán và đơn thuốc dành cho bạn:</p>
+            <p style="margin-top: 0;">Hello <strong>{{patientName}}</strong>,</p>
+            <p>Your doctor has completed the consultation. Below are your diagnosis and prescription details:</p>
 
             <div style="background-color: #f8f9fa; border-left: 4px solid #1976d2; padding: 15px; margin-bottom: 25px;">
                 <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 14px;">
-                    <tr><td style="padding: 3px 0;"><strong>Bác sĩ:</strong> BS. {{doctorName}}</td></tr>
-                    <tr><td style="padding: 3px 0;"><strong>Ngày khám:</strong> {{date}}</td></tr>
-                    <tr><td style="padding: 3px 0;"><strong>Chẩn đoán:</strong> {{symptoms}}</td></tr>
+                    <tr><td style="padding: 3px 0;"><strong>Doctor:</strong> Dr. {{doctorName}}</td></tr>
+                    <tr><td style="padding: 3px 0;"><strong>Appointment Date:</strong> {{date}}</td></tr>
+                    <tr><td style="padding: 3px 0;"><strong>Diagnosis:</strong> {{symptoms}}</td></tr>
                 </table>
             </div>
 
             <div style="color: #1976d2; border-bottom: 2px solid #1976d2; padding-bottom: 5px; margin-bottom: 15px; font-weight: bold; font-size: 16px;">
-                💊 CHI TIẾT ĐƠN THUỐC
+                💊 PRESCRIPTION DETAILS
             </div>
 
             <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse: collapse; margin-top: 10px;">
                 <thead>
                     <tr>
-                        <th style="background-color: #f2f2f2; padding: 12px 10px; border-bottom: 2px solid #ddd; font-size: 13px;">Tên thuốc / Hàm lượng</th>
-                        <th style="background-color: #f2f2f2; padding: 12px 10px; border-bottom: 2px solid #ddd; font-size: 13px; width: 80px;">SL</th>
-                        <th style="background-color: #f2f2f2; padding: 12px 10px; border-bottom: 2px solid #ddd; font-size: 13px;">Cách dùng</th>
+                        <th style="background-color: #f2f2f2; padding: 12px 10px; border-bottom: 2px solid #ddd; font-size: 13px;">Medicine / Dosage</th>
+                        <th style="background-color: #f2f2f2; padding: 12px 10px; border-bottom: 2px solid #ddd; font-size: 13px; width: 80px;">Qty</th>
+                        <th style="background-color: #f2f2f2; padding: 12px 10px; border-bottom: 2px solid #ddd; font-size: 13px;">Instructions</th>
                     </tr>
                 </thead>
                 <tbody style="font-size: 14px;">
@@ -41,20 +41,20 @@
             </table>
 
             <div style="color: #1976d2; border-bottom: 2px solid #1976d2; padding-bottom: 5px; margin-top: 30px; margin-bottom: 10px; font-weight: bold; font-size: 16px;">
-                📝 LỜI DẶN CỦA BÁC SĨ
+                📝 DOCTOR'S NOTES
             </div>
             <div style="background-color: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; color: #856404; font-size: 14px; min-height: 50px;">
                 {{doctorNotes}}
             </div>
             
             <div style="margin-top: 30px; padding: 15px; border-top: 1px dashed #ddd; font-size: 13px; color: #666; font-style: italic;">
-                * Vui lòng mang theo đơn thuốc này khi mua thuốc tại nhà thuốc gần nhất. Nếu có các triệu chứng bất thường như dị ứng, mẩn ngứa, buồn nôn, hãy ngưng thuốc và liên hệ ngay với bác sĩ.
+                * Please bring this prescription when purchasing medicine at your nearest pharmacy. If you experience any unusual symptoms such as allergies, rashes, or nausea, stop taking the medication and contact your doctor immediately.
             </div>
         </div>
 
         <div style="background-color: #f1f1f1; padding: 20px; text-align: center; font-size: 12px; color: #888; border-top: 1px solid #eee;">
-            <p style="margin: 0;">Đây là email tự động từ hệ thống <strong>BookingCare</strong>.</p>
-            <p style="margin: 5px 0 0 0;">© 2025 HealthCare System. Tất cả quyền được bảo lưu.</p>
+            <p style="margin: 0;">This is an automated email from the <strong>BookingCare</strong> system.</p>
+            <p style="margin: 5px 0 0 0;">© 2025 HealthCare System. All rights reserved.</p>
         </div>
     </div>
 </body>

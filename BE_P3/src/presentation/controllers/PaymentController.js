@@ -20,18 +20,18 @@ class PaymentController {
                 req.connection.socket.remoteAddress;
 
             if (!appointmentId) {
-                return res.status(400).json({ message: "appointmentId là bắt buộc" });
+                return res.status(400).json({ message: "appointmentId is required" });
             }
 
             const result = await this.createVnPayUrlUseCase.execute({
                 appointmentId,
-                userId, // Bây giờ userId đã có giá trị
+                userId,
                 ipAddr
             });
 
             return res.json(result);
         } catch (error) {
-            console.error(">>> Controller Error:", error.message);
+            console.error("Controller Error:", error.message);
             next(error);
         }
     }
@@ -57,11 +57,12 @@ class PaymentController {
             const isVerified = this.vnPayPaymentService.verifyReturn(vnp_Params);
 
             if (!isVerified) {
-                return res.status(400).json({ message: "Chữ ký không hợp lệ (Checksum failed)" });
+                return res.status(400).json({ message: "Invalid signature (Checksum failed)" });
             }
 
+
             if (vnp_Params['vnp_ResponseCode'] !== '00') {
-                return res.status(400).json({ message: "Giao dịch thất bại tại VNPAY" });
+                return res.status(400).json({ message: "Transaction failed at VNPAY" });
             }
 
             const appointmentId = vnp_Params['vnp_TxnRef'];
@@ -70,11 +71,11 @@ class PaymentController {
             const appointment = await AppointmentModel.findOne({ _id: appointmentId });
 
             if (!appointment) {
-                return res.status(404).json({ message: "Không tìm thấy lịch hẹn" });
+                return res.status(404).json({ Message: "Appointment not found" });
             }
 
             if (appointment.paymentStatus === 'PAID') {
-                return res.status(200).json({ message: "Giao dịch đã được xử lý trước đó", data: appointment });
+                return res.status(200).json({ message: "The transaction was processed previously", data: appointment });
             }
 
             appointment.paymentStatus = 'PAID';
@@ -84,15 +85,13 @@ class PaymentController {
 
             await appointment.save();
 
-            console.log(`>>> UPDATE SUCCESS: Appointment ${appointmentId} is giờ đã PAID.`);
-
             return res.status(200).json({
-                message: "Xác nhận thanh toán thành công",
+                message: "Payment confirmed.",
                 data: appointment
             });
 
         } catch (error) {
-            console.error("Lỗi xử lý VNPAY Return:", error);
+            console.error("VNPAY Return Processing Error:", error);
             next(error);
         }
     }

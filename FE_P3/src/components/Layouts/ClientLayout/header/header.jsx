@@ -9,7 +9,9 @@ import Modal from "../../../ui/modal";
 import { patientApi } from "../../../../services/api";
 import { useNavigate } from "react-router-dom";
 import LanguageSwitcher from "../../../ui/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 const Header = () => {
+  const { t } = useTranslation("navigation");
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const { user, logout } = useContext(AuthContext);
@@ -68,8 +70,8 @@ const Header = () => {
       <Modal
         open={openLogoutModal}
         onClose={() => setOpenLogoutModal(false)}
-        title="Đăng xuất"
-        message="Bạn có chắc chắn muốn thoát phiên làm việc không?"
+        title={t("logout")}
+        message={t("confirmLogout")}
         onConfirm={handleConfirmLogout}
       />
 

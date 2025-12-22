@@ -9,11 +9,11 @@ class CreateMedicationUseCase {
 
     async execute(actor, createMedicationDto) {
         if (!medicationPolicy.can(actor, Action.CREATE)) {
-            throw new Error("Unauthorized: Bạn không có quyền thêm thuốc vào danh mục");
+            throw new Error("Unauthorized: You do not have permission to add medication to the catalog");
         }
 
         const existing = await this.medicationRepository.findByCode(createMedicationDto.code);
-        if (existing) throw new Error(`Mã thuốc ${createMedicationDto.code} đã tồn tại`);
+        if (existing) throw new Error(`Medication code ${createMedicationDto.code} already exists`);
 
         const medication = new Medication(createMedicationDto);
 

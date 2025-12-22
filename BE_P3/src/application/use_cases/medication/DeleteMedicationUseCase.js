@@ -14,13 +14,13 @@ class DeleteMedicationUseCase {
 
     const medication = await this.medicationRepository.findById(id);
     if (!medication)
-      throw new Error("Thuốc không tồn tại hoặc đã bị xóa trước đó");
+      throw new Error("Medication does not exist or has already been deleted");
 
     await this.medicationRepository.delete(id);
 
     return {
       success: true,
-      message: "Thuốc đã được loại bỏ khỏi danh mục hoạt động",
+      message: "Medication has been removed from the active catalog",
     };
   }
 }

@@ -90,7 +90,7 @@ class MongoAppointmentRepository extends IAppointmentRepository {
 
     async getPatientProfile(patientId) {
         const user = await UserModel.findById(patientId);
-        if (!user) throw new Error("Không tìm thấy thông tin bệnh nhân");
+       if (!user) throw new Error("Patient information not found");
 
         return {
             age: this._calculateAge(user.dob),

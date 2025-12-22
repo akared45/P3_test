@@ -79,85 +79,118 @@ exports.specializations = [
 // ================= MEDICATIONS =================
 exports.medications = [
     {
-        _id: "PARA500",
+        code: "PARA500",
         name: "Paracetamol 500mg",
-        generic: "Paracetamol",
-        class: "ANALG",
-        commonDosage: "1-2 viên/lần"
+        genericName: "Paracetamol",
+        drugClass: "GIẢM ĐAU, HẠ SỐT",
+        isDeleted: false,
+        safety: {
+            allergens: ["Paracetamol"],
+            contraindications: ["Suy gan nặng", "Quá mẫn cảm với paracetamol"]
+        },
+        usage: {
+            instructions: "1-2 viên mỗi liều, cách mỗi 4-6 giờ. Không dùng quá 4g mỗi ngày. Uống sau khi ăn.",
+            sideEffects: ["Phát ban da", "Buồn nôn", "Thay đổi men gan"]
+        }
     },
     {
-        _id: "IBU400",
+        code: "IBU400",
         name: "Ibuprofen 400mg",
-        generic: "Ibuprofen",
-        class: "NSAID",
-        commonDosage: "1 viên/lần"
+        genericName: "Ibuprofen",
+        drugClass: "KHÁNG VIÊM KHÔNG STEROID (NSAID)",
+        isDeleted: false,
+        safety: {
+            allergens: ["Ibuprofen", "Aspirin"],
+            contraindications: ["Loét dạ dày tá tràng", "Suy tim nặng", "Ba tháng cuối thai kỳ"]
+        },
+        usage: {
+            instructions: "1 viên mỗi liều, 3 lần mỗi ngày. Phải uống sau khi ăn với nhiều nước.",
+            sideEffects: ["Đau dạ dày", "Ợ nóng", "Chóng mặt"]
+        }
     },
     {
-        _id: "AMOX500",
+        code: "AMOX500",
         name: "Amoxicillin 500mg",
-        generic: "Amoxicillin",
-        class: "ANTIBIOTIC",
-        commonDosage: "1 viên x 3 lần/ngày"
+        genericName: "Amoxicillin",
+        drugClass: "KHÁNG SINH",
+        isDeleted: false,
+        safety: {
+            allergens: ["Penicillin", "Amoxicillin"],
+            contraindications: ["Tăng bạch cầu đơn nhân nhiễm khuẩn", "Tiền sử dị ứng penicillin"]
+        },
+        usage: {
+            instructions: "1 viên mỗi 8 giờ (3 lần một ngày). Phải uống hết liệu trình ngay cả khi đã cảm thấy khỏe hơn.",
+            sideEffects: ["Tiêu chảy", "Buồn nôn", "Tưa miệng/Nấm miệng"]
+        }
     },
     {
-        _id: "OMEP20",
+        code: "OMEP20",
         name: "Omeprazole 20mg",
-        generic: "Omeprazole",
-        class: "PPI",
-        commonDosage: "1 viên/ngày"
+        genericName: "Omeprazole",
+        drugClass: "THUỐC ỨC CHẾ BƠM PROTON (PPI)",
+        isDeleted: false,
+        safety: {
+            allergens: ["Omeprazole"],
+            contraindications: ["Sử dụng đồng thời với nelfinavir"]
+        },
+        usage: {
+            instructions: "1 viên mỗi ngày, tốt nhất là vào buổi sáng 30 phút trước khi ăn sáng.",
+            sideEffects: ["Đau đầu", "Đau bụng", "Đầy hơi"]
+        }
     },
     {
-        _id: "LOSA50",
-        name: "Losartan 50mg",
-        generic: "Losartan",
-        class: "ARB",
-        commonDosage: "1 viên/ngày"
-    },
-    {
-        _id: "METF850",
+        code: "METF850",
         name: "Metformin 850mg",
-        generic: "Metformin",
-        class: "ANTIDIABETIC",
-        commonDosage: "1 viên x 2 lần/ngày"
+        genericName: "Metformin",
+        drugClass: "THUỐC ĐIỀU TRỊ TIỂU ĐƯỜNG",
+        isDeleted: false,
+        safety: {
+            allergens: ["Metformin"],
+            contraindications: ["Suy thận (eGFR < 30)", "Nhiễm toan chuyển hóa cấp tính"]
+        },
+        usage: {
+            instructions: "1 viên x 2 lần mỗi ngày. Uống trong hoặc sau bữa ăn để giảm tác dụng phụ lên dạ dày.",
+            sideEffects: ["Vị kim loại trong miệng", "Nhiễm toan lactic (hiếm gặp)", "Thiếu hụt Vitamin B12"]
+        }
     },
     {
-        _id: "ATOR20",
+        code: "ATOR20",
         name: "Atorvastatin 20mg",
-        generic: "Atorvastatin",
-        class: "STATIN",
-        commonDosage: "1 viên/ngày"
+        genericName: "Atorvastatin",
+        drugClass: "STATIN (THUỐC HẠ MỠ MÁU)",
+        isDeleted: false,
+        safety: {
+            allergens: ["Atorvastatin"],
+            contraindications: ["Bệnh gan đang tiến triển", "Phụ nữ mang thai", "Phụ nữ đang cho con bú"]
+        },
+        usage: {
+            instructions: "1 viên một lần mỗi ngày. Có thể uống vào bất kỳ thời điểm nào trong ngày, cùng hoặc không cùng thức ăn.",
+            sideEffects: ["Đau cơ", "Đau khớp", "Triệu chứng cảm lạnh thông thường"]
+        }
     },
     {
-        _id: "CETI10",
+        code: "CETI10",
         name: "Cetirizine 10mg",
-        generic: "Cetirizine",
-        class: "ANTIHISTAMINE",
-        commonDosage: "1 viên/ngày"
-    },
-    {
-        _id: "SERT50",
-        name: "Sertraline 50mg",
-        generic: "Sertraline",
-        class: "SSRI",
-        commonDosage: "1 viên/ngày"
-    },
-    {
-        _id: "ALPR05",
-        name: "Alprazolam 0.5mg",
-        generic: "Alprazolam",
-        class: "BENZODIAZEPINE",
-        commonDosage: "1/2-1 viên khi cần"
+        genericName: "Cetirizine",
+        drugClass: "THUỐC KHÁNG HISTAMINE",
+        isDeleted: false,
+        safety: {
+            allergens: ["Cetirizine", "Hydroxyzine"],
+            contraindications: ["Suy thận nặng (CrCl < 10ml/phút)"]
+        },
+        usage: {
+            instructions: "1 viên mỗi ngày. Có thể gây buồn ngủ ở một số bệnh nhân.",
+            sideEffects: ["Ngủ gật", "Mệt mỏi", "Khô miệng"]
+        }
     }
 ];
 
 exports.userSeeds = () => {
     const baseDate = new Date("2024-01-01T10:00:00Z");
-
     const patients = [];
     const firstNames = ["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Phan", "Vũ", "Đặng", "Bùi", "Đỗ"];
     const middleNames = ["Văn", "Thị", "Hữu", "Minh", "Thanh", "Hoài", "Kim", "Ngọc", "Xuân", "Thu"];
     const lastNames = ["An", "Bình", "Cường", "Dũng", "Giang", "Hải", "Khoa", "Long", "Nam", "Phúc"];
-
     for (let i = 1; i <= 10; i++) {
         const patientNum = i.toString().padStart(2, '0');
         const firstName = firstNames[(i - 1) % firstNames.length];
@@ -182,6 +215,7 @@ exports.userSeeds = () => {
             createdAt: new Date(baseDate.getTime() + i * 24 * 60 * 60 * 1000),
             isDeleted: i === 9,
             deletedAt: i === 9 ? new Date("2024-06-15T14:30:00Z") : null,
+            isEmailVerified: true,
             profile: {
                 fullName: fullName,
                 dateOfBirth: new Date(1990 - (i % 10), (i % 12), 15),
@@ -277,6 +311,7 @@ exports.userSeeds = () => {
             yearsExperience: 10 + i,
             rating: 4.0 + (i * 0.08),
             reviewCount: i * 15,
+            isEmailVerified: true,
             schedules: [
                 {
                     day: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"][i % 5],
@@ -291,18 +326,6 @@ exports.userSeeds = () => {
                     end: "17:00",
                     maxPatients: 8,
                     sessionType: "afternoon"
-                }
-            ],
-            unavailableDates: [
-                {
-                    date: new Date(2024, 11, 25),
-                    reason: "Nghỉ lễ",
-                    allDay: true
-                },
-                {
-                    start: new Date(2024, 5, 15 + i),
-                    end: new Date(2024, 5, 17 + i),
-                    reason: "Hội thảo y khoa"
                 }
             ],
             qualifications: [

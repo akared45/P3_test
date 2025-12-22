@@ -70,7 +70,7 @@ class SocketService extends ISocketService {
                     }
                 } catch (error) {
                     console.error("Socket Message Error:", error);
-                    socket.emit('error_message', { message: "Gửi tin nhắn thất bại" });
+                    socket.emit('error_message', { message: "Failed to send message" });
                 }
             });
 

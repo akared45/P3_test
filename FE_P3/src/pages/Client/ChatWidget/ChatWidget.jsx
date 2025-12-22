@@ -28,11 +28,16 @@ const ChatWidget = () => {
     setLoading(true);
 
     try {
-      const response = await aiApi.suggest({ prompt: text });
-      const aiMessage = {
-        from: "doctor",
-        text: response.data?.reply || t("chatWidget.fallbackMessage"),
-      };
+       const response = await aiApi.suggest({ symptoms: text });
+        console.log*(response);
+        const suggestion = response.data?.suggestion;
+        
+        const aiMessage = {
+            from: "doctor",
+            text: suggestion 
+                ? `[Chuyên khoa gợi ý: ${suggestion.specialtyName}]\n\n${suggestion.reasoning}`
+                : t("chatWidget.fallbackMessage"),
+        };
 
       setMessages((prev) => [...prev, aiMessage]);
     } catch (err) {

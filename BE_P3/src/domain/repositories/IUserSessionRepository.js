@@ -1,4 +1,4 @@
-const NotImplementedException = require('../exceptions');
+const {NotImplementedException} = require('../exceptions');
 
 class IUserSessionRepository {
     async save(session) {
@@ -13,9 +13,10 @@ class IUserSessionRepository {
         throw new NotImplementedException('deleteByRefreshToken');
     }
 
-    async deleteAllByUserId(userId) {
+    async deleteByUserId(userId) {
         throw new NotImplementedException('deleteAllByUserId');
     }
+    
 }
 
 module.exports = IUserSessionRepository;

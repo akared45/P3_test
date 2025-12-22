@@ -22,11 +22,6 @@ const verifyToken = (req, res, next) => {
 };
 
 const requireRole = (role) => (req, res, next) => {
-    console.log("----------------DEBUG ROLE----------------");
-        console.log("1. Role yêu cầu (allowedRoles):", role);
-        console.log("2. User trong Token (req.user):", req.user);
-        console.log("3. Role của User:", req.user?.role); 
-        console.log("------------------------------------------");
     if (!req.user || req.user.role !== role) {
         return res.status(403).json({ message: 'Access denied: Insufficient permissions' });
     }

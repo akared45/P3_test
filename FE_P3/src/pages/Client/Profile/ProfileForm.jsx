@@ -25,10 +25,9 @@ const ProfileForm = ({ initialValues, onSubmit, onUploadAvatar }) => {
 
     dateOfBirth: Yup.date()
       .required(t("form.validation.dateOfBirth.required"))
-      .max(new Date(), t("form.validation.dateOfBirth.future")), // ❌ không được chọn ngày tương lai
+      .max(new Date(), t("form.validation.dateOfBirth.future")),
 
     medicalConditions: Yup.array()
-      .min(1, t("form.validation.medicalConditions.min"))
       .of(
         Yup.object().shape({
           name: Yup.string().required(
@@ -39,14 +38,12 @@ const ProfileForm = ({ initialValues, onSubmit, onUploadAvatar }) => {
           ),
           diagnosedDate: Yup.date()
             .nullable()
-            .required(
-              t("form.validation.medicalConditions.diagnosedDateRequired")
-            ),
+            .required(t("form.validation.medicalConditions.diagnosedDateRequired"))
+            .max(new Date(), t("form.validation.medicalConditions.diagnosedDateFuture")),
         })
       ),
 
     allergies: Yup.array()
-      .min(1, t("form.validation.allergies.min"))
       .of(
         Yup.object().shape({
           name: Yup.string().required(

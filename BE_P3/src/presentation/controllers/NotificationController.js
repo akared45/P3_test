@@ -5,10 +5,10 @@ class NotificationController {
     constructor({ getNotificationsUseCase, markNotificationAsReadUseCase, deleteNotificationUseCase }) {
         this.getNotificationsUseCase = getNotificationsUseCase;
         this.markNotificationAsReadUseCase = markNotificationAsReadUseCase;
-         this.deleteNotificationUseCase = deleteNotificationUseCase;
+        this.deleteNotificationUseCase = deleteNotificationUseCase;
     }
 
-    async getNotifications(req, res, next) {
+    getNotifications = async (req, res, next) => {
         try {
             const userId = req.user.id;
             const { limit, offset } = req.query;
@@ -26,7 +26,7 @@ class NotificationController {
         }
     }
 
-    async markAsRead(req, res, next) {
+    markAsRead = async (req, res, next) => {
         try {
             const userId = req.user.id;
             const notificationId = req.params.id;
@@ -53,7 +53,7 @@ class NotificationController {
                 userId: userId
             });
 
-            return res.status(200).json({ message: "Xóa thành công" });
+            return res.status(200).json({ message: "Delete success" });
         } catch (error) {
             next(error);
         }

@@ -18,7 +18,6 @@ import { fromZonedTime } from "date-fns-tz";
 import { appointmentApi } from "../../../services/api";
 import { useTranslation } from "react-i18next";
 
-// Mapping chuẩn để so sánh ngày
 const DAYS_MAP = {
   Sunday: 0,
   Monday: 1,
@@ -31,19 +30,14 @@ const DAYS_MAP = {
 
 const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
   const { t } = useTranslation("doctorcard");
-
-  // States
   const [selectedScheduleIndex, setSelectedScheduleIndex] = useState(null);
   const [generatedSlots, setGeneratedSlots] = useState([]);
   const [busySlots, setBusySlots] = useState([]);
   const [checkingSlots, setCheckingSlots] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [symptoms, setSymptoms] = useState("");
-
-  /**
-   * Tính toán ngày tiếp theo dựa trên thứ (Monday, Tuesday...)
-   * Nếu là hôm nay và đã qua giờ kết thúc ca, sẽ nhảy sang tuần sau.
-   */
+const isSymptomsValid = symptoms.trim().length >= 5;
+const showIncompleteWarning = symptoms.length > 0 && !isSymptomsValid;
   const getTargetDate = (dayName, endTimeStr) => {
     const targetDayIndex = DAYS_MAP[dayName];
     if (targetDayIndex === undefined) return null;
@@ -54,13 +48,11 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
 
     if (daysToAdd < 0) daysToAdd += 7;
 
-    // Xử lý nếu chọn trúng ngày hôm nay
     if (daysToAdd === 0) {
       const [endH, endM] = endTimeStr.split(":").map(Number);
       const shiftEnd = new Date(now);
       shiftEnd.setHours(endH, endM, 0, 0);
 
-      // Nếu hiện tại đã quá giờ kết thúc ca khám hôm nay -> Nhảy sang tuần sau
       if (now > shiftEnd) {
         daysToAdd = 7;
       }
@@ -71,9 +63,6 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
     return targetDate;
   };
 
-  /**
-   * Kiểm tra xem slot có bị trùng lịch (busy) hay không
-   */
   const isSlotBusy = (slotIsoTime) => {
     if (!busySlots?.length) return false;
     const targetTime = new Date(slotIsoTime).getTime();
@@ -82,9 +71,6 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
     );
   };
 
-  /**
-   * Xử lý khi người dùng chọn một ca khám (Thứ 2, Thứ 3...)
-   */
   const handleSelectSchedule = async (index, schedule) => {
     setSelectedScheduleIndex(index);
     setSelectedSlot(null);
@@ -96,7 +82,6 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
     const dateStr = format(targetDateObj, "yyyy-MM-dd");
 
     try {
-      // 1. Gọi API lấy các slot đã bị đặt
       const res = await appointmentApi.getBusySlots(
         doctor.id || doctor._id,
         dateStr
@@ -104,7 +89,6 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
       const busyData = res.data?.data || res.data || [];
       setBusySlots(busyData);
 
-      // 2. Tạo danh sách các slot 30 phút
       const slots = [];
       const [startH, startM] = schedule.start.split(":").map(Number);
       const [endH, endM] = schedule.end.split(":").map(Number);
@@ -119,13 +103,11 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
           .toString()
           .padStart(2, "0")}`;
 
-        // Chuyển đổi giờ địa phương của bác sĩ sang ISO dựa trên múi giờ
         const slotDateObj = fromZonedTime(
           `${dateStr} ${timeStr}`,
           doctorTimeZone
         );
 
-        // Chỉ thêm slot nếu nó ở tương lai so với thời điểm hiện tại
         if (slotDateObj.getTime() > new Date().getTime()) {
           slots.push({
             display: timeStr,
@@ -153,7 +135,6 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
 
   return (
     <Box>
-      {/* Bước 1: Chọn ca khám */}
       <Box mb={3}>
         <Typography
           variant="subtitle2"
@@ -190,7 +171,6 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
 
       <Divider />
 
-      {/* Bước 2: Chọn khung giờ cụ thể */}
       {selectedScheduleIndex !== null && (
         <Box mt={3}>
           <Box
@@ -275,12 +255,16 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
         </Box>
       )}
 
-      {/* Bước 3: Nhập triệu chứng */}
       {selectedSlot && (
         <Box mt={3}>
           <Typography variant="subtitle2" fontWeight={600} mb={1}>
             {t("step3")}
           </Typography>
+          {showIncompleteWarning && (
+      <Alert severity="warning" sx={{ mb: 1.5, py: 0 }}>
+        Vui lòng mô tả triệu chứng chi tiết hơn (tối thiểu 5 ký tự).
+      </Alert>
+    )}
           <TextField
             fullWidth
             multiline
@@ -288,23 +272,25 @@ const BookingForm = ({ doctor, onSubmit, onCancel, loading }) => {
             placeholder={t("placeholderSymptoms")}
             value={symptoms}
             onChange={(e) => setSymptoms(e.target.value)}
+            error={showIncompleteWarning}
           />
         </Box>
       )}
 
       <DialogActions sx={{ mt: 3, px: 0 }}>
-        <Button onClick={onCancel} color="inherit">
-          {t("cancelButton")}
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleFinalSubmit}
-          disabled={loading || !selectedSlot || !symptoms.trim()}
-          startIcon={loading && <CircularProgress size={16} />}
-        >
-          {loading ? t("processing") : t("confirmButton")}
-        </Button>
-      </DialogActions>
+  <Button onClick={onCancel} color="inherit">
+    {t("cancelButton")}
+  </Button>
+  <Button
+    variant="contained"
+    onClick={handleFinalSubmit}
+    // Nút chỉ được bật khi đã chọn Slot VÀ triệu chứng hợp lệ (>= 5 ký tự)
+    disabled={loading || !selectedSlot || !isSymptomsValid}
+    startIcon={loading && <CircularProgress size={16} />}
+  >
+    {loading ? t("processing") : t("confirmButton")}
+  </Button>
+</DialogActions>
     </Box>
   );
 };

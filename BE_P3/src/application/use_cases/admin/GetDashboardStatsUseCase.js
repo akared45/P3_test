@@ -10,8 +10,6 @@ class GetDashboardStatsUseCase {
         const request = new GetDashboardStatsRequest(rawRequest);
         const { startDate, endDate } = request;
 
-        console.log(`📊 Generating Report: ${startDate.toISOString()} -> ${endDate.toISOString()}`);
-
         const [
             summary,
             revenueChart,

@@ -41,7 +41,6 @@ class MomoPaymentService extends IMomoPaymentService {
         };
 
         try {
-            console.log("🚀 Đang kết nối cổng MoMo thật...");
             const response = await axios.post(this.endpoint, requestBody, { timeout: 8000 });
 
             if (response.data.resultCode !== 0) {
@@ -67,7 +66,7 @@ class MomoPaymentService extends IMomoPaymentService {
                         signature: "mock_signature"
                     });
                 } catch (ipnError) {
-                    console.error("Không thể tự kích hoạt luồng IPN:", ipnError.message);
+                    console.error("Error:", ipnError.message);
                 }
             }, 2000);
 

@@ -144,7 +144,7 @@
     "successTitle": "Appointment booked successfully!",
     "confirmPayment": "Please complete the payment to confirm your appointment with Dr",
     "redirecting": "Redirecting...",
-    "payNow": "Pay now via MoMo",
+    "payNow": "Pay now via VNPAY",
     "payLater": "I'll pay later (Go to appointment details)"
   }
 

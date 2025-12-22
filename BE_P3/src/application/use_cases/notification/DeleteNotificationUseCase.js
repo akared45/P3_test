@@ -7,16 +7,16 @@ class DeleteNotificationUseCase {
         const notification = await this.notificationRepository.findById(notificationId);
 
         if (!notification) {
-            throw new Error("Thông báo không tồn tại.");
+            throw new Error("Notification not found.");
         }
 
         if (notification.userId.toString() !== userId.toString()) {
-            throw new Error("Bạn không có quyền xóa thông báo này.");
+            throw new Error("You are not authorized to delete this notification.");
         }
 
         await this.notificationRepository.deleteById(notificationId);
 
-        return { success: true, message: "Xóa thông báo thành công" };
+        return { success: true, message: "Notification deleted successfully" };
     }
 }
 

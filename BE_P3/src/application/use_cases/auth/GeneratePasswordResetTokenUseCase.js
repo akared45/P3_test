@@ -20,8 +20,13 @@ class GeneratePasswordResetTokenUseCase {
         const user = await this.userRepository.findByEmail(email);
 
         if (!user || !user.isAvailable()) {
-            console.warn(`[ForgotPass] Email không tồn tại hoặc bị khóa: ${email}`);
-            return { message: "Nếu email tồn tại, hướng dẫn đặt lại mật khẩu đã được gửi." };
+            console.warn(
+                `[ForgotPass] Email does not exist or is locked: ${email}`
+            );
+            return {
+                message:
+                    "If the email exists, password reset instructions have been sent."
+            };
         }
 
         const tokenString = this.securityService.generateSecureRandomToken();
@@ -42,7 +47,7 @@ class GeneratePasswordResetTokenUseCase {
             user.profile.fullName
         );
 
-        return { message: "Nếu email tồn tại, hướng dẫn đặt lại mật khẩu đã được gửi." };
+        return { message: "If the email exists, password reset instructions have been sent." };
     }
 }
 

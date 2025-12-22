@@ -71,6 +71,7 @@ const MedicineForm = ({ open, onClose, onSubmit, initialData }) => {
             name="code"
             value={form.code}
             onChange={handleChange}
+            disabled={!!initialData}
             fullWidth
           />
 

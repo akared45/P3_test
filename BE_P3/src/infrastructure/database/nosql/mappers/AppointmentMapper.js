@@ -32,17 +32,18 @@ class AppointmentMapper {
             durationMinutes: doc.durationMinutes,
             status: doc.status,
             symptoms: doc.symptoms,
-            startTime: doc.startTime ? new Date(doc.startTime) : new Date(doc.appointmentDate), 
-            endTime: doc.endTime ? new Date(doc.endTime) : new Date(new Date(doc.appointmentDate).getTime() + (doc.durationMinutes || 30)*60000),
+            startTime: doc.startTime ? new Date(doc.startTime) : new Date(doc.appointmentDate),
+            endTime: doc.endTime ? new Date(doc.endTime) : new Date(new Date(doc.appointmentDate).getTime() + (doc.durationMinutes || 30) * 60000),
             doctorNotes: doc.doctorNotes,
             symptomDetails: doc.symptomDetails || [],
             prescriptions: (doc.prescriptions || []).map(p => ({
-                drugName: p.drugName,
-                quantity: p.quantity,
-                usage: p.usage,
-                medicationCode: p.medicationCode,
-                instructions: p.instructions
-            })),
+            medicationId: p.medicationId, 
+            drugName: p.drugName,
+            quantity: p.quantity,
+            usage: p.usage,
+            dosage: p.dosage,            
+            duration: p.duration          
+        })),
             amount: doc.amount,
             paymentStatus: doc.paymentStatus,
             paymentMethod: doc.paymentMethod,
@@ -74,11 +75,12 @@ class AppointmentMapper {
             doctorNotes: entity.doctorNotes,
             symptomDetails: entity.symptomDetails ? entity.symptomDetails.map(s => ({ ...s })) : [],
             prescriptions: entity.prescriptions.map(p => ({
+                medicationId: p.medicationId,
                 drugName: p.drugName,
                 quantity: p.quantity,
                 usage: p.usage,
-                medicationCode: p.medicationCode,
-                instructions: p.instructions
+                dosage: p.dosage,
+                duration: p.duration
             })),
             amount: entity.amount,
             paymentStatus: entity.paymentStatus,

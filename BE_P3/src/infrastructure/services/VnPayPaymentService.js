@@ -12,7 +12,7 @@ class VnPayPaymentService extends IPaymentService {
 
     async createPaymentUrl({ orderId, amount, returnUrl, ipAddr }) {
         const createDate = format(new Date(), 'yyyyMMddHHmmss');
-        const orderInfo = `Thanh_toan_lich_hen_${orderId}`;
+        const orderInfo = `Payment_for_appointment_${orderId}`;
 
         let vnp_Params = {
             'vnp_Version': '2.1.0',

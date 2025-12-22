@@ -1,4 +1,3 @@
-// src/presentation/controllers/MedicationController.js
 const CreateMedicationRequest = require('../../application/dtos/medication/CreateMedicationRequest');
 const UpdateMedicationRequest = require('../../application/dtos/medication/UpdateMedicationRequest');
 
@@ -55,7 +54,7 @@ class MedicationController {
             const { appointmentId } = req.params;
             const request = { ...req.body, appointmentId };
             const result = await this.addPrescriptionUseCase.execute(request);
-            res.status(201).json({ status: 'success', message: "Kê đơn thành công" });
+            res.status(201).json({ status: 'success', message: "Prescription created successfully" });
         } catch (error) { next(error); }
     };
 }

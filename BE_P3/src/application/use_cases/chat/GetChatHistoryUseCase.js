@@ -1,4 +1,4 @@
-const MessageResponse = require('../../dtos/chat/MessageResponse');
+const MessageResponse = require("../../dtos/chat/MessageResponse");
 
 class GetChatHistoryUseCase {
     constructor({ messageRepository, appointmentRepository }) {
@@ -7,29 +7,37 @@ class GetChatHistoryUseCase {
     }
 
     async execute(appointmentId, userId) {
-        const appointment = await this.appointmentRepository.findById(appointmentId);
+        const appointment =
+            await this.appointmentRepository.findById(appointmentId);
 
         if (!appointment) {
-            throw new Error("Lịch hẹn không tồn tại");
+            throw new Error("Appointment not found");
         }
 
-        if (appointment.patientId !== userId && appointment.doctorId !== userId) {
-            throw new Error("Bạn không có quyền truy cập cuộc hội thoại này");
+        if (
+            appointment.patientId !== userId &&
+            appointment.doctorId !== userId
+        ) {
+            throw new Error("You are not authorized to access this conversation");
         }
 
-        if (appointment.status === 'pending' || appointment.status === 'cancelled') {
-            throw new Error("Cuộc hẹn chưa sẵn sàng hoặc đã bị hủy.");
+        if (
+            appointment.status === "pending" ||
+            appointment.status === "cancelled"
+        ) {
+            throw new Error("The appointment is not ready or has been cancelled");
         }
 
         const sessionCheck = appointment.isSessionActive();
 
-        if (!sessionCheck.allowed && sessionCheck.code === 'TOO_EARLY') {
+        if (!sessionCheck.allowed && sessionCheck.code === "TOO_EARLY") {
             throw new Error(sessionCheck.message);
         }
 
-        const messages = await this.messageRepository.findByAppointmentId(appointmentId);
+        const messages =
+            await this.messageRepository.findByAppointmentId(appointmentId);
 
-        return messages.map(msg => MessageResponse.fromEntity(msg));
+        return messages.map((msg) => MessageResponse.fromEntity(msg));
     }
 }
 

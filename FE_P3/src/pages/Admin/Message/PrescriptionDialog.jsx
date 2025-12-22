@@ -68,31 +68,70 @@ const PrescriptionDialog = ({ open, onClose, appointment, onSuccess }) => {
     };
 
     const handleSubmit = async () => {
-        if (!doctorNotes.trim()) return toast.warning("Vui lòng nhập lời dặn bác sĩ");
+    // 1. Kiểm tra Lời dặn & Triệu chứng
+    if (!symptoms.trim()) return toast.warning("Vui lòng nhập chẩn đoán/triệu chứng");
+    if (!doctorNotes.trim()) return toast.warning("Vui lòng nhập lời dặn bác sĩ");
 
-        const validMeds = medicines.filter(m => m.medicationId);
-        setLoading(true);
+    // 2. Kiểm tra danh sách thuốc
+    // Phải có ít nhất 1 loại thuốc
+    const hasMedication = medicines.some(m => m.medicationId);
+    if (!hasMedication) return toast.warning("Vui lòng chọn ít nhất một loại thuốc");
 
-        try {
-            for (const med of validMeds) {
-                await medicationApi.addPrescription(appointment.id || appointment._id, {
-                    medicationId: med.medicationId,
-                    dosage: med.dosage,
-                    duration: med.duration,
-                    note: med.note,
-                    timing: "AFTER_MEAL"
-                });
-            }
+    // Kiểm tra tính đầy đủ của từng dòng thuốc đã chọn
+    const isAnyMedIncomplete = medicines.some(med => {
+        // Nếu đã chọn thuốc (có medicationId) thì phải điền đủ liều lượng và ngày
+        if (med.medicationId) {
+            const hasDosage = Number(med.dosage.morning) > 0 || 
+                              Number(med.dosage.afternoon) > 0 || 
+                              Number(med.dosage.evening) > 0;
+            const hasDuration = Number(med.duration) > 0;
+            
+            return !hasDosage || !hasDuration;
+        }
+        return false;
+    });
 
-            await appointmentApi.complete(appointment.id || appointment._id, {
-                symptoms,
-                doctorNotes
+    if (isAnyMedIncomplete) {
+        return toast.warning("Vui lòng điền đủ liều dùng và số ngày cho các thuốc đã chọn");
+    }
+
+    const validMeds = medicines.filter(m => m.medicationId);
+    
+    setLoading(true);
+    try {
+        for (const med of validMeds) {
+            await medicationApi.addPrescription(appointment.id || appointment._id, {
+                medicationId: med.medicationId,
+                dosage: med.dosage,
+                duration: med.duration,
+                note: med.note,
+                timing: "AFTER_MEAL"
             });
+        }
 
-            toast.success("Đã kê đơn và kết thúc ca khám!");
-            onSuccess?.();
-            onClose();
-        } catch (error) {
+        const mappedPrescriptions = validMeds.map(med => {
+            const dailyTotal = Number(med.dosage.morning || 0) + 
+                               Number(med.dosage.afternoon || 0) + 
+                               Number(med.dosage.evening || 0);
+            return {
+                medicationId: med.medicationId,
+                drugName: med.drugName,
+                quantity: dailyTotal * Number(med.duration), 
+                usage: med.note || `Sáng ${med.dosage.morning}, Trưa ${med.dosage.afternoon}, Tối ${med.dosage.evening}`,
+                dosage: med.dosage,
+                duration: med.duration
+            };
+        });
+
+        await appointmentApi.complete(appointment.id || appointment._id, {
+            symptoms,
+            doctorNotes,
+            prescriptions: mappedPrescriptions
+        });
+
+        toast.success("Đã kê đơn và kết thúc ca khám!");
+        onSuccess?.();
+        onClose(); }catch (error) {
             const warnings = error.response?.data?.warnings;
             if (warnings) {
                 toast.error(`CẢNH BÁO AN TOÀN: ${warnings.join('. ')}`, { autoClose: false });
@@ -111,7 +150,6 @@ const PrescriptionDialog = ({ open, onClose, appointment, onSuccess }) => {
             </DialogTitle>
 
             <DialogContent dividers sx={{ bgcolor: '#f8f9fa' }}>
-                {/* 1. Chẩn đoán */}
                 <Typography variant="subtitle2" fontWeight="bold" gutterBottom>1. CHẨN ĐOÁN / TRIỆU CHỨNG</Typography>
                 <TextField
                     fullWidth multiline rows={2} variant="outlined" sx={{ bgcolor: 'white', mb: 3 }}

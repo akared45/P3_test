@@ -1,11 +1,27 @@
 const mongoose = require('mongoose');
 
 const MedicationSchema = new mongoose.Schema({
-    code: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
-    genericName: { type: String, required: true },
-    drugClass: { type: String, required: true },
-    unit: { type: String, default: 'Viên' },
+    code: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    genericName: {
+        type: String,
+        required: true
+    },
+    drugClass: {
+        type: String,
+        required: true
+    },
+    unit: {
+        type: String,
+        default: 'Viên'
+    },
 
     safety: {
         contraindications: [String],
@@ -14,7 +30,11 @@ const MedicationSchema = new mongoose.Schema({
     },
 
     defaultUsage: {
-        timing: { type: String, enum: ['BEFORE_MEAL', 'AFTER_MEAL', 'ANYTIME'], default: 'ANYTIME' },
+        timing: {
+            type: String,
+            enum: ['BEFORE_MEAL', 'AFTER_MEAL', 'ANYTIME'],
+            default: 'ANYTIME'
+        },
         instructions: String
     },
     isDeleted: { type: Boolean, default: false }

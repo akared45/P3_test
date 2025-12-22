@@ -32,7 +32,7 @@ class PatientController {
             const responseDto = new PatientProfileResponse(updatedEntity);
             res.status(200).json({
                 success: true,
-                message: "Hồ sơ cập nhật thành công.",
+                message: "Profile updated",
                 data: responseDto
             });
         } catch (error) { next(error); }

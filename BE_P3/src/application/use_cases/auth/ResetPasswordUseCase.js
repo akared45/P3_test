@@ -1,11 +1,14 @@
-const { AuthorizationException, ValidationException } = require('../../../domain/exceptions');
-const TokenType = require('../../../domain/enums/TokenType');
+const {
+    AuthorizationException,
+    ValidationException,
+} = require("../../../domain/exceptions");
+const TokenType = require("../../../domain/enums/TokenType");
 
 class ResetPasswordUseCase {
     constructor({
         userRepository,
         verificationTokenRepository,
-        authenticationService
+        authenticationService,
     }) {
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
@@ -16,22 +19,25 @@ class ResetPasswordUseCase {
         const { token, email, newPassword, confirmPassword } = request;
 
         if (newPassword !== confirmPassword) {
-            throw new ValidationException("Mật khẩu xác nhận không khớp.");
+            throw new ValidationException("Password confirmation does not match.");
         }
 
-        const tokenEntity = await this.verificationTokenRepository.findByTokenAndType(
-            token,
-            TokenType.RESET_PASSWORD
-        );
+        const tokenEntity =
+            await this.verificationTokenRepository.findByTokenAndType(
+                token,
+                TokenType.RESET_PASSWORD
+            );
 
         if (!tokenEntity || !tokenEntity.isValid()) {
-            throw new AuthorizationException("Token không hợp lệ hoặc đã hết hạn.");
+            throw new AuthorizationException("Invalid or expired token.");
         }
 
         const user = await this.userRepository.findByEmail(email);
         if (!user || user.id.toString() !== tokenEntity.userId) {
             await this.verificationTokenRepository.delete(token);
-            throw new AuthorizationException("Token không thuộc về tài khoản này.");
+            throw new AuthorizationException(
+                "The token does not belong to this account."
+            );
         }
 
         const newPasswordHash = await this.authenticationService.hash(newPassword);
@@ -39,7 +45,7 @@ class ResetPasswordUseCase {
         await this.userRepository.save(updatedUser);
         await this.verificationTokenRepository.delete(token);
 
-        return { success: true, message: "Đặt lại mật khẩu thành công." };
+        return { success: true, message: "Password reset successful." };
     }
 }
 

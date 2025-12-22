@@ -23,31 +23,38 @@ class BookAppointmentUseCase {
 
     const startTime = new Date(appointmentDate);
     if (isNaN(startTime.getTime())) {
-      throw new BusinessRuleException("Ngày giờ không hợp lệ");
-    }
-    console.log("1. Raw Data từ FE:", appointmentDate);
-    const durationMinutes = 30;
-    const endTime = new Date(startTime.getTime() + durationMinutes * 60000);
-    console.log("2. Start Time (Local):", startTime.toLocaleString("vi-VN"));
-    console.log("3. Start Time (ISO/UTC):", startTime.toISOString());
-    console.log("4. End Time (ISO/UTC):", endTime.toISOString());
-    const doctor = await this.userRepository.findById(doctorId);
-    if (!doctor || doctor.userType !== "doctor") {
-      throw new BusinessRuleException("Doctor not found");
+      throw new BusinessRuleException("Invalid date and time");
     }
 
-    const patient = await this.userRepository.findById(patientId);
+    const durationMinutes = 30;
+    const endTime = new Date(startTime.getTime() + durationMinutes * 60000);
+
+    const [doctor, patient] = await Promise.all([
+      this.userRepository.findById(doctorId),
+      this.userRepository.findById(patientId),
+    ]);
+
+    if (!doctor || doctor.userType !== "doctor") {
+      throw new BusinessRuleException("Doctor not found or invalid");
+    }
+
     if (!patient) {
       throw new BusinessRuleException("Patient not found");
     }
 
-    if (!doctor.isAvailableOn(startTime)) {
+    if (
+      typeof doctor.isAvailableOn === "function" &&
+      !doctor.isAvailableOn(startTime)
+    ) {
       throw new BusinessRuleException("The doctor is not working on this day");
     }
 
-    if (!doctor.isWorkingAt(startTime, durationMinutes)) {
+    if (
+      typeof doctor.isWorkingAt === "function" &&
+      !doctor.isWorkingAt(startTime, durationMinutes)
+    ) {
       throw new BusinessRuleException(
-        "Doctors are off or not working during this time slot"
+        "The doctor is off or not working during this time slot"
       );
     }
 
@@ -58,7 +65,7 @@ class BookAppointmentUseCase {
     );
     if (isOverlapping) {
       throw new BusinessRuleException(
-        "Doctor is busy at this time (Slot taken)"
+        "Doctor is busy at this time (slot taken)"
       );
     }
 
@@ -77,66 +84,63 @@ class BookAppointmentUseCase {
     const savedAppointment = await this.appointmentRepository.save(
       newAppointment
     );
-    const doctorIdStr = doctor.id.value || doctor.id;
-    const patientIdStr = patient.id.value || patient.id;
-    try {
-      const doctorNoti = new Notification({
-        userId: doctorIdStr.toString(),
-        title: "Lịch hẹn mới",
-        message: `Bệnh nhân ${patient.profile.fullName} vừa đặt lịch.`,
-        type: NotificationType.BOOKING_SUCCESS,
-        link: `/doctor/appointments`,
-      });
-      await this.notificationRepository.save(doctorNoti);
 
-      this.socketService.sendToUser(
-        doctorIdStr.toString(),
-        "new_notification",
-        {
-          ...doctorNoti,
-          id: doctorNoti.id,
-        }
-      );
-
-      const patientNoti = new Notification({
-        userId: patientIdStr.toString(),
-        title: "Đặt lịch thành công",
-        message: `Bạn đã đặt lịch khám với BS ${doctor.profile.fullName}.`,
-        type: NotificationType.BOOKING_SUCCESS,
-        link: `/appointments`,
-      });
-      await this.notificationRepository.save(patientNoti);
-
-      this.socketService.sendToUser(
-        patientIdStr.toString(),
-        "new_notification",
-        {
-          ...patientNoti,
-          id: patientNoti.id,
-        }
-      );
-
-      const timeString = startTime.toLocaleTimeString("vi-VN", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      const dateString = startTime.toLocaleDateString("vi-VN");
-
-      this.emailService
-        .sendAppointmentConfirmation(patient.email, {
-          patientName:
-            patient.profile?.fullName || patient.username || "Quý khách",
-          doctorName: doctor.profile?.fullName || doctor.username || "Bác sĩ",
-          time: timeString,
-          date: dateString,
-          symptoms: symptoms,
-        })
-        .catch((err) => console.error("Lỗi gửi email xác nhận:", err));
-    } catch (error) {
-      console.error("Lỗi trong quá trình gửi thông báo/email:", error);
-    }
+    this._handleNotifications(doctor, patient, startTime, symptoms).catch(
+      (err) => console.error("Side effects error:", err)
+    );
 
     return savedAppointment;
+  }
+
+  async _handleNotifications(doctor, patient, startTime, symptoms) {
+    const doctorIdStr = (doctor.id.value || doctor.id).toString();
+    const patientIdStr = (patient.id.value || patient.id).toString();
+
+    const doctorNoti = new Notification({
+      userId: doctorIdStr,
+      title: "New appointment",
+      message: `Patient ${patient.profile?.fullName || "Anonymous"} has just booked an appointment.`,
+      type: NotificationType.BOOKING_SUCCESS,
+      link: `/doctor/appointments`,
+    });
+
+    const patientNoti = new Notification({
+      userId: patientIdStr,
+      title: "Booking successful",
+      message: `You have booked an appointment with Dr. ${doctor.profile?.fullName || doctor.username}.`,
+      type: NotificationType.BOOKING_SUCCESS,
+      link: `/appointments`,
+    });
+
+    await Promise.all([
+      this.notificationRepository.save(doctorNoti),
+      this.notificationRepository.save(patientNoti),
+    ]);
+
+    this.socketService.sendToUser(doctorIdStr, "new_notification", {
+      ...doctorNoti,
+      id: doctorNoti.id,
+    });
+    this.socketService.sendToUser(patientIdStr, "new_notification", {
+      ...patientNoti,
+      id: patientNoti.id,
+    });
+
+    const timeString = startTime.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    const dateString = startTime.toLocaleDateString("en-US");
+
+    await this.emailService.sendAppointmentConfirmation(patient.email, {
+      patientName:
+        patient.profile?.fullName || patient.username || "Valued customer",
+      doctorName:
+        doctor.profile?.fullName || doctor.username || "Doctor",
+      time: timeString,
+      date: dateString,
+      symptoms: symptoms,
+    });
   }
 }
 

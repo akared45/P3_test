@@ -1,5 +1,5 @@
-const medicationPolicy = require('../../../domain/policies/MedicationPolicy');
-const { Action } = require('../../../domain/enums');
+const medicationPolicy = require("../../../domain/policies/MedicationPolicy");
+const { Action } = require("../../../domain/enums");
 
 class UpdateMedicationUseCase {
     constructor({ medicationRepository }) {
@@ -8,16 +8,16 @@ class UpdateMedicationUseCase {
 
     async execute(actor, id, updateMedicationDto) {
         if (!medicationPolicy.can(actor, Action.UPDATE)) {
-            throw new Error("Unauthorized: Bạn không có quyền sửa thông tin thuốc");
+            throw new Error("Unauthorized: You do not have permission to update medication information");
         }
 
         const medication = await this.medicationRepository.findById(id);
-        if (!medication) throw new Error("Không tìm thấy thuốc cần cập nhật");
+        if (!medication) throw new Error("Medication not found");
 
         const updatedData = {
             ...medication,
             ...updateMedicationDto,
-            code: medication.code
+            code: medication.code,
         };
 
         return await this.medicationRepository.save(updatedData);

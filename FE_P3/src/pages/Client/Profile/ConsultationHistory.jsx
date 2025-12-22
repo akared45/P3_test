@@ -27,13 +27,12 @@ const ConsultationHistory = () => {
     const fetchHistory = async () => {
       try {
         const res = await appointmentApi.getMyAppointments();
-        console.log(res.data.data);
         const sorted = (res.data.data || res.data).sort(
           (a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate)
         );
         setAppointments(sorted);
       } catch (error) {
-        console.error("Lỗi tải lịch sử:", error);
+        console.error("Error:", error);
       } finally {
         setLoading(false);
       }

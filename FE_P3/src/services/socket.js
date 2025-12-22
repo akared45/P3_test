@@ -10,15 +10,15 @@ export const socket = io(URL, {
 });
 
 socket.on("connect", () => {
-  console.log("🟢 Socket Connected! ID:", socket.id);
+  console.log("Socket Connected! ID:", socket.id);
 });
 
 socket.on("disconnect", (reason) => {
-  console.log("🔴 Socket Disconnected! Reason:", reason);
+  console.log("Socket Disconnected! Reason:", reason);
 });
 
 socket.on("connect_error", (err) => {
-  console.error("⚠️ Socket Connection Error:", err.message);
+  console.error("Socket Connection Error:", err.message);
 });
 
 export const connectSocket = (token) => {
@@ -27,7 +27,7 @@ export const connectSocket = (token) => {
     socket.auth = { token };
     socket.connect();
   } else {
-    console.warn("Socket: Không tìm thấy Token để kết nối.");
+    console.warn("Socket: Token not found to connect.");
   }
 };
 

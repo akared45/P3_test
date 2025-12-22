@@ -16,45 +16,45 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2>Xác Nhận Thanh Toán Thành Công</h2>
+            <h2>Payment Successful Confirmation</h2>
         </div>
         <div class="content">
             <div class="success-icon">✔</div>
-            <p>Xin chào <strong>{{name}}</strong>,</p>
-            <p>Chúng tôi đã nhận được khoản thanh toán của bạn. Lịch hẹn khám bệnh của bạn đã được xác nhận thành công.</p>
+            <p>Hello <strong>{{name}}</strong>,</p>
+            <p>We have received your payment. Your medical appointment has been successfully confirmed.</p>
             
             <div class="details">
                 <div class="row">
-                    <span class="label">Mã lịch hẹn:</span>
+                    <span class="label">Appointment ID:</span>
                     <span>#{{appointmentId}}</span>
                 </div>
                 <div class="row">
-                    <span class="label">Bác sĩ:</span>
+                    <span class="label">Doctor:</span>
                     <span>{{doctorName}}</span>
                 </div>
                 <div class="row">
-                    <span class="label">Thời gian:</span>
+                    <span class="label">Time:</span>
                     <span>{{time}} - {{date}}</span>
                 </div>
                 <div class="row">
-                    <span class="label">Số tiền:</span>
-                    <span style="color: #A50064; font-weight: bold;">{{amount}} VNĐ</span>
+                    <span class="label">Amount:</span>
+                    <span style="color: #A50064; font-weight: bold;">{{amount}} VND</span>
                 </div>
                 <div class="row">
-                    <span class="label">Phương thức:</span>
-                    <span>Ví MoMo</span>
+                    <span class="label">Payment Method:</span>
+                    <span>MoMo Wallet</span>
                 </div>
                 <div class="row">
-                    <span class="label">Mã giao dịch:</span>
+                    <span class="label">Transaction ID:</span>
                     <span>{{transactionId}}</span>
                 </div>
             </div>
 
-            <p>Vui lòng đăng nhập vào hệ thống đúng giờ để tham gia tư vấn.</p>
-            <p>Cảm ơn bạn đã tin tưởng sử dụng dịch vụ!</p>
+            <p>Please log in to the system on time to join the consultation.</p>
+            <p>Thank you for trusting our service!</p>
         </div>
         <div class="footer">
-            <p>Email này được gửi tự động, vui lòng không trả lời.</p>
+            <p>This is an automated email, please do not reply.</p>
         </div>
     </div>
 </body>

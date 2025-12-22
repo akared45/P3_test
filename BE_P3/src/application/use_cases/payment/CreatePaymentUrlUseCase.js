@@ -10,21 +10,22 @@ class CreatePaymentUrlUseCase {
         const appointment = await this.appointmentRepository.findById(appointmentId);
 
         if (!appointment) {
-            throw new Error("Lịch hẹn không tồn tại");
+            throw new Error("Appointment not found");
         }
+
         const now = new Date();
         const appointmentTime = new Date(appointment.appointmentDate);
 
         if (now > appointmentTime) {
-            throw new Error("Lịch hẹn đã quá hạn, không thể thanh toán.");
-        }
-        
-        if (appointment.patientId.toString() !== userId.toString()) {
-            throw new Error("Bạn không có quyền thanh toán cho lịch hẹn này");
+            throw new Error("Appointment has expired and cannot be paid for.");
         }
 
-        if (appointment.paymentStatus === 'PAID') {
-            throw new Error("Lịch hẹn này đã được thanh toán.");
+        if (appointment.patientId.toString() !== userId.toString()) {
+            throw new Error("You are not authorized to pay for this appointment");
+        }
+
+        if (appointment.paymentStatus === "PAID") {
+            throw new Error("This appointment has already been paid.");
         }
 
         const amount = 50000;
@@ -35,12 +36,12 @@ class CreatePaymentUrlUseCase {
         const payUrl = await this.momoPaymentService.createPaymentUrl({
             orderId: uniqueOrderId,
             amount: amount,
-            orderInfo: `Thanh toan lich hen ${appointmentId}`,
+            orderInfo: `Payment for appointment ${appointmentId}`,
             returnUrl,
-            notifyUrl
+            notifyUrl,
         });
-        const updatedAppointment = appointment.updatePaymentUrl(payUrl);
 
+        const updatedAppointment = appointment.updatePaymentUrl(payUrl);
         await this.appointmentRepository.save(updatedAppointment);
 
         return { payUrl };

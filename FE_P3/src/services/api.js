@@ -87,7 +87,7 @@ export const appointmentApi = {
 };
 
 export const aiApi = {
-  suggest: (data) => axiosClient.post("/ai/suggest", data),
+  suggest: (data) => axiosClient.post("/ai/consult", data),
 };
 
 export const chatApi = {

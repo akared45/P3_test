@@ -26,7 +26,7 @@ class DeleteUserUseCase {
             throw new AuthorizationException("Permission denied to delete this user.");
         }
         await this.userRepository.delete(targetUserId);
-        await this.userSessionRepository.deleteAllByUserId(targetUserId);
+        await this.userSessionRepository.deleteByUserId(targetUserId);
 
         return { message: "User deleted successfully" };
     }

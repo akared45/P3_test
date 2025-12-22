@@ -31,7 +31,7 @@
       aiService: dependencies.aiService
     });
   } else {
-    console.error("CRITICAL: socketService chưa được export từ dependencies.js");
+    console.error("CRITICAL: socketService has not been exported from dependencies.js");
   }
 
   app.use(helmet({

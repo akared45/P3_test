@@ -126,25 +126,33 @@ class Appointment {
     const now = new Date().getTime();
     const start = this.startTime.getTime();
     const end = this.endTime.getTime();
+
     const BUFFER_MS = 15 * 60 * 1000;
     const allowedStart = start - BUFFER_MS;
+
     const GRACE_MS = 30 * 60 * 1000;
     const allowedEnd = end + GRACE_MS;
+
     if (now < allowedStart) {
       const diffMinutes = Math.ceil((allowedStart - now) / 60000);
       return {
         active: false,
         reason: 'too_early',
-        message: `Chưa đến giờ hẹn. Vui lòng quay lại sau ${diffMinutes} phút nữa.`
+        message: `It is not time for the appointment yet. Please come back in ${diffMinutes} minutes.`
       };
     }
 
     if (now > allowedEnd) {
-      return { active: false, reason: 'ended', message: "Phiên tư vấn đã kết thúc." };
+      return {
+        active: false,
+        reason: 'ended',
+        message: 'The consultation session has ended.'
+      };
     }
 
     return { active: true };
   }
+
 }
 
 module.exports = Appointment;

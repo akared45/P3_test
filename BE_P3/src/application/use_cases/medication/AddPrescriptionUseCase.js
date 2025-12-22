@@ -7,10 +7,10 @@ class AddPrescriptionUseCase {
 
     async execute(request) {
         const appointment = await this.appointmentRepository.findById(request.appointmentId);
-        const medication = await this.medicationRepository.getById(request.medicationId);
+        const medication = await this.medicationRepository.findById(request.medicationId);
 
         if (!appointment || !medication) {
-            throw new Error("Dữ liệu không tồn tại");
+            throw new Error("Data not found");
         }
 
         const patientProfile = await this.appointmentRepository.getPatientProfile(appointment.patientId);
@@ -37,7 +37,7 @@ class AddPrescriptionUseCase {
 
         return {
             success: true,
-            message: "Kê đơn thuốc thành công"
+            message: "Prescription successfully created"
         };
     }
 }

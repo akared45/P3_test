@@ -23,7 +23,7 @@ class DoctorController {
             const doctorEntity = await this.getDoctorDetailUseCase.execute(id);
 
             if (!doctorEntity) {
-                return res.status(404).json({ message: "Không tìm thấy bác sĩ" });
+                return res.status(404).json({ message: "Doctor not found" });
             }
 
             const response = new DoctorProfileResponse(doctorEntity);

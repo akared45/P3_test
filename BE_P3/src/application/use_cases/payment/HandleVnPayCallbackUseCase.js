@@ -57,7 +57,6 @@ class HandleVnPayCallbackUseCase {
                     appointmentId: realAppointmentId,
                     amount: Number(vnpayData.vnp_Amount) / 100
                 });
-                console.log(`Đã gửi email xác nhận thành công tới: ${patient.email}`);
             }
 
             this.socketService.sendToUser(paidAppointment.patientId.toString(), 'payment_success', {

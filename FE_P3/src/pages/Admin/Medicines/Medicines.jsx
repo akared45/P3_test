@@ -23,6 +23,9 @@ const Medicines = () => {
   const [openForm, setOpenForm] = useState(false);
   const [editingMedicine, setEditingMedicine] = useState(null);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const role = user?.userType?.toLowerCase();
+
   const fetchMedicine = async () => {
     try {
       const res = await medicationApi.getAll();
@@ -87,10 +90,11 @@ const Medicines = () => {
           <Typography variant="h6" fontWeight="bold">
             {t("medicines.title")}
           </Typography>
-
-          <Button variant="contained" startIcon={<Add />} onClick={handleAdd}>
-            {t("medicines.add_button")}
-          </Button>
+          {role === "admin" && (
+            <Button variant="contained" startIcon={<Add />} onClick={handleAdd}>
+              {t("medicines.add_button")}
+            </Button>
+          )}
         </Stack>
 
         {/* Table */}
@@ -116,9 +120,11 @@ const Medicines = () => {
                 <TableCell>
                   <b>{t("medicines.table.timing")}</b>
                 </TableCell>
-                <TableCell align="center">
-                  <b>{t("medicines.table.action")}</b>
-                </TableCell>
+                {role === "admin" && (
+                  <TableCell align="center">
+                    <b>{t("medicines.table.action")}</b>
+                  </TableCell>
+                )}
               </TableRow>
             </TableHead>
 
@@ -133,19 +139,22 @@ const Medicines = () => {
                   <TableCell>{medicine.usage?.timing}</TableCell>
 
                   <TableCell align="center">
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleEdit(medicine)}
-                    >
-                      <Edit />
-                    </IconButton>
-
-                    <IconButton
-                      color="error"
-                      onClick={() => handleDeleteMedi(medicine.id)}
-                    >
-                      <Delete />
-                    </IconButton>
+                    {role === "admin" && (
+                      <IconButton
+                        color="primary"
+                        onClick={() => handleEdit(medicine)}
+                      >
+                        <Edit />
+                      </IconButton>
+                    )}
+                    {role === "admin" && (
+                      <IconButton
+                        color="error"
+                        onClick={() => handleDeleteMedi(medicine.id)}
+                      >
+                        <Delete />
+                      </IconButton>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

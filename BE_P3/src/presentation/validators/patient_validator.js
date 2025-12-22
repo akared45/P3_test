@@ -10,7 +10,7 @@ const validate = (schema) => (req, res, next) => {
 
     if (error) {
         const messages = error.details.map(d => d.message.replace(/"/g, ''));
-        return next(new ValidationException('Dữ liệu cập nhật không hợp lệ', messages));
+        return next(new ValidationException('Invalid update data', messages));
     }
     req.body = value;
     next();
@@ -19,14 +19,14 @@ const validate = (schema) => (req, res, next) => {
 const schemas = {
     updatePatientProfile: Joi.object({
         fullName: Joi.string().required().messages({
-            'string.empty': 'Họ tên không được để trống',
-            'any.required': 'Họ tên là bắt buộc',
+            'string.empty': 'Full name cannot be blank',
+            'any.required': 'Full name is required',
         }),
 
         gender: Joi.string().valid('Male', 'Female', 'Other').default('Other'),
 
         dateOfBirth: Joi.date().iso().allow(null).optional().messages({
-            'date.format': 'Ngày sinh phải đúng định dạng ISO'
+            'date.format': 'Date of birth must be in ISO format'
         }),
 
         avatarUrl: Joi.string().allow('', null).optional(),
@@ -36,14 +36,14 @@ const schemas = {
                     .valid('phone', 'email', 'facebook', 'zalo', 'address')
                     .required()
                     .messages({
-                        'any.only': 'Loại liên hệ không hợp lệ'
+                        'any.only': 'Invalid contact type'
                     }),
 
                 value: Joi.string().required().when('type', {
                     is: 'phone',
                     then: Joi.string().pattern(/^[0-9+]{9,15}$/).messages({
-                        'string.pattern.base': 'Số điện thoại không hợp lệ (9-15 số)',
-                        'any.required': 'Số điện thoại là bắt buộc'
+                        'string.pattern.base': 'Invalid phone number (9-15 digits)',
+                        'any.required': 'Any phone number is required'
                     }),
                     otherwise: Joi.string()
                 }),
@@ -53,7 +53,7 @@ const schemas = {
 
         medicalConditions: Joi.array().items(
             Joi.object({
-                name: Joi.string().required().messages({ 'any.required': 'Tên bệnh lý là bắt buộc' }),
+                name: Joi.string().required().messages({ 'any.required': 'The name of the disease is required' }),
                 status: Joi.string().valid('active', 'chronic', 'cured').default('active'),
                 diagnosedDate: Joi.date().iso().allow(null).optional(),
                 treatmentPlan: Joi.string().allow('', null).optional(),
@@ -63,7 +63,7 @@ const schemas = {
 
         allergies: Joi.array().items(
             Joi.object({
-                name: Joi.string().required().messages({ 'any.required': 'Tên dị ứng là bắt buộc' }),
+                name: Joi.string().required().messages({ 'any.required': 'Allergy names are required.' }),
                 severity: Joi.string().valid('low', 'medium', 'high').default('low'),
                 reaction: Joi.string().allow('', null).optional(),
                 notes: Joi.string().allow('', null).optional()

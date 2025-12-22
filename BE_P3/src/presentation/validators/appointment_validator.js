@@ -14,8 +14,8 @@ const schemas = {
     bookAppointment: Joi.object({
         doctorId: Joi.string().required(),
         appointmentDate: Joi.date().iso().greater('now').required().messages({
-            'date.greater': 'Thời gian đặt lịch phải ở tương lai',
-            'date.format': 'Định dạng ngày giờ không hợp lệ (ISO 8601)'
+            'date.greater': 'The scheduled time must be in the future',
+            'date.format': 'Invalid date and time format (ISO 8601)'
         }),
         symptoms: Joi.string().required().min(5),
         type: Joi.string().valid('VIDEO', 'VOICE', 'CHAT', 'in_person').default('CHAT'),

@@ -1,5 +1,5 @@
 const User = require('./User');
-const { Schedule, UnavailableDate } = require('../value_objects');
+const { Schedule } = require('../value_objects');
 const { UserType } = require('../enums');
 
 class Doctor extends User {

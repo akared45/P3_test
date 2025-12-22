@@ -6,11 +6,10 @@ class SuggestSpecialtyUseCase {
 
     async execute(request) {
         const { symptoms } = request;
-        if (!symptoms) throw new Error("Vui lòng nhập triệu chứng");
+        if (!symptoms) throw new Error("Please enter the symptoms");
 
         const allSpecs = await this.specializationRepository.findAll();
         const specNames = allSpecs.map(s => s.name);
-
         const analysis = await this.aiService.analyzeSymptoms(symptoms, specNames);
 
         const matchedSpec = allSpecs.find(s =>

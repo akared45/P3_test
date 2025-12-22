@@ -43,7 +43,7 @@ class AppointmentController {
             const { doctorId } = req.params;
             const { date } = req.query;
 
-            if (!date) return res.status(400).json({ message: "Thiếu tham số date" });
+            if (!date) return res.status(400).json({ message: "Missing required parameter: date" });
 
             const result = await this.getBusySlotsUseCase.execute({ doctorId, date });
             res.status(200).json({
@@ -55,7 +55,7 @@ class AppointmentController {
         }
     };
 
-    async complete(req, res, next) {
+    complete = async (req, res, next) => {
         try {
             const request = new CompleteAppointmentRequest({
                 userId: req.user.id,

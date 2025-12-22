@@ -25,8 +25,8 @@ const schemas = {
 
     verifyEmail: Joi.object({
         token: Joi.string().required().messages({
-            'string.empty': 'Token không được để trống',
-            'any.required': 'Vui lòng cung cấp token xác thực'
+            'string.empty': 'Token cannot be empty',
+            'any.required': 'Please provide a validator token'
         })
     }),
 
@@ -39,7 +39,7 @@ const schemas = {
         email: Joi.string().email().required().trim(),
         newPassword: Joi.string().min(6).required(),
         confirmPassword: Joi.string().valid(Joi.ref('newPassword')).required()
-            .messages({ 'any.only': 'Mật khẩu xác nhận không khớp' })
+            .messages({ 'any.only': 'Confirmation password does not match' })
     })
 };
 
@@ -47,7 +47,7 @@ const validate = (schema) => (req, res, next) => {
     const { error } = schema.validate(req.body, { abortEarly: false });
     if (error) {
         const errorMessages = error.details.map((detail) => detail.message);
-        return next(new ValidationException('Dữ liệu không hợp lệ', errorMessages));
+        return next(new ValidationException('Invalid data', errorMessages));
     }
 
     next();

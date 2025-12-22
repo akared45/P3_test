@@ -1,21 +1,13 @@
-class PrescriptionItem {
-  constructor({
-    medicationId,
-    drugName,
-    dosage,
-    timing,
-    duration,
-    note
-  }) {
+class Prescription {
+  constructor({ medicationId, drugName, quantity, usage, dosage, duration }) {
     this.medicationId = medicationId;
     this.drugName = drugName;
+    this.quantity = quantity;
+    this.usage = usage;
     this.dosage = dosage;
-    this.timing = timing;
     this.duration = duration;
-    this.note = note;
-
     Object.freeze(this);
   }
 }
 
-module.exports = PrescriptionItem;
+module.exports = Prescription;
