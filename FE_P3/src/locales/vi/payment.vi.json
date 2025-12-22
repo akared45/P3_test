@@ -1,0 +1,26 @@
+{
+  "loading": "Đang hoàn tất thủ tục thanh toán...",
+
+  "success": {
+    "title": "Thanh Toán Thành Công",
+    "message": "Thanh toán của bạn đã được hệ thống xác nhận thành công!"
+  },
+
+  "error": {
+    "title": "Giao Dịch Thất Bại",
+    "verify_failed": "Xác thực giao dịch thất bại. Vui lòng liên hệ hỗ trợ.",
+    "invalid_data": "Dữ liệu thanh toán không hợp lệ.",
+    "update_failed": "Không thể cập nhật trạng thái lịch hẹn."
+  },
+
+  "detail": {
+    "total": "Tổng tiền:",
+    "order_info": "Nội dung:",
+    "transaction_code": "Mã GD VNPAY:"
+  },
+
+  "button": {
+    "home": "Trang chủ",
+    "appointments": "Xem lịch hẹn"
+  }
+}

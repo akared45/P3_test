@@ -20,6 +20,7 @@ import patient_chat_vi from "./patient_chat_vi.json";
 import homepage_vi from "./homepage_vi.json";
 import profile_client_vi from "./profile_client_vi.json";
 import noti_vi from "./noti_vi.json";
+import payment_vi from "./payment.vi.json";
 
 const vi = {
   common,
@@ -44,6 +45,7 @@ const vi = {
   homepage: homepage_vi,
   profile_client: profile_client_vi,
   noti: noti_vi,
+  payment: payment_vi,
 };
 
 export default vi;

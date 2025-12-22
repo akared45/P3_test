@@ -1,0 +1,26 @@
+{
+  "loading": "Completing payment process...",
+
+  "success": {
+    "title": "Payment Successful",
+    "message": "Your payment has been successfully confirmed by the system!"
+  },
+
+  "error": {
+    "title": "Transaction Failed",
+    "verify_failed": "Transaction verification failed. Please contact support.",
+    "invalid_data": "Invalid payment data.",
+    "update_failed": "Unable to update appointment status."
+  },
+
+  "detail": {
+    "total": "Total amount:",
+    "order_info": "Description:",
+    "transaction_code": "VNPAY Transaction ID:"
+  },
+
+  "button": {
+    "home": "Home",
+    "appointments": "View Appointments"
+  }
+}

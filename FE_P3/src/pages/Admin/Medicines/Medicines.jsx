@@ -16,8 +16,9 @@ import {
 import { Add, Edit, Delete } from "@mui/icons-material";
 import { medicationApi } from "../../../services/api";
 import MedicineForm from "./MedicineForm";
-
+import { useTranslation } from "react-i18next";
 const Medicines = () => {
+  const { t } = useTranslation("admin_sidebar");
   const [medicines, setMedicines] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const [editingMedicine, setEditingMedicine] = useState(null);
@@ -46,7 +47,7 @@ const Medicines = () => {
   };
 
   const handleDeleteMedi = async (id) => {
-    const confirm = window.confirm("Bạn có chắc chắn muốn xóa thuốc này?");
+    const confirm = window.confirm(t("medicines.confirm_delete"));
     if (!confirm) return;
 
     try {
@@ -54,7 +55,7 @@ const Medicines = () => {
       setMedicines((prev) => prev.filter((m) => m.id !== id));
     } catch (error) {
       console.error(error);
-      alert("Xóa thuốc thất bại");
+      alert(t("medicines.delete_error"));
     }
   };
 
@@ -69,7 +70,7 @@ const Medicines = () => {
       fetchMedicine();
     } catch (error) {
       console.error(error);
-      alert("Lưu thuốc thất bại");
+      alert(t("medicines.save_error"));
     }
   };
 
@@ -84,11 +85,11 @@ const Medicines = () => {
           mb={2}
         >
           <Typography variant="h6" fontWeight="bold">
-            Quản lý thuốc
+            {t("medicines.title")}
           </Typography>
 
           <Button variant="contained" startIcon={<Add />} onClick={handleAdd}>
-            Thêm thuốc
+            {t("medicines.add_button")}
           </Button>
         </Stack>
 
@@ -98,25 +99,25 @@ const Medicines = () => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <b>STT</b>
+                  <b>{t("medicines.table.index")}</b>
                 </TableCell>
                 <TableCell>
-                  <b>Mã thuốc</b>
+                  <b>{t("medicines.table.code")}</b>
                 </TableCell>
                 <TableCell>
-                  <b>Tên thuốc</b>
+                  <b>{t("medicines.table.name")}</b>
                 </TableCell>
                 <TableCell>
-                  <b>Hoạt chất</b>
+                  <b>{t("medicines.table.generic_name")}</b>
                 </TableCell>
                 <TableCell>
-                  <b>Nhóm thuốc</b>
+                  <b>{t("medicines.table.drug_class")}</b>
                 </TableCell>
                 <TableCell>
-                  <b>Thời điểm dùng</b>
+                  <b>{t("medicines.table.timing")}</b>
                 </TableCell>
                 <TableCell align="center">
-                  <b>Hành động</b>
+                  <b>{t("medicines.table.action")}</b>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -152,7 +153,7 @@ const Medicines = () => {
               {medicines.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={7} align="center">
-                    Không có dữ liệu
+                    {t("medicines.table.no_data")}
                   </TableCell>
                 </TableRow>
               )}

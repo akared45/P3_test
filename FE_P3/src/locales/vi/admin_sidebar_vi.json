@@ -12,5 +12,43 @@
   "doctorRole": "Bác sĩ",
   "logoutButton": "Đăng xuất", 
   "toggleExpandAria": "Expand sidebar",
-  "toggleCollapseAria": "Collapse sidebar" 
+  "toggleCollapseAria": "Collapse sidebar" ,
+
+  
+  "title_add": "Thêm thuốc",
+  "title_update": "Cập nhật thuốc",
+
+  "label_code": "Mã thuốc",
+  "label_name": "Tên thuốc",
+  "label_generic_name": "Hoạt chất",
+  "label_drug_class": "Nhóm thuốc",
+  "label_timing": "Thời điểm dùng",
+
+  "timing_before_meal": "Trước ăn",
+  "timing_after_meal": "Sau ăn",
+  "timing_anytime": "Bất kỳ",
+
+  "button_cancel": "Hủy",
+  "button_save": "Lưu",
+
+  "medicines": {
+    "title": "Quản lý thuốc",
+    "add_button": "Thêm thuốc",
+
+    "table": {
+      "index": "STT",
+      "code": "Mã thuốc",
+      "name": "Tên thuốc",
+      "generic_name": "Hoạt chất",
+      "drug_class": "Nhóm thuốc",
+      "timing": "Thời điểm dùng",
+      "action": "Hành động",
+      "no_data": "Không có dữ liệu"
+    },
+
+    "confirm_delete": "Bạn có chắc chắn muốn xóa thuốc này?",
+    "delete_error": "Xóa thuốc thất bại",
+    "save_error": "Lưu thuốc thất bại"
+  }
+
 }
